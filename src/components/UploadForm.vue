@@ -15,7 +15,7 @@
         <label for="tags">Tags:</label>
         <div class="tags-container">
           <div v-for="(tag, index) in tags" :key="index" class="tag">
-            <span class="tag-text">{{ tag }}</span> 
+            <span class="tag-text">{{ tag }}</span>
             <button @click="removeTag(index)" type="button">x</button>
           </div>
         </div>
@@ -24,7 +24,14 @@
 
       <div class="form-group">
         <label for="image">Image:</label>
-        <input type="file" id="image" @change="handleFileUpload">
+        <div class="drop-zone" @dragover.prevent @drop="handleDrop" @click="selectFile">
+          <p v-if="!imagePreview">Drag & Drop images here or click to select</p>
+          <img :src="imagePreview" v-if="imagePreview" alt="Image Preview"
+            style="max-width: 100%; max-height: 200px; margin-bottom: 10px;">
+          <p>{{ fileName }}</p>
+          <input type="file" id="image" ref="fileInput" style="display: none;" accept="image/*"
+            @change="handleFileChange">
+        </div>
       </div>
 
       <button type="submit" class="submit-button">Upload</button>
@@ -40,10 +47,43 @@ export default {
       description: '',
       tagInput: '',
       tags: [],
-      file: null
+      file: null,
+      imagePreview: '',
+      fileName: ''
     };
   },
   methods: {
+    handleDrop(event) {
+      event.preventDefault();
+      const files = event.dataTransfer.files;
+      if (files.length > 0 && this.isValidImage(files[0])) {
+        this.file = files[0];
+        this.displayImage(files[0]);
+        this.fileName = files[0].name;
+      }
+    },
+
+    selectFile() {
+      this.$refs.fileInput.click();
+    },
+    handleFileChange(event) {
+      const file = event.target.files[0];
+      if (file && this.isValidImage(file)) {
+        this.file = file;
+        this.displayImage(file);
+        this.fileName = file.name;
+      }
+    },
+    isValidImage(file) {
+      return file.type.startsWith('image/');
+    },
+    displayImage(file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result;
+      };
+      reader.readAsDataURL(file);
+    },
     handleFileUpload(event) {
       this.file = event.target.files[0];
     },
@@ -57,6 +97,10 @@ export default {
       this.tags.splice(index, 1);
     },
     async submitForm() {
+      if (!this.file) { 
+        alert('Please select an image');
+        return;
+      }
       const formData = new FormData();
       formData.append('title', this.title);
       formData.append('description', this.description);
@@ -82,17 +126,19 @@ export default {
         alert('Error uploading image. Please try again later.');
       }
     }
+
+
   }
 };
 </script>
 
 <style scoped>
-
-
 input[type="text"],
 textarea {
-  background-color: #fff; /* Set background color to white */
-  border: 1px solid #ccc; /* Set border color to light grey */
+  background-color: #fff;
+  /* Set background color to white */
+  border: 1px solid #ccc;
+  /* Set border color to light grey */
   border-radius: 4px;
   padding: 8px;
   width: 100%;
@@ -103,7 +149,7 @@ textarea {
   max-width: 500px;
   margin: auto;
   padding: 20px;
-  border: 1px solid 	#99aab5;
+  border: 1px solid #99aab5;
   border-radius: 8px;
   background-color: #2c2f33;
 }
@@ -168,5 +214,21 @@ label {
 
 .submit-button:hover {
   background-color: #0056b3;
+}
+
+.drop-zone {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.drop-zone p {
+  margin: 0;
+}
+
+.drop-zone:hover {
+  background-color: #f0f0f0;
 }
 </style>
