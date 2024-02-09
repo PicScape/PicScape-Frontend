@@ -1,20 +1,35 @@
 <template>
-  <form @submit.prevent="submitForm">
-    <label for="title">Title:</label>
-    <input type="text" id="title" v-model="title" required><br><br>
+  <div class="upload-form-container">
+    <form @submit.prevent="submitForm" class="upload-form">
+      <div class="form-group">
+        <label for="title">Title:</label>
+        <input type="text" id="title" v-model="title" required>
+      </div>
 
-    <label for="description">Description:</label>
-    <textarea id="description" v-model="description" required></textarea><br><br>
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea id="description" v-model="description" required></textarea>
+      </div>
 
-    <label for="tags">Tags:</label>
-    <input type="text" id="tags" v-model="tagInput" @keydown.enter.prevent="addTag"><br>
-    <div v-for="(tag, index) in tags" :key="index">{{ tag }} <button @click="removeTag(index)">x</button></div><br>
+      <div class="form-group">
+        <label for="tags">Tags:</label>
+        <div class="tags-container">
+          <div v-for="(tag, index) in tags" :key="index" class="tag">
+            <span class="tag-text">{{ tag }}</span> 
+            <button @click="removeTag(index)" type="button">x</button>
+          </div>
+        </div>
+        <input type="text" id="tags" v-model="tagInput" @keydown.enter.prevent="addTag">
+      </div>
 
-    <label for="image">Image:</label>
-    <input type="file" id="image" @change="handleFileUpload"><br><br>
+      <div class="form-group">
+        <label for="image">Image:</label>
+        <input type="file" id="image" @change="handleFileUpload">
+      </div>
 
-    <button type="submit">Upload</button>
-  </form>
+      <button type="submit" class="submit-button">Upload</button>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -29,6 +44,9 @@ export default {
     };
   },
   methods: {
+    handleFileUpload(event) {
+      this.file = event.target.files[0];
+    },
     addTag() {
       if (this.tagInput.trim() !== '') {
         this.tags.push(this.tagInput.trim());
@@ -51,9 +69,11 @@ export default {
           body: formData
         });
         if (response.ok) {
-          this.$emit('upload-success');
-          this.resetForm();
           alert('Upload successful!');
+          this.title = '';
+          this.description = '';
+          this.tags = [];
+          this.file = null;
         } else {
           alert('Upload failed!');
         }
@@ -61,12 +81,6 @@ export default {
         console.error('Error uploading image:', error);
         alert('Error uploading image. Please try again later.');
       }
-    },
-    resetForm() {
-      this.title = '';
-      this.description = '';
-      this.tags = [];
-      this.file = null;
     }
   }
 };
