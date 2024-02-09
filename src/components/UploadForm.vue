@@ -1,20 +1,16 @@
 <template>
-  <form @submit.prevent="submitForm">
-    <label for="title">Title:</label>
-    <input type="text" id="title" v-model="title" required><br><br>
-
-    <label for="description">Description:</label>
-    <textarea id="description" v-model="description" required></textarea><br><br>
-
-    <label for="tags">Tags:</label>
-    <input type="text" id="tags" v-model="tagInput" @keydown.enter.prevent="addTag"><br>
-    <div v-for="(tag, index) in tags" :key="index">{{ tag }} <button @click="removeTag(index)">x</button></div><br>
-
-    <label for="image">Image:</label>
-    <input type="file" id="image" @change="handleFileUpload"><br><br>
-
-    <button type="submit">Upload</button>
-  </form>
+  <v-container>
+    <v-form @submit.prevent="submitForm">
+      <v-text-field v-model="title" label="Title" required></v-text-field>
+      <v-textarea v-model="description" label="Description" required></v-textarea>
+      <v-chip v-for="(tag, index) in tags" :key="index" close @click:close="removeTag(index)">
+        {{ tag }}
+      </v-chip>
+      <v-text-field v-model="tagInput" label="Tags" @keydown.enter.prevent="addTag"></v-text-field>
+      <v-file-input v-model="file" label="Image" accept="image/*"></v-file-input>
+      <v-btn type="submit" color="primary">Upload</v-btn>
+    </v-form>
+  </v-container>
 </template>
 
 <script>
@@ -29,9 +25,6 @@ export default {
     };
   },
   methods: {
-    handleFileUpload(event) {
-      this.file = event.target.files[0];
-    },
     addTag() {
       if (this.tagInput.trim() !== '') {
         this.tags.push(this.tagInput.trim());
@@ -54,11 +47,9 @@ export default {
           body: formData
         });
         if (response.ok) {
+          this.$emit('upload-success');
+          this.resetForm();
           alert('Upload successful!');
-          this.title = '';
-          this.description = '';
-          this.tags = [];
-          this.file = null;
         } else {
           alert('Upload failed!');
         }
@@ -66,6 +57,12 @@ export default {
         console.error('Error uploading image:', error);
         alert('Error uploading image. Please try again later.');
       }
+    },
+    resetForm() {
+      this.title = '';
+      this.description = '';
+      this.tags = [];
+      this.file = null;
     }
   }
 };
