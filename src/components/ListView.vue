@@ -7,13 +7,14 @@
 
 <style>
 #images {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     padding-left: 400px;
     padding-right: 400px;
-    padding-top: 80px;
+    padding-top: 40px;
 }
+
 
 .image-container {
     position: relative;
@@ -87,7 +88,7 @@ async function fetchRandomImages() {
     } catch (error) {
         console.error('Error fetching random images:', error.message);
         displayInfoBox('Unable to reach the API.');
-        return []; // Return an empty array to avoid crashing the application
+        return [];
     }
 }
 
@@ -95,7 +96,6 @@ async function fetchAndDisplayImages() {
     try {
         const imagesData = await fetchRandomImages();
         if (imagesData.length === 0) {
-            // Don't attempt to display images if there are none
             return;
         }
         const imagesDiv = document.getElementById('images');
