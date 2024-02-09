@@ -87,6 +87,18 @@ export default {
 </script>
 
 <style scoped>
+
+
+input[type="text"],
+textarea {
+  background-color: #fff; /* Set background color to white */
+  border: 1px solid #ccc; /* Set border color to light grey */
+  border-radius: 4px;
+  padding: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .upload-form-container {
   max-width: 500px;
   margin: auto;
