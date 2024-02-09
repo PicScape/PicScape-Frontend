@@ -1,9 +1,12 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/upload">About</router-link>
-  </nav>
-  <router-view/>
+  <div>
+    <img src="@/assets/logo.png" class="logo" style="height: 200px; padding-top: 30px;">
+    <nav>
+      <router-link to="/">Home</router-link> |
+      <router-link to="/upload">Upload</router-link>
+    </nav>
+    <router-view/>
+  </div>
 </template>
 
 <style>
@@ -12,7 +15,8 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #ffffff;
+  
 }
 
 nav {
@@ -21,10 +25,15 @@ nav {
 
 nav a {
   font-weight: bold;
-  color: #2c3e50;
+  color: #ffffff;
+
+  text-decoration: none;
 }
 
 nav a.router-link-exact-active {
-  color: #42b983;
+  color: #99aab5;
+
+  text-decoration: none;
+
 }
 </style>

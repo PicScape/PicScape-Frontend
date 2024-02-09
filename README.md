@@ -1,4 +1,4 @@
-# pfp-archive
+# PicScape-frontend
 
 ## Project setup
 ```
