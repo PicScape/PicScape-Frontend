@@ -1,16 +1,28 @@
 <template>
-    <!-- Modal HTML structure -->
     <div class="modal" id="imageModal">
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2 class="modal-title">Image Preview</h2>
-            <img id="modal-image" src="" alt="Preview" />
-            <div id="modal-info"></div>
+            <div class="modal-detail-container">
+                <img id="modal-image" src="" alt="Preview" />
+                <div class="img-data-container">
+                    <div>
+                        <h3 style="color: black;">Title:</h3>
+                        <h3 class="img-title"></h3>
+                    </div>
+                    <div>
+                        <h3 style="color: black;">Description:</h3>
+                        <h3 style="color: black;" class="img-description"></h3>
+                    </div>
+                    <h4 class="img-description"></h4>
+                </div>
+                
+            </div>
+            
             <button id="downloadButton">Download</button>
         </div>
     </div>
     
-    <!-- Rest of your template -->
     <div id="images"></div>
     <div id="info-box" style="display: none;" class="info-box">
         <p>Unable to reach the API.</p>
@@ -97,36 +109,61 @@
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0, 0, 0); /* Fallback color */
     background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+    animation: fadeIn 0.5s ease-in-out; /* Apply fade-in animation */
 }
 
-/* Modal content */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 .modal-content {
     background-color: #fefefe;
-    margin: 5% auto; /* Adjust the top margin */
+    margin: 5% auto; 
     padding: 20px;
     border: 1px solid #888;
-    width: 80%; /* Set the width of the modal content */
-    max-width: 400px; /* Limit the maximum width of the modal content */
-    max-height: 80%; /* Limit the maximum height of the modal content */
-    overflow-y: auto; /* Enable vertical scrolling if needed */
+    width: 80%; 
+    max-width: 400px; 
+    max-height: 80%; 
+    overflow-y: auto; 
+    animation: slideIn 0.5s ease-in-out; /* Apply slide-in animation */
 }
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
 
 #modal-image {
-    /* Limit the size of the image preview */
     max-width: 100%;
+    grid-column: 1/2;
     height: auto;
-    width: 200px; /* Set the width of the image preview */
-    height: 200px; /* Set the height of the image preview */
-    margin: 0 auto 10px; /* Center the image horizontally and add some bottom margin */
-    display: block; /* Ensure it's treated as a block element */
+    width: 200px; 
+    height: 200px; 
+    margin: 0 auto 10px; 
+    display: block;
+    background-color: #888;
+    border-radius: 20px;
 }
 
-/* Close button */
+
 .close {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
+    transition: 0.3s; 
 }
 
 .close:hover,
@@ -137,12 +174,11 @@
 }
 
 .modal-title {
-    /* Center the modal title */
+    color: black;
     text-align: center;
 }
 
 #modal-info {
-    /* Add some padding to the information container */
     padding: 10px;
 }
 
@@ -162,6 +198,25 @@
 #downloadButton:hover {
     background-color: #0056b3;
 }
+
+
+.modal-detail-container{
+    display: grid;
+    grid-template-columns: 200px 1fr;
+}
+
+.img-data-container{
+    text-align: left;
+    padding-left: 10px;
+    
+}
+
+.img-title{
+    color: black;
+    font-size: 25px;
+}
+
+
 
 </style>
 
@@ -216,14 +271,18 @@ async function fetchAndDisplayImages() {
 function showImagePreview(imageData) {
     const modal = document.getElementById('imageModal');
     const modalImage = document.getElementById('modal-image');
-    const modalInfo = document.getElementById('modal-info');
+
+    const imgTitle = document.querySelector('.img-title');
+    const imgDescription = document.querySelector('.img-description');
+
     const downloadButton = document.getElementById('downloadButton');
     const modalTitle = document.querySelector('.modal-title');
 
     // Set image source and other information
     modalImage.src = `http://localhost:3000/api/images/${imageData.id}`;
-    modalInfo.textContent = `Image ID: ${imageData.id}, Description: ${imageData.description}, Author: ${imageData.author}`;
-    modalTitle.textContent = 'Image Preview';
+    modalTitle.textContent = 'Preview';
+    imgTitle.textContent = `${imageData.title}`;
+    imgDescription.textContent = `${imageData.description}`;
 
     // Show modal
     modal.style.display = 'block';
