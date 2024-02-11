@@ -14,6 +14,10 @@
               <h3 style="color: black;">Description:</h3>
               <h3 style="color: black;" class="img-description"></h3>
             </div>
+            <div>
+              <h3 style="color: black;">Id:</h3>
+              <h3 style="color: black;" class="img-id"></h3>
+            </div>
           </div>
         </div>
         <button id="downloadButton">Download</button>

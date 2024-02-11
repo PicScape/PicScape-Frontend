@@ -23,7 +23,7 @@ export default {
   setup() {
     async function fetchRandomImages() {
       try {
-        const response = await fetch('http://localhost:3000/api/random?count=20');
+        const response = await fetch('http://localhost:3000/api/random?count=100');
         if (!response.ok) {
           throw new Error('Failed to fetch random images');
         }
@@ -73,12 +73,14 @@ export default {
       const modal = document.getElementById('imageModal');
       const modalImage = document.getElementById('modal-image');
       const imgTitle = document.querySelector('.img-title');
+      const imgId = document.querySelector('.img-id');
       const imgDescription = document.querySelector('.img-description');
       const downloadButton = document.getElementById('downloadButton');
       const modalTitle = document.querySelector('.modal-title');
 
       modalImage.src = `http://localhost:3000/api/images/${imageData.id}`;
       modalTitle.textContent = 'Preview';
+      imgId.textContent = `${imageData.id}`
       imgTitle.textContent = `${imageData.title}`;
       imgDescription.textContent = `${imageData.description}`;
 
