@@ -2,28 +2,44 @@
     <div class="modal" :id="modalId">
       <div class="modal-content">
         <span class="close">&times;</span>
-        <h2 class="modal-title">Image Preview</h2>
-        <div class="modal-detail-container">
-          <img id="modal-image" src="" alt="Preview" />
-          <div class="img-data-container">
-            <div>
-              <h3 style="color: black;">Title:</h3>
-              <h3 class="img-title"></h3>
+
+        <div class="image-modal-details-container">
+          <img id="modal-image" src="" />
+          <div class="information-box">
+            <h3 class="img-title text-set-large"></h3>
+            <h3 class="img-id text-set-middle-sub"></h3>
+
+          </div>
+          <hr>
+
+          <div class="information-box">
+            <div style="margin-bottom: 10px;">
+              <h3 class="text-set-middle-bottom">Description:</h3>
+              <h3 class="img-description text-set-middle-bottom-sub"></h3>
             </div>
-            <div>
-              <h3 style="color: black;">Description:</h3>
-              <h3 style="color: black;" class="img-description"></h3>
+            
+            <div style="margin-bottom: 10px;">
+              <h3 class="text-set-middle-bottom">Tags:</h3>
+              <h3 class="img-tags text-set-middle-bottom-sub"></h3>
             </div>
-            <div>
-              <h3 style="color: black;">Id:</h3>
-              <h3 style="color: black;" class="img-id"></h3>
+
+            <div style="margin-bottom: 10px;">
+              <h3 class="text-set-middle-bottom">Publish Date:</h3>
+              <h3 class="img-upload-date text-set-middle-bottom-sub"></h3>
             </div>
           </div>
+
+          
         </div>
+
+        
+
+
+
         <button id="downloadButton">Download</button>
       </div>
     </div>
-  </template>
+</template>
   
   <script>
   export default {
@@ -44,7 +60,7 @@
     overflow: auto; 
     background-color: rgb(0, 0, 0);
     background-color: rgba(0, 0, 0, 0.4); 
-    animation: fadeIn 0.5s ease-in-out; 
+    animation: fadeIn 0.5s ease-in-out;
 }
 
 @keyframes fadeIn {
@@ -57,15 +73,17 @@
 }
 
 .modal-content {
-    background-color: #fefefe;
+    background-color: #23272a;
     margin: 5% auto; 
     padding: 20px;
     border: 1px solid #888;
+    border-radius: 4%;
     
     width: 500px; 
     max-height: 80%; 
     overflow-y: auto; 
-    animation: slideIn 0.5s ease-in-out; 
+    
+    animation: slideIn 0.5s ease-in-out;
 }
 
 @keyframes slideIn {
@@ -80,17 +98,7 @@
 }
 
 
-#modal-image {
-    max-width: 100%;
-    grid-column: 1/2;
-    height: auto;
-    width: 200px; 
-    height: 200px; 
-    margin: 0 auto 10px; 
-    display: block;
-    background-color: #888;
-    border-radius: 15%;
-}
+
 
 
 .close {
@@ -108,18 +116,15 @@
     cursor: pointer;
 }
 
-.modal-title {
-    color: black;
-    text-align: center;
-}
 
-#modal-info {
-    padding: 10px;
-}
+
+
 
 #downloadButton {
     display: block;
-    margin: 0 auto;
+    margin-left: 15px;
+    margin-bottom: 5px;
+    
     padding: 10px 20px;
     background-color: #007bff;
     color: white;
@@ -135,20 +140,68 @@
 }
 
 
-.modal-detail-container{
-    display: grid;
-    grid-template-columns: 200px 1fr;
+
+.image-modal-details-container{
+  text-align: left;  
+  padding-bottom: 10px;
 }
 
-.img-data-container{
-    text-align: left;
-    padding-left: 10px;
-    
+#modal-image{
+  width: 150px;
+  height: 150px;
+  margin: 20px;
+  margin-bottom: 0;
+  border-radius: 15%;
+  background-color: #101213;
+  box-shadow: 10px 10px #15181a;
+  
+  
 }
 
-.img-title{
-    color: black;
-    font-size: 25px;
+
+.information-box{
+  margin: 15px;
+  
 }
+
+hr{
+  margin-left: 15px;
+  margin-right: 15px;
+  border: 1px solid #4e4e4e;
+}
+
+.text-set-large{
+  font-size: 30px;
+}
+
+.text-set-middle-sub{
+  font-size: 16px;
+  color: #919191;
+}
+
+.text-set-middle-bottom-sub{
+  font-size: 17px;
+  color: #e7e7e7;
+}
+
+.text-set-middle-bottom{
+  font-size: 17px;
+  color: #919191;
+}
+
+img-tag{
+  text-decoration: none;
+  color: #fff;
+  background-color: #007bff;
+  padding: 1px 8px;
+  border-radius: 3px; 
+  margin-right: 6px;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+  margin-top: 6px;
+}
+
+
+
   </style>
   

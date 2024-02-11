@@ -21,6 +21,7 @@ export default {
     }
   },
   setup() {
+    
     async function fetchRandomImages() {
       try {
         const response = await fetch('http://localhost:3000/api/random?count=100');
@@ -36,9 +37,11 @@ export default {
       }
     }
 
+
     async function fetchAndDisplayImages() {
       try {
         const imagesData = await fetchRandomImages();
+
         if (imagesData.length === 0) {
           return;
         }
@@ -62,11 +65,13 @@ export default {
           overlay.appendChild(button);
           container.appendChild(overlay);
           imagesDiv.appendChild(container);
+          
         });
       } catch (error) {
         console.error('Error fetching and displaying images:', error.message);
         displayInfoBox('Unable to reach the API.');
       }
+      
     }
 
     function showImagePreview(imageData) {
@@ -74,13 +79,25 @@ export default {
       const modalImage = document.getElementById('modal-image');
       const imgTitle = document.querySelector('.img-title');
       const imgId = document.querySelector('.img-id');
+      const imgTags = document.querySelector('.img-tags');
+
+      const imgUploadDate = document.querySelector('.img-upload-date')
       const imgDescription = document.querySelector('.img-description');
       const downloadButton = document.getElementById('downloadButton');
-      const modalTitle = document.querySelector('.modal-title');
 
       modalImage.src = `http://localhost:3000/api/images/${imageData.id}`;
-      modalTitle.textContent = 'Preview';
       imgId.textContent = `${imageData.id}`
+      console.log(imageData.tags)
+      imgTags.innerHTML = '';
+
+      imageData.tags.forEach(tag => {
+        const tagElement = document.createElement('img-tag');
+        tagElement.textContent = tag;
+        imgTags.appendChild(tagElement);
+      });
+
+      imgUploadDate.textContent = `${imageData.date}`
+
       imgTitle.textContent = `${imageData.title}`;
       imgDescription.textContent = `${imageData.description}`;
 
@@ -128,6 +145,7 @@ export default {
     fetchAndDisplayImages();
   }
 }
+
 </script>
 <style>
 #images {
