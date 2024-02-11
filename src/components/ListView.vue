@@ -114,8 +114,8 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    padding-left: 400px;
-    padding-right: 400px;
+    padding-left: 20%;
+    padding-right: 10%;
     padding-top: 40px;
 }
 
