@@ -229,6 +229,6 @@ label {
 }
 
 .drop-zone:hover {
-  background-color: #f0f0f0;
+  background-color: #9c9c9c;
 }
 </style>
