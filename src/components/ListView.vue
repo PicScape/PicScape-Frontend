@@ -114,7 +114,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    padding-left: 20%;
+    padding-left: 10%;
     padding-right: 10%;
     padding-top: 40px;
 }

@@ -1,5 +1,4 @@
 <template>
-  <NavigationBar />
   <ListView />
 </template>
 
