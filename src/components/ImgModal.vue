@@ -58,7 +58,7 @@
     padding: 20px;
     border: 1px solid #888;
     
-    width: 550px; 
+    width: 500px; 
     max-height: 80%; 
     overflow-y: auto; 
     animation: slideIn 0.5s ease-in-out; 
