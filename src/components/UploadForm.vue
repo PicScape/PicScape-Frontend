@@ -123,6 +123,8 @@ export default {
           this.description = '';
           this.tags = [];
           this.file = null;
+          this.$refs.fileInput.value = '';
+          this.imagePreview = ''; 
         } else {
           alert('Upload failed!');
         }
