@@ -85,7 +85,7 @@
     margin: 0 auto 10px; 
     display: block;
     background-color: #888;
-    border-radius: 20px;
+    border-radius: 15%;
 }
 
 

@@ -28,7 +28,7 @@
           <p v-if="!imagePreview">Drag & Drop images here or click to select</p>
           <img :src="imagePreview" v-if="imagePreview" alt="Image Preview"
             style="max-width: 100%; max-height: 200px; margin-bottom: 10px;">
-          <p>{{ fileName }}</p>
+          <p class="filename">{{ fileName }}</p>
           <input type="file" id="image" ref="fileInput" style="display: none;" accept="image/*"
             @change="handleFileChange">
         </div>
@@ -75,7 +75,12 @@ export default {
       }
     },
     isValidImage(file) {
-      return file.type.startsWith('image/');
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/tiff', 'image/gif', 'image/svg+xml'];
+      if (!allowedTypes.includes(file.type)) {
+        alert('Please upload an image file with one of the following formats: JPEG, PNG, WebP, TIFF, GIF, SVG.');
+        return false;
+      }
+      return true;
     },
     displayImage(file) {
       const reader = new FileReader();
@@ -97,7 +102,7 @@ export default {
       this.tags.splice(index, 1);
     },
     async submitForm() {
-      if (!this.file) { 
+      if (!this.file) {
         alert('Please select an image');
         return;
       }
@@ -231,4 +236,7 @@ label {
 .drop-zone:hover {
   background-color: #9c9c9c;
 }
+
+
+
 </style>
