@@ -1,15 +1,24 @@
 <h1 align="center">
-    Proxer
+    PicScape-Frontend
     <br>
-    <div align="center">
-    ![Vue.js](https://img.shields.io/badge/vuejs-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D)
-    </div>
+    <div align="center"></div>
+    <img src="https://img.shields.io/badge/Vue-v3.2.13-bgrightgreen" align="center"/>
+    <img src="https://img.shields.io/badge/NodeJs-v20.11.0-green" align="center"/>
+    <img src="https://img.shields.io/badge/NPM-v10.4.0-red" align="center"/>
+    <img src="https://img.shields.io/badge/Development-active-blue" align="center"/>
 </h1>
 
-This is the repository for the frontend of the open-source PicScape project. PicScape serves as an archive for profile pictures, banners, and wallpapers. On PicScape, users can discover and share stunning and aesthetic artwork, enhancing their online presence or desktop aesthetics.
+This is the repository for the __frontend__ of the open-source PicScape project. PicScape serves as an archive for profile pictures, banners, and wallpapers. On PicScape, users can discover and share stunning and aesthetic artwork, enhancing their online presence or desktop aesthetics.
+
+## Overview
+- [Introduction](#picscape-frontend)
+- [License](#mit-license)
+- [Project Setup](#project-setup)
+- [Project Status](#project-status)
+- [Reporting Issues](#reporting-issues)
 
 ## MIT License
-Copyright (c) 2024 Sebastian Felix-Alexander Stepper
+__Copyright (c) 2024 Sebastian Felix-Alexander Stepper__
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -45,4 +54,22 @@ npm run serve
 ```
 npm run build
 ```
+
+### For the complete functionality of this project, the [backend](https://github.com/AIO-Develope/PicScape-Backend) is essential.
+
+## Project Status
+PicScape is a relatively new project and it may currently lack some functionality and features. However, I am continually improving the project in the future. Additionally, PicScape will be available as a fully functional service in the future, ready for you to use.
+
+## Reporting Issues
+
+If you encounter any problems while using PicScape or have suggestions for improvement, please don't hesitate to open an issue on the GitHub repository. Your feedback is crucial in helping me identify areas for enhancement and address any issues that arise.
+
+To report an issue:
+
+1. Go to the [Issues](https://github.com/YourGitHubUsername/PicScape-Frontend/issues) section of the repository.
+2. Provide a clear and detailed description of the problem you've encountered or the feature you'd like to suggest.
+3. If possible, include steps to reproduce the issue or examples to clarify your suggestion.
+5. Add any relevant files.
+
+Thank you for your help.
 
