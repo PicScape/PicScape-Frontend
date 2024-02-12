@@ -5,7 +5,7 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/upload">Upload</router-link>
     </nav>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -16,7 +16,7 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #ffffff;
-  
+
 }
 
 nav {
