@@ -24,7 +24,7 @@ export default {
     
     async function fetchRandomImages() {
       try {
-        const response = await fetch('http://localhost:3000/api/random?count=100');
+        const response = await fetch('http://localhost:3000/api/random?count=500');
         if (!response.ok) {
           throw new Error('Failed to fetch random images');
         }
@@ -123,7 +123,7 @@ export default {
 
             anchor.href = blobUrl;
 
-            anchor.setAttribute('download', `${imageData.title}_${imageData.id}.jpg`);
+            anchor.setAttribute('download', `${imageData.title.replace(/ /g, "_")}-${imageData.id}.jpg`);
 
             anchor.click();
 
