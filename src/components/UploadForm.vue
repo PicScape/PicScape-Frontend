@@ -124,7 +124,7 @@ export default {
           this.tags = [];
           this.file = null;
           this.$refs.fileInput.value = '';
-          this.imagePreview = ''; 
+          this.imagePreview = '';
         } else {
           alert('Upload failed!');
         }
@@ -238,7 +238,4 @@ label {
 .drop-zone:hover {
   background-color: #9c9c9c;
 }
-
-
-
 </style>
