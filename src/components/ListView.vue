@@ -21,7 +21,7 @@ export default {
     }
   },
   setup() {
-    
+
     async function fetchRandomImages() {
       try {
         const response = await fetch('http://localhost:3000/api/random?count=500');
@@ -65,13 +65,13 @@ export default {
           overlay.appendChild(button);
           container.appendChild(overlay);
           imagesDiv.appendChild(container);
-          
+
         });
       } catch (error) {
         console.error('Error fetching and displaying images:', error.message);
         displayInfoBox('Unable to reach the API.');
       }
-      
+
     }
 
     function showImagePreview(imageData) {
@@ -166,21 +166,21 @@ export default {
   overflow: hidden;
   border: 1px solid #ccc;
   text-align: center;
-  transition: transform 0.3s ease; 
+  transition: transform 0.3s ease;
 }
 
 .image-container:hover {
-  transform: scale(1.1); 
+  transform: scale(1.1);
 }
 
 .image-container img {
   height: 120px;
   width: 120px;
-  transition: transform 0.3s ease; 
+  transition: transform 0.3s ease;
 }
 
 .image-container:hover img {
-  transform: scale(1.1); 
+  transform: scale(1.1);
 }
 
 .overlay {
@@ -191,12 +191,12 @@ export default {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   display: none;
-  transition: opacity 0.3s ease; 
+  transition: opacity 0.3s ease;
 }
 
 .image-container:hover .overlay {
   display: block;
-  opacity: 1; 
+  opacity: 1;
 }
 
 .overlay button {
