@@ -66,7 +66,7 @@ If you encounter any problems while using PicScape or have suggestions for impro
 
 To report an issue:
 
-1. Go to the [Issues](https://github.com/YourGitHubUsername/PicScape-Frontend/issues) section of the repository.
+1. Go to the [Issues](https://github.com/AIO-Develope/PicScape-Frontend/issues) section of the repository.
 2. Provide a clear and detailed description of the problem you've encountered or the feature you'd like to suggest.
 3. If possible, include steps to reproduce the issue or examples to clarify your suggestion.
 5. Add any relevant files.
