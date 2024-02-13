@@ -3,7 +3,8 @@
     <img src="@/assets/logo.png" class="logo" style="height: 200px; padding-top: 30px;">
     <nav>
       <router-link to="/">Home</router-link> |
-      <router-link to="/upload">Upload</router-link>
+      <router-link to="/upload">Upload</router-link> |
+      <router-link to="/login">Login</router-link>
     </nav>
     <router-view />
   </div>
