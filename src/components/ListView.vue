@@ -11,6 +11,9 @@
 <script>
 import Modal from './ImgModal.vue';
 
+import { API_URL } from '../../config';
+
+
 export default {
   components: {
     Modal
@@ -24,7 +27,7 @@ export default {
 
     async function fetchRandomImages() {
       try {
-        const response = await fetch('http://localhost:3000/api/random?count=500');
+        const response = await fetch(`${API_URL}/api/random?count=500`);
         if (!response.ok) {
           throw new Error('Failed to fetch random images');
         }
@@ -47,7 +50,7 @@ export default {
         }
         const imagesDiv = document.getElementById('images');
         imagesData.forEach(imageData => {
-          const imageURL = `http://localhost:3000/api/images/${imageData.id}`;
+          const imageURL = `${API_URL}/api/images/${imageData.id}`;
           const img = document.createElement('img');
           img.src = imageURL;
           const container = document.createElement('div');
@@ -85,9 +88,8 @@ export default {
   const imgDescription = document.querySelector('.img-description');
   const downloadButton = document.getElementById('downloadButton');
 
-  modalImage.src = `http://localhost:3000/api/images/${imageData.id}`;
+  modalImage.src = `${API_URL}/api/images/${imageData.id}`;
   imgId.textContent = `${imageData.id}`
-  console.log(imageData.tags)
 
   if (Array.isArray(imageData.tags)) {
     imgTags.innerHTML = '';
@@ -115,7 +117,7 @@ export default {
   };
 
   downloadButton.onclick = function () {
-    fetch(`http://localhost:3000/api/images/${imageData.id}`)
+    fetch(`${API_URL}/api/images/${imageData.id}`)
       .then(response => response.blob())
       .then(blob => {
         var anchor = document.createElement('a');

@@ -45,6 +45,9 @@
 </template>
 
 <script>
+
+import { API_URL } from '../../config';
+
 export default {
   data() {
     return {
@@ -69,7 +72,7 @@ export default {
           formData.append('username', this.username);
           formData.append('password', this.password);
 
-          const response = await fetch('http://localhost:3000/api/register', {
+          const response = await fetch(`${API_URL}/api/register`, {
             method: 'POST',
             body: formData
           });
@@ -93,7 +96,7 @@ export default {
           formData.append('username', this.loginUsername);
           formData.append('password', this.loginPassword);
 
-          const response = await fetch('http://localhost:3000/api/login', {
+          const response = await fetch(`${API_URL}/api/login`, {
             method: 'POST',
             body: formData
           });
