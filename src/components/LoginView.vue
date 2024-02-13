@@ -62,9 +62,9 @@ export default {
       isLoggedIn: false
     };
   },
-  mounted() {
-    this.isLoggedIn = this.checkLoggedIn();
-  },
+  async mounted() {
+  this.isLoggedIn = await this.checkLoggedIn();
+},
   methods: {
     async submitForm() {
       if (this.isRegistering) {
@@ -136,9 +136,30 @@ export default {
       this.loginUsername = '';
       this.loginPassword = '';
     },
-    checkLoggedIn() {
+    async checkLoggedIn() {
       const token = this.getCookie('token');
-      return !!token;
+
+      if (!token) {
+        return false;
+      }
+
+      try {
+        const response = await fetch(`${API_URL}/api/verifyToken`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${token}`
+          }
+        });
+
+        if (response.ok) {
+          return true;
+        } else {
+          return false;
+        }
+      } catch (error) {
+        return false;
+      }
     },
     logout() {
       document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
