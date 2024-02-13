@@ -41,6 +41,7 @@ export default {
     }
 
 
+
     async function fetchAndDisplayImages() {
       try {
         const imagesData = await fetchRandomImages();
@@ -77,66 +78,81 @@ export default {
 
     }
 
-    function showImagePreview(imageData) {
-  const modal = document.getElementById('imageModal');
-  const modalImage = document.getElementById('modal-image');
-  const imgTitle = document.querySelector('.img-title');
-  const imgId = document.querySelector('.img-id');
-  const imgTags = document.querySelector('.img-tags');
+    async function showImagePreview(imageData) {
+      const modal = document.getElementById('imageModal');
+      const modalImage = document.getElementById('modal-image');
+      const imgTitle = document.querySelector('.img-title');
+      const imgId = document.querySelector('.img-id');
+      const imgAuthor = document.querySelector('.img-author');
 
-  const imgUploadDate = document.querySelector('.img-upload-date')
-  const imgDescription = document.querySelector('.img-description');
-  const downloadButton = document.getElementById('downloadButton');
+      const imgTags = document.querySelector('.img-tags');
 
-  modalImage.src = `${API_URL}/api/images/${imageData.id}`;
-  imgId.textContent = `${imageData.id}`
+      const imgUploadDate = document.querySelector('.img-upload-date')
+      const imgDescription = document.querySelector('.img-description');
+      const downloadButton = document.getElementById('downloadButton');
 
-  if (Array.isArray(imageData.tags)) {
-    imgTags.innerHTML = '';
-    imageData.tags.forEach(tag => {
-      const tagElement = document.createElement('img-tag');
-      tagElement.textContent = tag;
-      imgTags.appendChild(tagElement);
-    });
-  }
+      modalImage.src = `${API_URL}/api/images/${imageData.id}`;
+      imgId.textContent = `${imageData.id}`
 
-  imgUploadDate.textContent = `${imageData.date}`
-  imgTitle.textContent = `${imageData.title}`;
-  imgDescription.textContent = `${imageData.description}`;
+      if (Array.isArray(imageData.tags)) {
+        imgTags.innerHTML = '';
+        imageData.tags.forEach(tag => {
+          const tagElement = document.createElement('img-tag');
+          tagElement.textContent = tag;
+          imgTags.appendChild(tagElement);
+        });
+      }
 
-  modal.style.display = 'block';
+      imgUploadDate.textContent = `${imageData.date}`
 
-  const closeButton = document.querySelector('.close');
-  closeButton.onclick = function () {
-    modal.style.display = 'none';
-  };
-  window.onclick = function (event) {
-    if (event.target == modal) {
-      modal.style.display = 'none';
+      try {
+        const response = await fetch(`${API_URL}/api/uuiduser/${imageData.userId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch username');
+        }
+        const userData = await response.json();
+        imgAuthor.textContent = "@" + userData.username;
+      } catch (error) {
+        console.error('Error fetching username:', error.message);
+        imgAuthor.textContent = 'Unknown';
+      }
+
+      imgTitle.textContent = `${imageData.title}`;
+      imgDescription.textContent = `${imageData.description}`;
+
+      modal.style.display = 'block';
+
+      const closeButton = document.querySelector('.close');
+      closeButton.onclick = function () {
+        modal.style.display = 'none';
+      };
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = 'none';
+        }
+      };
+
+      downloadButton.onclick = function () {
+        fetch(`${API_URL}/api/images/${imageData.id}`)
+          .then(response => response.blob())
+          .then(blob => {
+            var anchor = document.createElement('a');
+
+            var blobUrl = window.URL.createObjectURL(blob);
+
+            anchor.href = blobUrl;
+
+            anchor.setAttribute('download', `${imageData.title.replace(/ /g, "_")}-${imageData.id}.jpg`);
+
+            anchor.click();
+
+            window.URL.revokeObjectURL(blobUrl);
+          })
+          .catch(error => {
+            console.error('Error downloading file:', error);
+          });
+      };
     }
-  };
-
-  downloadButton.onclick = function () {
-    fetch(`${API_URL}/api/images/${imageData.id}`)
-      .then(response => response.blob())
-      .then(blob => {
-        var anchor = document.createElement('a');
-
-        var blobUrl = window.URL.createObjectURL(blob);
-
-        anchor.href = blobUrl;
-
-        anchor.setAttribute('download', `${imageData.title.replace(/ /g, "_")}-${imageData.id}.jpg`);
-
-        anchor.click();
-
-        window.URL.revokeObjectURL(blobUrl);
-      })
-      .catch(error => {
-        console.error('Error downloading file:', error);
-      });
-  };
-}
 
     function displayInfoBox(message) {
       const infoBox = document.getElementById('info-box');

@@ -1,48 +1,51 @@
 <template>
   <div class="upload-form-container">
-    <form @submit.prevent="submitForm" class="upload-form">
-      <div class="form-group">
-        <label for="title">Title:</label>
-        <input type="text" id="title" v-model="title" required>
-      </div>
+    <div v-if="isLoggedIn">
+      <form @submit.prevent="submitForm" class="upload-form">
+        <div class="form-group">
+          <label for="title">Title:</label>
+          <input type="text" id="title" v-model="title" required>
+        </div>
 
-      <div class="form-group">
-        <label for="description">Description:</label>
-        <textarea id="description" v-model="description" required></textarea>
-      </div>
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <textarea id="description" v-model="description" required></textarea>
+        </div>
 
-      <div class="form-group">
-        <label for="tags">Tags:</label>
-        <div class="tags-container">
-          <div v-for="(tag, index) in tags" :key="index" class="tag">
-            <span class="tag-text">{{ tag }}</span>
-            <button @click="removeTag(index)" type="button">x</button>
+        <div class="form-group">
+          <label for="tags">Tags:</label>
+          <div class="tags-container">
+            <div v-for="(tag, index) in tags" :key="index" class="tag">
+              <span class="tag-text">{{ tag }}</span>
+              <button @click="removeTag(index)" type="button">x</button>
+            </div>
+          </div>
+          <input type="text" id="tags" v-model="tagInput" @keydown.enter.prevent="addTag">
+        </div>
+
+        <div class="form-group">
+          <label for="image">Image:</label>
+          <div class="drop-zone" @dragover.prevent @drop="handleDrop" @click="selectFile">
+            <p v-if="!imagePreview">Drag & Drop images here or click to select</p>
+            <img :src="imagePreview" v-if="imagePreview" alt="Image Preview"
+              style="max-width: 100%; max-height: 200px; margin-bottom: 10px;">
+            <p class="filename">{{ fileName }}</p>
+            <input type="file" id="image" ref="fileInput" style="display: none;" accept="image/*"
+              @change="handleFileChange">
           </div>
         </div>
-        <input type="text" id="tags" v-model="tagInput" @keydown.enter.prevent="addTag">
-      </div>
 
-      <div class="form-group">
-        <label for="image">Image:</label>
-        <div class="drop-zone" @dragover.prevent @drop="handleDrop" @click="selectFile">
-          <p v-if="!imagePreview">Drag & Drop images here or click to select</p>
-          <img :src="imagePreview" v-if="imagePreview" alt="Image Preview"
-            style="max-width: 100%; max-height: 200px; margin-bottom: 10px;">
-          <p class="filename">{{ fileName }}</p>
-          <input type="file" id="image" ref="fileInput" style="display: none;" accept="image/*"
-            @change="handleFileChange">
-        </div>
-      </div>
-
-      <button type="submit" class="submit-button">Upload</button>
-    </form>
+        <button type="submit" class="submit-button">Upload</button>
+      </form>
+    </div>
+    <div v-else class="login-prompt">
+      <p>You need to <router-link to="/login">login</router-link> to upload images.</p>
+    </div>
   </div>
 </template>
 
 <script>
-
 import { API_URL } from '../../config';
-
 
 export default {
   data() {
@@ -53,8 +56,12 @@ export default {
       tags: [],
       file: null,
       imagePreview: '',
-      fileName: ''
+      fileName: '',
+      isLoggedIn: false
     };
+  },
+  created() {
+    this.checkLoggedIn();
   },
   methods: {
     getCookie(name) {
@@ -145,6 +152,33 @@ export default {
         console.error('Error uploading image:', error);
         alert('Error uploading image. Please try again later.');
       }
+    },
+    async checkLoggedIn() {
+      const token = this.getCookie('token');
+
+      if (!token) {
+        this.isLoggedIn = false;
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_URL}/api/verifyToken`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${token}`
+          }
+        });
+
+        if (response.ok) {
+          this.isLoggedIn = true;
+        } else {
+          this.isLoggedIn = false;
+        }
+      } catch (error) {
+        console.error('Error checking login status:', error);
+        this.isLoggedIn = false;
+      }
     }
   }
 };
@@ -155,9 +189,7 @@ export default {
 input[type="text"],
 textarea {
   background-color: #fff;
-  /* Set background color to white */
   border: 1px solid #ccc;
-  /* Set border color to light grey */
   border-radius: 4px;
   padding: 8px;
   width: 100%;
@@ -249,5 +281,24 @@ label {
 
 .drop-zone:hover {
   background-color: #9c9c9c;
+}
+
+.login-prompt {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 20px;
+  text-align: center;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 </style>

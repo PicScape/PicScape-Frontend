@@ -24,6 +24,12 @@
           </div>
 
           <div style="margin-bottom: 10px;">
+            <h3 class="text-set-middle-bottom">Uploaded by:</h3>
+            <h3 class="img-author text-set-middle-bottom-sub"></h3>
+          </div>
+
+
+          <div style="margin-bottom: 10px;">
             <h3 class="text-set-middle-bottom">Publish Date:</h3>
             <h3 class="img-upload-date text-set-middle-bottom-sub"></h3>
           </div>

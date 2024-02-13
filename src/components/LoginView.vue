@@ -14,8 +14,14 @@
       <div class="form-group">
         <label for="confirmPassword">Confirm Password:</label>
         <input type="password" id="confirmPassword" v-model="confirmPassword" required>
+      </div>
+      <div class="error-message-group">
         <span v-if="passwordMismatch" class="error-message">Passwords do not match</span>
       </div>
+      <div class="success-message-group">
+        <span v-if="registerdSuccessfully" class="success-message">registerd successfully</span>
+      </div>
+
 
       <button type="submit" class="submit-button">Register</button>
       <div class="toggle-auth-option">
@@ -33,6 +39,11 @@
       <div class="form-group">
         <label for="loginPassword">Password:</label>
         <input type="password" id="loginPassword" v-model="loginPassword" required>
+      </div>
+
+      <div class="error-message-group">
+        <span v-if="wrongCredentials" class="error-message">wrong password or username</span>
+
       </div>
 
       <button type="submit" class="submit-button">Login</button>
@@ -57,6 +68,8 @@ export default {
       password: '',
       confirmPassword: '',
       passwordMismatch: false,
+      wrongCredentials: false,
+      registerdSuccessfully: false,
       loginUsername: '',
       loginPassword: '',
       isLoggedIn: false
@@ -66,7 +79,9 @@ export default {
   this.isLoggedIn = await this.checkLoggedIn();
 },
   methods: {
+    
     async submitForm() {
+
       if (this.isRegistering) {
         if (this.password !== this.confirmPassword) {
           this.passwordMismatch = true;
@@ -83,11 +98,11 @@ export default {
           });
 
           if (response.ok) {
-            alert('Registration successful!');
             this.username = '';
             this.password = '';
             this.confirmPassword = '';
             this.passwordMismatch = false;
+            this.registerdSuccessfully = true;
           } else {
             alert('Registration failed!');
           }
@@ -110,12 +125,13 @@ export default {
             const responseData = await response.json();
             this.saveTokenInCookies(responseData.token);
 
-            alert('Login successful!');
 
             this.loginUsername = '';
             this.loginPassword = '';
           } else {
-            alert('Login failed. Invalid credentials.');
+            this.wrongCredentials = true;
+            this.loginPassword = '';
+
           }
         } catch (error) {
           console.error('Login failed:', error);
@@ -133,6 +149,8 @@ export default {
       this.password = '';
       this.confirmPassword = '';
       this.passwordMismatch = false;
+      this.wrongCredentials = false;
+      this.registerdSuccessfully = false;
       this.loginUsername = '';
       this.loginPassword = '';
     },
@@ -229,7 +247,17 @@ label {
 .error-message {
   color: red;
 }
+.success-message{
+  color: green;
+}
 
+.error-message-group{
+  margin: 20px;
+}
+
+.success-message-group{
+  margin: 20px;
+}
 .toggle-auth-option {
   margin-top: 10px;
   display: flex;
@@ -249,4 +277,7 @@ label {
 .toggle-auth-option button:hover {
   color: #0056b3;
 }
+
+
+
 </style>
