@@ -24,7 +24,7 @@
       </div>
     </form>
 
-    <form @submit.prevent="submitForm" v-else class="login-form">
+    <form @submit.prevent="submitForm" v-show="!isRegistering && !isLoggedIn" class="login-form">
       <div class="form-group">
         <label for="loginUsername">Username:</label>
         <input type="text" id="loginUsername" v-model="loginUsername" required>
@@ -41,24 +41,29 @@
         <button @click="toggleAuthOption">Register</button>
       </div>
     </form>
+
+    <button v-if="isLoggedIn" @click="logout" class="submit-button">Logout</button>
   </div>
 </template>
 
 <script>
-
 import { API_URL } from '../../config';
 
 export default {
   data() {
     return {
-      isRegistering: true,
+      isRegistering: false,
       username: '',
       password: '',
       confirmPassword: '',
       passwordMismatch: false,
       loginUsername: '',
-      loginPassword: ''
+      loginPassword: '',
+      isLoggedIn: false
     };
+  },
+  mounted() {
+    this.isLoggedIn = this.checkLoggedIn();
   },
   methods: {
     async submitForm() {
@@ -90,7 +95,7 @@ export default {
           console.error('Registration failed:', error);
           alert('Registration failed. Please try again.');
         }
-    } else {
+      } else {
         try {
           const formData = new FormData();
           formData.append('username', this.loginUsername);
@@ -120,9 +125,29 @@ export default {
     },
     saveTokenInCookies(token) {
       document.cookie = `token=${token}; expires=${new Date(Date.now() + 86400e3).toUTCString()}; path=/`;
+      this.isLoggedIn = true;
     },
     toggleAuthOption() {
       this.isRegistering = !this.isRegistering;
+      this.username = '';
+      this.password = '';
+      this.confirmPassword = '';
+      this.passwordMismatch = false;
+      this.loginUsername = '';
+      this.loginPassword = '';
+    },
+    checkLoggedIn() {
+      const token = this.getCookie('token');
+      return !!token;
+    },
+    logout() {
+      document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      this.isLoggedIn = false;
+    },
+    getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
     }
   }
 };
@@ -140,7 +165,7 @@ input[type="password"] {
 }
 
 .auth-form-container {
-  max-width: 400px;
+  max-width: 500px;
   margin: auto;
   padding: 20px;
   border: 1px solid #99aab5;
@@ -155,9 +180,9 @@ input[type="password"] {
 
 .form-group {
   display: grid;
-  grid-template-columns: 140px auto; 
+  grid-template-columns: 160px auto;
   align-items: center;
-  margin-bottom: 10px; 
+  margin-bottom: 10px;
 }
 
 label {
