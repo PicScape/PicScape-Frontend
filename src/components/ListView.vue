@@ -75,66 +75,66 @@ export default {
     }
 
     function showImagePreview(imageData) {
-      const modal = document.getElementById('imageModal');
-      const modalImage = document.getElementById('modal-image');
-      const imgTitle = document.querySelector('.img-title');
-      const imgId = document.querySelector('.img-id');
-      const imgTags = document.querySelector('.img-tags');
+  const modal = document.getElementById('imageModal');
+  const modalImage = document.getElementById('modal-image');
+  const imgTitle = document.querySelector('.img-title');
+  const imgId = document.querySelector('.img-id');
+  const imgTags = document.querySelector('.img-tags');
 
-      const imgUploadDate = document.querySelector('.img-upload-date')
-      const imgDescription = document.querySelector('.img-description');
-      const downloadButton = document.getElementById('downloadButton');
+  const imgUploadDate = document.querySelector('.img-upload-date')
+  const imgDescription = document.querySelector('.img-description');
+  const downloadButton = document.getElementById('downloadButton');
 
-      modalImage.src = `http://localhost:3000/api/images/${imageData.id}`;
-      imgId.textContent = `${imageData.id}`
-      console.log(imageData.tags)
-      imgTags.innerHTML = '';
+  modalImage.src = `http://localhost:3000/api/images/${imageData.id}`;
+  imgId.textContent = `${imageData.id}`
+  console.log(imageData.tags)
 
-      imageData.tags.forEach(tag => {
-        const tagElement = document.createElement('img-tag');
-        tagElement.textContent = tag;
-        imgTags.appendChild(tagElement);
-      });
+  if (Array.isArray(imageData.tags)) {
+    imgTags.innerHTML = '';
+    imageData.tags.forEach(tag => {
+      const tagElement = document.createElement('img-tag');
+      tagElement.textContent = tag;
+      imgTags.appendChild(tagElement);
+    });
+  }
 
-      imgUploadDate.textContent = `${imageData.date}`
+  imgUploadDate.textContent = `${imageData.date}`
+  imgTitle.textContent = `${imageData.title}`;
+  imgDescription.textContent = `${imageData.description}`;
 
-      imgTitle.textContent = `${imageData.title}`;
-      imgDescription.textContent = `${imageData.description}`;
+  modal.style.display = 'block';
 
-      modal.style.display = 'block';
-
-      const closeButton = document.querySelector('.close');
-      closeButton.onclick = function () {
-        modal.style.display = 'none';
-      };
-      window.onclick = function (event) {
-        if (event.target == modal) {
-          modal.style.display = 'none';
-        }
-      };
-
-      downloadButton.onclick = function () {
-        fetch(`http://localhost:3000/api/images/${imageData.id}`)
-          .then(response => response.blob())
-          .then(blob => {
-            var anchor = document.createElement('a');
-
-            var blobUrl = window.URL.createObjectURL(blob);
-
-            anchor.href = blobUrl;
-
-            anchor.setAttribute('download', `${imageData.title.replace(/ /g, "_")}-${imageData.id}.jpg`);
-
-            anchor.click();
-
-            window.URL.revokeObjectURL(blobUrl);
-          })
-          .catch(error => {
-            console.error('Error downloading file:', error);
-          });
-      };
-
+  const closeButton = document.querySelector('.close');
+  closeButton.onclick = function () {
+    modal.style.display = 'none';
+  };
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = 'none';
     }
+  };
+
+  downloadButton.onclick = function () {
+    fetch(`http://localhost:3000/api/images/${imageData.id}`)
+      .then(response => response.blob())
+      .then(blob => {
+        var anchor = document.createElement('a');
+
+        var blobUrl = window.URL.createObjectURL(blob);
+
+        anchor.href = blobUrl;
+
+        anchor.setAttribute('download', `${imageData.title.replace(/ /g, "_")}-${imageData.id}.jpg`);
+
+        anchor.click();
+
+        window.URL.revokeObjectURL(blobUrl);
+      })
+      .catch(error => {
+        console.error('Error downloading file:', error);
+      });
+  };
+}
 
     function displayInfoBox(message) {
       const infoBox = document.getElementById('info-box');

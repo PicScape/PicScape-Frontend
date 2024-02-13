@@ -53,6 +53,11 @@ export default {
     };
   },
   methods: {
+    getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    },
     handleDrop(event) {
       event.preventDefault();
       const files = event.dataTransfer.files;
@@ -62,7 +67,6 @@ export default {
         this.fileName = files[0].name;
       }
     },
-
     selectFile() {
       this.$refs.fileInput.click();
     },
@@ -113,8 +117,13 @@ export default {
       formData.append('file', this.file);
 
       try {
+        const token = this.getCookie('token'); // Get the token from the cookie
+
         const response = await fetch('http://localhost:3000/api/upload', {
           method: 'POST',
+          headers: {
+            'Authorization': `${token}` // Attach the token to the headers
+          },
           body: formData
         });
         if (response.ok) {
@@ -133,11 +142,10 @@ export default {
         alert('Error uploading image. Please try again later.');
       }
     }
-
-
   }
 };
 </script>
+
 
 <style scoped>
 input[type="text"],
