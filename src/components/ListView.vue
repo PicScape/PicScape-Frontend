@@ -114,7 +114,7 @@ export default {
           throw new Error('Failed to fetch username');
         }
         const userData = await response.json();
-        imgAuthor.textContent = "@" + userData.username;
+        imgAuthor.textContent = userData.username;
       } catch (error) {
         console.error('Error fetching username:', error.message);
         imgAuthor.textContent = 'Unknown';
