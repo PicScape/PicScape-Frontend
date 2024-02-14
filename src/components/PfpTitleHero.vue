@@ -5,7 +5,7 @@
         <h1 class="title-hero">Profile Pictures</h1>
         <p class="subtitle-hero">Share, Find, and Download your favorite Profile Pictures</p>
         <div class="search-box">
-          <input type="text" id="search-input" class="search-input">
+          <input type="text" id="search-input" placeholder="Search for profile pictures..." class="search-input">
           <button type="button" class="search-button">Search</button>
         </div>
       </div>
@@ -91,4 +91,25 @@ input[type="text"] {
   padding: 8px;
   width: 100%;
   box-sizing: border-box;
-}</style>
+}
+
+/* Media query for screens smaller than 768px (typical mobile devices) */
+@media screen and (max-width: 768px) {
+  .grid-container-hero {
+    width: 100%; /* Full width for smaller screens */
+  }
+
+  .title-container-hero {
+    margin-bottom: 20px; /* Further reduced margin for smaller screens */
+  }
+  
+  .hero-img {
+    display: none; /* Hide image on smaller screens */
+  }
+  
+  /* Remove grid gap when image is hidden */
+  .grid-container-hero {
+    grid-gap: 0;
+  }
+}
+</style>
