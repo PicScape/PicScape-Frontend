@@ -121,6 +121,11 @@ export default {
         alert('Please select an image');
         return;
       }
+
+      if (this.tags.length < 2) {
+        alert('Please enter at least two tags');
+        return;
+      }
       const formData = new FormData();
       formData.append('title', this.title);
       formData.append('description', this.description);
@@ -297,6 +302,7 @@ label {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }

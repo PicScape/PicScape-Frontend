@@ -1,11 +1,15 @@
 <template>
   <div>
-    <img src="@/assets/logo.png" class="logo" style="height: 200px; padding-top: 30px;">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/upload">Upload</router-link> |
-      <router-link to="/login">Login</router-link>
-    </nav>
+    <header class="navbar">
+      <div class="header-container">
+        <router-link to="/" class="logo">PicScape</router-link>
+        <nav>
+          <router-link to="/" class="nav-link">Home</router-link>
+          <router-link to="/upload" class="nav-link">Upload</router-link>
+          <router-link to="/login" class="nav-link">Login</router-link>
+        </nav>
+      </div>
+    </header>
     <router-view />
   </div>
 </template>
@@ -17,24 +21,51 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #ffffff;
-
 }
 
-nav {
-  padding: 30px;
+
+
+.navbar {
+  background-color: #282b30;
+  color: #fff;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 100px;
+  transition: background-color 0.3s;
 }
 
-nav a {
+.logo {
+  font-size: 24px;
   font-weight: bold;
-  color: #ffffff;
-
+  color: #fff;
   text-decoration: none;
 }
 
-nav a.router-link-exact-active {
-  color: #99aab5;
+.logo:hover {
+  color: #ffd700;
+}
 
+.nav-link {
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
   text-decoration: none;
+  margin-left: 20px;
+  transition: color 0.3s;
+}
 
+.nav-link:hover {
+  color: #007bff; 
+}
+
+.header-container {
+  width: 700px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
 }
 </style>

@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div id="images"></div>
+    <div id="images-pre">
+      <div id="images"></div>
+
+    </div>
     <div id="info-box" style="display: none;" class="info-box">
       <p>Unable to reach the API.</p>
     </div>
@@ -166,13 +169,24 @@ export default {
 
 </script>
 <style>
+#images-pre {
+  display: flex;
+  justify-content: center;
+}
+
 #images {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
-  padding-left: 25%;
-  padding-right: 25%;
   padding-top: 40px;
+}
+
+@media (min-width: 768px) {
+  #images {
+    padding-left: calc((100% - (220px * 4) - (3 * 10px)) / 2);
+    padding-right: calc((100% - (220px * 4) - (3 * 10px)) / 2);
+  }
 }
 
 
