@@ -42,6 +42,8 @@
   font-weight: bold;
   color: #fff;
   text-decoration: none;
+  transition: color 0.3s;
+
 }
 
 .logo:hover {
