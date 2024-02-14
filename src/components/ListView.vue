@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div id="images"></div>
+    <div id="images-pre">
+      <div id="images"></div>
+
+    </div>
     <div id="info-box" style="display: none;" class="info-box">
       <p>Unable to reach the API.</p>
     </div>
@@ -10,6 +13,9 @@
   
 <script>
 import Modal from './ImgModal.vue';
+
+import { API_URL } from '../../config';
+
 
 export default {
   components: {
@@ -24,7 +30,7 @@ export default {
 
     async function fetchRandomImages() {
       try {
-        const response = await fetch('http://localhost:3000/api/random?count=500');
+        const response = await fetch(`${API_URL}/api/random?count=500`);
         if (!response.ok) {
           throw new Error('Failed to fetch random images');
         }
@@ -38,6 +44,7 @@ export default {
     }
 
 
+
     async function fetchAndDisplayImages() {
       try {
         const imagesData = await fetchRandomImages();
@@ -47,7 +54,7 @@ export default {
         }
         const imagesDiv = document.getElementById('images');
         imagesData.forEach(imageData => {
-          const imageURL = `http://localhost:3000/api/images/${imageData.id}`;
+          const imageURL = `${API_URL}/api/images/${imageData.id}`;
           const img = document.createElement('img');
           img.src = imageURL;
           const container = document.createElement('div');
@@ -74,29 +81,44 @@ export default {
 
     }
 
-    function showImagePreview(imageData) {
+    async function showImagePreview(imageData) {
       const modal = document.getElementById('imageModal');
       const modalImage = document.getElementById('modal-image');
       const imgTitle = document.querySelector('.img-title');
       const imgId = document.querySelector('.img-id');
+      const imgAuthor = document.querySelector('.img-author');
+
       const imgTags = document.querySelector('.img-tags');
 
       const imgUploadDate = document.querySelector('.img-upload-date')
       const imgDescription = document.querySelector('.img-description');
       const downloadButton = document.getElementById('downloadButton');
 
-      modalImage.src = `http://localhost:3000/api/images/${imageData.id}`;
+      modalImage.src = `${API_URL}/api/images/${imageData.id}`;
       imgId.textContent = `${imageData.id}`
-      console.log(imageData.tags)
-      imgTags.innerHTML = '';
 
-      imageData.tags.forEach(tag => {
-        const tagElement = document.createElement('img-tag');
-        tagElement.textContent = tag;
-        imgTags.appendChild(tagElement);
-      });
+      if (Array.isArray(imageData.tags)) {
+        imgTags.innerHTML = '';
+        imageData.tags.forEach(tag => {
+          const tagElement = document.createElement('img-tag');
+          tagElement.textContent = tag;
+          imgTags.appendChild(tagElement);
+        });
+      }
 
       imgUploadDate.textContent = `${imageData.date}`
+
+      try {
+        const response = await fetch(`${API_URL}/api/uuiduser/${imageData.userId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch username');
+        }
+        const userData = await response.json();
+        imgAuthor.textContent = "@" + userData.username;
+      } catch (error) {
+        console.error('Error fetching username:', error.message);
+        imgAuthor.textContent = 'Unknown';
+      }
 
       imgTitle.textContent = `${imageData.title}`;
       imgDescription.textContent = `${imageData.description}`;
@@ -114,7 +136,7 @@ export default {
       };
 
       downloadButton.onclick = function () {
-        fetch(`http://localhost:3000/api/images/${imageData.id}`)
+        fetch(`${API_URL}/api/images/${imageData.id}`)
           .then(response => response.blob())
           .then(blob => {
             var anchor = document.createElement('a');
@@ -133,7 +155,6 @@ export default {
             console.error('Error downloading file:', error);
           });
       };
-
     }
 
     function displayInfoBox(message) {
@@ -148,13 +169,24 @@ export default {
 
 </script>
 <style>
+#images-pre {
+  display: flex;
+  justify-content: center;
+}
+
 #images {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
-  padding-left: 25%;
-  padding-right: 25%;
   padding-top: 40px;
+}
+
+@media (min-width: 768px) {
+  #images {
+    padding-left: calc((100% - (220px * 4) - (3 * 10px)) / 2);
+    padding-right: calc((100% - (220px * 4) - (3 * 10px)) / 2);
+  }
 }
 
 

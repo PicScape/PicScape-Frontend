@@ -6,6 +6,7 @@ import 'vuetify/dist/vuetify.min.css';
 
 const app = createApp(App);
 
+
 app.use(router);
 
 const vuetify = createVuetify();
