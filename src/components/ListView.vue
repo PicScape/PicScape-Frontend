@@ -172,6 +172,7 @@ export default {
 #images-pre {
   display: flex;
   justify-content: center;
+  padding-bottom: 20px;
 }
 
 #images {
