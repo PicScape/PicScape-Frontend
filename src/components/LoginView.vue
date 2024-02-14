@@ -76,10 +76,10 @@ export default {
     };
   },
   async mounted() {
-  this.isLoggedIn = await this.checkLoggedIn();
-},
+    this.isLoggedIn = await this.checkLoggedIn();
+  },
   methods: {
-    
+
     async submitForm() {
 
       if (this.isRegistering) {
@@ -123,15 +123,13 @@ export default {
 
           if (response.ok) {
             const responseData = await response.json();
-            this.saveTokenInCookies(responseData.token);
-
+            this.saveTokenInCookies(responseData.token, responseData.uuid);
 
             this.loginUsername = '';
             this.loginPassword = '';
           } else {
             this.wrongCredentials = true;
             this.loginPassword = '';
-
           }
         } catch (error) {
           console.error('Login failed:', error);
@@ -139,8 +137,10 @@ export default {
         }
       }
     },
-    saveTokenInCookies(token) {
+    async saveTokenInCookies(token, uuid) {
       document.cookie = `token=${token}; expires=${new Date(Date.now() + 86400e3).toUTCString()}; path=/`;
+      document.cookie = `uuid=${uuid}; expires=${new Date(Date.now() + 86400e3).toUTCString()}; path=/`;
+
       this.isLoggedIn = true;
     },
     toggleAuthOption() {
@@ -181,6 +181,7 @@ export default {
     },
     logout() {
       document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      document.cookie = 'uuid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
       this.isLoggedIn = false;
     },
     getCookie(name) {
@@ -247,17 +248,19 @@ label {
 .error-message {
   color: red;
 }
-.success-message{
+
+.success-message {
   color: green;
 }
 
-.error-message-group{
+.error-message-group {
   margin: 20px;
 }
 
-.success-message-group{
+.success-message-group {
   margin: 20px;
 }
+
 .toggle-auth-option {
   margin-top: 10px;
   display: flex;
@@ -277,7 +280,4 @@ label {
 .toggle-auth-option button:hover {
   color: #0056b3;
 }
-
-
-
 </style>
