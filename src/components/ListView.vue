@@ -93,6 +93,8 @@ export default {
       const imgUploadDate = document.querySelector('.img-upload-date')
       const imgDescription = document.querySelector('.img-description');
       const downloadButton = document.getElementById('downloadButton');
+      const deleteButton = document.getElementById('delete-button');
+
 
       modalImage.src = `${API_URL}/api/images/${imageData.id}`;
       imgId.textContent = `${imageData.id}`
@@ -125,6 +127,10 @@ export default {
 
       modal.style.display = 'block';
 
+
+      const isUserLoggedIn = checkCookieUserId(imageData.userId);
+      deleteButton.style.display = isUserLoggedIn ? 'block' : 'none';
+
       const closeButton = document.querySelector('.close');
       closeButton.onclick = function () {
         modal.style.display = 'none';
@@ -155,12 +161,63 @@ export default {
             console.error('Error downloading file:', error);
           });
       };
+
+      deleteButton.onclick = async function () {
+        try {
+          const response = await fetch(`${API_URL}/api/images/delete/${imageData.id}`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `${getTokenCookieValue('token')}`
+            }
+          });
+          if (!response.ok) {
+            throw new Error('Failed to delete image');
+          }
+          console.log('Image deleted successfully');
+          modal.style.display = 'none';
+          const imagesDiv = document.getElementById('images');
+          imagesDiv.innerHTML = '';
+          await fetchAndDisplayImages();
+        } catch (error) {
+          console.error('Error deleting image:', error);
+        }
+      };
+
+      function getTokenCookieValue(cookieName) {
+        const cookies = document.cookie.split(';').map(cookie => cookie.trim());
+        for (const cookie of cookies) {
+          const [name, value] = cookie.split('=');
+          if (name === cookieName) {
+            return value;
+          }
+        }
+        return null;
+      }
+
     }
 
     function displayInfoBox(message) {
       const infoBox = document.getElementById('info-box');
       infoBox.style.display = 'block';
       infoBox.querySelector('p').textContent = message;
+    }
+
+    function checkCookieUserId(userId) {
+      const cookies = document.cookie.split(';').map(cookie => cookie.trim());
+      let uuid = null;
+      for (const cookie of cookies) {
+        const [name, value] = cookie.split('=');
+        if (name === 'uuid') {
+          uuid = value;
+          break;
+        }
+      }
+
+      if (uuid === userId) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     fetchAndDisplayImages();

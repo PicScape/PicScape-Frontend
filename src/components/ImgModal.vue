@@ -41,8 +41,10 @@
 
 
 
+      <button id="delete-button">Delete</button>
 
       <button id="downloadButton">Download</button>
+
     </div>
   </div>
 </template>
@@ -128,11 +130,26 @@ export default {
 
 
 
+#delete-button {
+  display: inline-block;
+  float: right;
+  margin-right: 15px;
+  margin-bottom: 5px;
+  padding: 10px 20px;
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
 #downloadButton {
-  display: block;
+  display: inline-block;
+  float: left;
   margin-left: 15px;
   margin-bottom: 5px;
-
   padding: 10px 20px;
   background-color: #007bff;
   color: white;
@@ -147,6 +164,9 @@ export default {
   background-color: #0056b3;
 }
 
+#delete-button:hover {
+  background-color: #b30000;
+}
 
 
 .image-modal-details-container {
@@ -208,5 +228,6 @@ img-tag {
   transition: background-color 0.3s ease;
   margin-top: 6px;
 }
+
 </style>
   
