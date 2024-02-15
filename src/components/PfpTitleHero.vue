@@ -93,21 +93,20 @@ input[type="text"] {
   box-sizing: border-box;
 }
 
-/* Media query for screens smaller than 768px (typical mobile devices) */
 @media screen and (max-width: 768px) {
   .grid-container-hero {
-    width: 100%; /* Full width for smaller screens */
+    width: 100%;
   }
 
   .title-container-hero {
-    margin-bottom: 20px; /* Further reduced margin for smaller screens */
+    margin-bottom: 20px;
   }
   
   .hero-img {
-    display: none; /* Hide image on smaller screens */
+    display: none; 
   }
   
-  /* Remove grid gap when image is hidden */
+
   .grid-container-hero {
     grid-gap: 0;
   }
