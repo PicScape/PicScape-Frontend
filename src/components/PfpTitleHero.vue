@@ -103,10 +103,9 @@ input[type="text"] {
   }
   
   .hero-img {
-    display: none; 
+    display: none;
   }
   
-
   .grid-container-hero {
     grid-gap: 0;
   }
