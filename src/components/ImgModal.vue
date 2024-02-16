@@ -131,7 +131,6 @@ export default {
 
 
 #delete-button {
-  display: inline-block;
   float: right;
   margin-right: 15px;
   margin-bottom: 5px;
@@ -148,12 +147,11 @@ export default {
 }
 
 #delete-button:hover{
-  background-color: #c00000;
+  background-color: #8d0000;
 
 }
 
 #downloadButton {
-  display: inline-block;
   float: left;
   margin-left: 15px;
   margin-bottom: 5px;
@@ -173,9 +171,7 @@ export default {
   background-color: #0056b3;
 }
 
-#delete-button:hover {
-  background-color: #b30000;
-}
+
 
 
 .image-modal-details-container {
