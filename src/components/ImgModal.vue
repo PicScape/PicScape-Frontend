@@ -143,6 +143,13 @@ export default {
   cursor: pointer;
   text-align: center;
   text-decoration: none;
+  transition: 0.2s ease-in-out;
+
+}
+
+#delete-button:hover{
+  background-color: #c00000;
+
 }
 
 #downloadButton {
@@ -158,6 +165,8 @@ export default {
   cursor: pointer;
   text-align: center;
   text-decoration: none;
+  transition: 0.2s ease-in-out;
+
 }
 
 #downloadButton:hover {
