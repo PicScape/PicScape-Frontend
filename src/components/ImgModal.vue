@@ -38,10 +38,7 @@
 
       </div>
 
-
-
-
-      <button id="delete-button">Delete</button>
+      <button id="delete-button" @click="confirmDelete">Delete</button>
 
       <button id="downloadButton">Download</button>
 
@@ -52,7 +49,13 @@
 <script>
 export default {
   props: ['modalId'],
-
+  methods: {
+    confirmDelete() {
+      if (confirm('Are you sure you want to delete this item?')) {
+        this.$emit('deleteItem');
+      }
+    }
+  }
 }
 </script>
   
@@ -146,7 +149,7 @@ export default {
 
 }
 
-#delete-button:hover{
+#delete-button:hover {
   background-color: #8d0000;
 
 }
@@ -233,6 +236,5 @@ img-tag {
   transition: background-color 0.3s ease;
   margin-top: 6px;
 }
-
 </style>
   
