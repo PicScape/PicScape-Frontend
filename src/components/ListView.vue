@@ -236,14 +236,14 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
+  gap: 20px;
   padding-top: 40px;
 }
 
 @media (min-width: 768px) {
   #images {
-    padding-left: calc((100% - (220px * 4) - (3 * 10px)) / 2);
-    padding-right: calc((100% - (220px * 4) - (3 * 10px)) / 2);
+    padding-left: calc((100% - (200px * 4) - (3 * 10px)) / 2);
+    padding-right: calc((100% - (200px * 4) - (3 * 10px)) / 2);
   }
 }
 
