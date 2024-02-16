@@ -185,7 +185,7 @@ export default {
 #modal-image {
   width: 150px;
   height: 150px;
-  margin: 20px;
+  margin: 15px;
   margin-bottom: 0;
   border-radius: 15%;
   background-color: #101213;
