@@ -149,6 +149,8 @@ export default {
           this.tags = [];
           this.file = null;
           this.$refs.fileInput.value = '';
+          this.fileName = '';
+
           this.imagePreview = '';
         } else {
           alert('Upload failed!');
@@ -266,6 +268,8 @@ label {
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
+  transition: 0.2s ease-in-out;
+
 }
 
 .submit-button:hover {
@@ -278,10 +282,7 @@ label {
   padding: 20px;
   text-align: center;
   cursor: pointer;
-}
-
-.drop-zone p {
-  margin: 0;
+  transition: background-color 0.3s ease;
 }
 
 .drop-zone:hover {
