@@ -1,6 +1,6 @@
 <template>
 <div>
-  <h1>PicScape Frontend</h1>
+  <h1>PicScape-Frontend</h1>
 </div>
 </template>
 
