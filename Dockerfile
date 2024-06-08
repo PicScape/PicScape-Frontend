@@ -1,6 +1,5 @@
 FROM node:16-alpine AS build-stage
-# Delete the existing app folder
-RUN rm -rf /app
+
 WORKDIR /app
 
 COPY package*.json ./
