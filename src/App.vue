@@ -15,6 +15,7 @@ export default {
   },
 };
 </script>
+<style src="./styles.css"></style>
 
 <style>
 #app {
@@ -22,6 +23,6 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #ffffff;
+  color: var(--text-color);
 }
 </style>
