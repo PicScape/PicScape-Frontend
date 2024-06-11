@@ -1,5 +1,7 @@
 <template>
+  
   <div v-if="isLoaded" class="auth-form-container" :class="{ 'fly-in': isLoaded }">
+    
     <form @submit.prevent="submitForm" v-if="isRegistering" class="auth-form register-form">
       <div class="form-group">
         <label for="email">Email:</label>
@@ -41,9 +43,11 @@
     </form>
 
     <button v-if="isLoggedIn" @click="logout" class="submit-button">Logout</button>
-
-    <div v-if="error" class="error-message">{{ error }}</div>
-    <div v-if="success" class="success-message">{{ success }}</div>
+    <div class="messages">
+      <div v-if="error" class="error-message">{{ error }}</div>
+      <div v-if="success" class="success-message">{{ success }}</div>
+    </div>
+    
   </div>
 </template>
 
@@ -124,6 +128,10 @@ export default {
 </script>
 
 <style scoped>
+
+.messages{
+  margin-top: 10px;
+}
 
 .fly-in {
   animation: flyIn 0.5s ease forwards;

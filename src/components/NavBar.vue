@@ -19,7 +19,7 @@
 .navbar {
   background-color: var(--navbar-color);
   color: var(--text-color);
-  padding: 10px 20px;
+  padding: 15px 20px;
   display: flex;
   justify-content: center;
   align-items: center;
