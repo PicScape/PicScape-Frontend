@@ -10,12 +10,11 @@ const axiosInstance = axios.create({
   }
 });
 
-// Set Authorization header for every request
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = Cookies.get('token');
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `${token}`;
     }
     return config;
   },
