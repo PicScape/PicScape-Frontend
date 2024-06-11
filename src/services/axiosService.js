@@ -1,8 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const baseURL = 'http://localhost:3000';
-
+const baseURL = process.env.VUE_APP_API_URL;
 const axiosInstance = axios.create({
   baseURL,
   headers: {
@@ -10,6 +9,7 @@ const axiosInstance = axios.create({
   }
 });
 
+// Set Authorization header for every request
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = Cookies.get('token');
@@ -59,12 +59,18 @@ export const logout = () => {
 };
 
 export const checkTokenValidity = async () => {
-  try {
-    const response = await axiosInstance.get('/fetch/account/');
-    return response.data;
-  } catch (error) {
-    handleApiError(error);
+  const token = Cookies.get('token');
+  if (token){
+    try {
+      const response = await axiosInstance.get('/fetch/account/');
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  }else{
+    return false;
   }
+  
 };
 
 
