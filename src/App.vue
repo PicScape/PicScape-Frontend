@@ -1,12 +1,21 @@
 <template>
-<div>
-  <h1>PicScape-Frontend</h1>
-</div>
+  <div id="app">
+    <NavBar />
+    <router-view/>
+  </div>
 </template>
 
 <script>
+import NavBar from "@/components/NavBar.vue";
 
+export default {
+  name: "App",
+  components: {
+    NavBar,
+  },
+};
 </script>
+<style src="./styles.css"></style>
 
 <style>
 #app {
@@ -14,7 +23,6 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  color: var(--text-color);
 }
 </style>
