@@ -327,7 +327,6 @@ input[type="password"] {
   color: #721c24;
   padding: 10px;
   border-radius: 5px;
-  margin-top: 20px;
   text-align: center;
 }
 
