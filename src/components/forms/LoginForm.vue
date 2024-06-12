@@ -1,55 +1,58 @@
 <template>
-  
   <div v-if="isLoaded" class="auth-form-container" :class="{ 'fly-in': isLoaded }">
-    
-    <form @submit.prevent="submitForm" v-if="isRegistering" class="auth-form register-form">
+    <div class="card-header">
+      <div>{{ isRegistering ? 'Register' : 'Login' }}</div>
+    </div>
+
+    <form @submit.prevent="submitForm" v-if="isRegistering" class="auth-form">
       <div class="form-group">
         <label for="email">Email:</label>
-        <input type="email" id="email" v-model="email" name="email" required>
+        <input type="email" id="email" v-model="email" name="email" required autocomplete="email">
       </div>
       <div class="form-group">
         <label for="username">Username:</label>
-        <input type="text" id="username" v-model="username" name="username" required>
+        <input type="text" id="username" v-model="username" name="username" required autocomplete="username">
       </div>
       <div class="form-group">
         <label for="password">Password:</label>
-        <input type="password" id="password" v-model="password" name="password" required>
+        <input type="password" id="password" v-model="password" name="password" required autocomplete="new-password">
       </div>
       <div class="form-group">
         <label for="confirmPassword">Confirm Password:</label>
-        <input type="password" id="confirmPassword" v-model="confirmPassword" name="confirmPassword" required>
+        <input type="password" id="confirmPassword" v-model="confirmPassword" name="confirmPassword" required autocomplete="new-password">
       </div>
       <button type="submit" class="submit-button">Register</button>
       <div class="toggle-auth-option">
         <span>Already have an account?</span>
-        <button @click="toggleAuthOption">Login</button>
+        <button type="button" @click="toggleAuthOption">Login</button>
       </div>
     </form>
 
-    <form @submit.prevent="submitForm" v-if="!isRegistering && !isLoggedIn" class="auth-form login-form">
+    <form @submit.prevent="submitForm" v-else-if="!isLoggedIn" class="auth-form">
       <div class="form-group">
         <label for="loginEmail">Email:</label>
-        <input type="email" id="loginEmail" v-model="loginEmail" name="loginEmail" required>
+        <input type="email" id="loginEmail" v-model="loginEmail" name="loginEmail" required autocomplete="email">
       </div>
       <div class="form-group">
         <label for="loginPassword">Password:</label>
-        <input type="password" id="loginPassword" v-model="loginPassword" name="loginPassword" required>
+        <input type="password" id="loginPassword" v-model="loginPassword" name="loginPassword" required autocomplete="current-password">
       </div>
       <button type="submit" class="submit-button">Login</button>
       <div class="toggle-auth-option">
         <span>Don't have an account yet?</span>
-        <button @click="toggleAuthOption">Register</button>
+        <button type="button" @click="toggleAuthOption">Register</button>
       </div>
     </form>
 
     <button v-if="isLoggedIn" @click="logout" class="submit-button">Logout</button>
-    <div class="messages">
+    <div v-if="!isLoggedIn" class="messages">
       <div v-if="error" class="error-message">{{ error }}</div>
       <div v-if="success" class="success-message">{{ success }}</div>
     </div>
-    
   </div>
 </template>
+
+
 
 <script>
 import axiosService from '@/services/axiosService';
@@ -102,10 +105,10 @@ export default {
           this.error = '';
           await axiosService.login(this.loginEmail, this.loginPassword);
           this.isLoggedIn = true;
-          
+
         }
       } catch (error) {
-        this.error = error.message; 
+        this.error = error.message;
       }
     },
     toggleAuthOption() {
@@ -128,28 +131,6 @@ export default {
 </script>
 
 <style scoped>
-
-.messages{
-  margin-top: 10px;
-}
-
-.fly-in {
-  animation: flyIn 0.5s ease forwards;
-  opacity: 0;
-  transform: translateY(-50px);
-}
-
-@keyframes flyIn {
-  from {
-    opacity: 0;
-    transform: translateY(-50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .auth-form-container {
   max-width: 500px;
   margin: auto;
@@ -157,6 +138,19 @@ export default {
   margin-top: 80px;
   border-radius: 8px;
   background-color: var(--card-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.card-header {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  padding: 10px;
+  margin: -20px -20px 20px -20px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: left;
+  padding-left: 20px;
 }
 
 .auth-form {
@@ -169,6 +163,8 @@ export default {
   grid-template-columns: auto;
   align-items: center;
   margin-bottom: 10px;
+  font-size: 16px;
+
 }
 
 label {
@@ -215,7 +211,7 @@ input[type="password"] {
 }
 
 .toggle-auth-option {
-  margin-top: 10px;
+  margin-top: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -233,5 +229,27 @@ input[type="password"] {
 
 .toggle-auth-option button:hover {
   color: var(--submit-btn-secondary);
+}
+
+.messages {
+  margin-top: 10px;
+}
+
+.fly-in {
+  animation: flyIn 0.5s ease forwards;
+  opacity: 0;
+  transform: translateY(-50px);
+}
+
+@keyframes flyIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
