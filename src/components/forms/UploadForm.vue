@@ -1,5 +1,8 @@
 <template>
   <div v-if="isLoaded" class="auth-form-container" :class="{ 'fly-in': isLoaded }">
+    <div class="card-header">
+      <div>Upload</div>
+    </div>
     <form @submit.prevent="submitForm" v-if="isLoggedIn" class="auth-form upload-form">
       <div class="form-group">
         <label for="title">Title:</label>
@@ -143,17 +146,20 @@ export default {
       this.$refs.fileInput.click();
     },
     handleFileChange(event) {
-      const file = event.target.files[0];
-      this.file = file;
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.imagePreview = reader.result;
-        };
-        reader.readAsDataURL(file);
-      } else {
-        this.imagePreview = '';
-      }
+  const file = event.target.files[0];
+  this.file = file;
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = reader.result;
+      this.fileName = file.name;
+    };
+    reader.readAsDataURL(file);
+  } else {
+    this.imagePreview = '';
+    this.fileName = '';
+  }
+
     },
     logout() {
       this.isLoggedIn = false;
@@ -176,6 +182,8 @@ export default {
   margin-top: 80px;
   border-radius: 8px;
   background-color: var(--card-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .auth-form {
@@ -207,6 +215,17 @@ export default {
   align-items: center;
   margin-bottom: 10px;
   
+}
+
+.card-header {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  padding: 10px;
+  margin: -20px -20px 20px -20px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: left;
+  padding-left: 20px;
 }
 
 label {
@@ -257,6 +276,11 @@ input[type="password"] {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.filename{
+  margin: 0;
+  margin-top: 10px;
 }
 
 .toggle-auth-option button {
@@ -316,11 +340,15 @@ input[type="password"] {
   padding: 20px;
   text-align: center;
   cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
 }
 
 .drop-zone:hover {
-  background-color: #9c9c9c;
+  background-color: #ffffff17;
+
 }
+
 
 .login-prompt {
   background-color: #f8d7da;
@@ -358,7 +386,7 @@ input[type="password"] {
 
 .image-preview {
   max-width: 100%;
-  max-height: 300px;
+  max-height: 200px;
 }
 
 
