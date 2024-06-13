@@ -154,25 +154,27 @@ export default {
       this.file = null;
       this.imagePreview = '';
       this.fileName = '';
+      this.$refs.fileInput.value = null;
     },
     handleFileChange(event) {
-  const file = event.target.files[0];
+      const file = event.target.files[0];
 
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.file = file;
-      this.imagePreview = reader.result;
-      this.fileName = file.name;
-    };
-    reader.readAsDataURL(file);
-  } else {
-    this.file = null;
-    this.imagePreview = '';
-    this.fileName = '';
-  }
-},
-
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.file = file;
+          this.imagePreview = reader.result;
+          this.fileName = file.name;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        if (!this.file) {
+          this.file = null;
+          this.imagePreview = '';
+          this.fileName = '';
+        }
+      }
+    },
     logout() {
       this.isLoggedIn = false;
       Cookies.remove('token');
