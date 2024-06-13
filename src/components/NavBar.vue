@@ -5,14 +5,11 @@
     <header class="navbar">
       <div class="header-container">
         <router-link to="/" class="logo">PicScape</router-link>
-        <nav>
+        <nav v-if="isLoaded">
           <router-link to="/" class="nav-link">Home</router-link>
           <router-link to="/upload" class="nav-link">Upload</router-link>
-          <div v-if="!isLoggedIn">
-            <router-link v-if="isLoggedIn" to="/login" class="nav-link">Login</router-link>
-
-          </div>
-          <div v-else-if="isLoggedIn">
+          <router-link v-if="!isLoggedIn" to="/login" class="nav-link">Login</router-link>
+          <div v-else>
             <div class="dropdown nav-link">
               <button class="dropdown-toggle">
                 Dropdown
@@ -23,17 +20,15 @@
               <div class="dropdown-content">
                 <router-link to="/profile" class="nav-link sub-nav">Profile</router-link>
                 <router-link to="/settings" class="nav-link sub-nav">Settings</router-link>
-                <router-link to="/" @click="logout" class="nav-link sub-nav">Settings</router-link>
+                <router-link to="/" @click="logout" class="nav-link sub-nav">Logout</router-link>
               </div>
             </div>
           </div>
-
         </nav>
       </div>
     </header>
   </div>
 </template>
-
 
 <script>
 import axiosService from '@/services/axiosService';
@@ -44,7 +39,6 @@ export default {
     return {
       isLoggedIn: false,
       isLoaded: false,
-
     };
   },
   created() {
@@ -62,14 +56,10 @@ export default {
         this.isLoaded = true;
       }
     },
-
-
-
     logout() {
       this.isLoggedIn = false;
       Cookies.remove('token');
     },
-
   }
 };
 </script>
