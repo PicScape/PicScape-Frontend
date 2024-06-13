@@ -73,10 +73,53 @@ export const checkTokenValidity = async () => {
   
 };
 
+export const uploadWallpaper = async (title, image, tags) => {
+  try {
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('image', image);
+    tags.forEach(tag => {
+      formData.append('tags', tag);
+    });
+
+    const response = await axiosInstance.post('/upload/wallpaper', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+export const uploadProfilePicture = async (title, image, tags) => {
+  try {
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('image', image);
+    tags.forEach(tag => {
+      formData.append('tags', tag);
+    });
+
+    const response = await axiosInstance.post('/upload/pfp', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+
 
 export default {
   login,
   register,
   logout,
-  checkTokenValidity
+  checkTokenValidity,
+  uploadProfilePicture,
+  uploadWallpaper
 };
