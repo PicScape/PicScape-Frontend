@@ -12,15 +12,15 @@
           <div v-else>
             <div class="dropdown nav-link">
               <button class="dropdown-toggle">
-                Dropdown
+                {{ username }}
                 <span class="material-symbols-outlined">
                   keyboard_arrow_down
                 </span>
               </button>
               <div class="dropdown-content">
-                <router-link to="/profile" class="nav-link sub-nav">Profile</router-link>
+                <router-link to="/myscape" class="nav-link sub-nav">My Scape</router-link>
                 <router-link to="/settings" class="nav-link sub-nav">Settings</router-link>
-                <router-link to="/" @click="logout" class="nav-link sub-nav">Logout</router-link>
+                <router-link to="/" @click="logout" class="nav-link sub-nav logout-btn">Logout</router-link>
               </div>
             </div>
           </div>
@@ -39,6 +39,7 @@ export default {
     return {
       isLoggedIn: false,
       isLoaded: false,
+      username: '',
     };
   },
   created() {
@@ -46,14 +47,20 @@ export default {
   },
   methods: {
     async checkTokenValidity() {
+      let accountData = null;
       try {
-        const accountData = await axiosService.checkTokenValidity();
+        accountData = await axiosService.checkTokenValidity();
+        console.log(accountData)
+
         this.isLoggedIn = !!accountData;
       } catch (error) {
         this.isLoggedIn = false;
         Cookies.remove('token');
       } finally {
         this.isLoaded = true;
+        if (accountData) {
+          this.username = accountData.user.username;
+        }
       }
     },
     logout() {
@@ -65,6 +72,11 @@ export default {
 </script>
 
 <style>
+.logout-btn:hover {
+  background-color: red !important;
+}
+
+
 .navbar {
   background-color: var(--navbar-color);
   color: var(--text-color);
