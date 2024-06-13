@@ -1,4 +1,6 @@
 <template>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
   <div v-if="isLoaded" class="auth-form-container" :class="{ 'fly-in': isLoaded }">
     <div class="card-header">
       <div>Upload</div>
@@ -8,7 +10,7 @@
         <label for="title">Title:</label>
         <input type="text" id="title" v-model="title" required>
       </div>
-      
+
       <div class="form-group">
         <label for="description">Description:</label>
         <input type="text" id="description" v-model="description" required>
@@ -34,21 +36,19 @@
 
       <div class="form-group">
         <label for="image">Image:</label>
-        <div class="drop-zone" 
-             @dragenter.prevent="draggingOver = true"
-             @dragleave.prevent="draggingOver = false"
-             @dragover.prevent
-             @drop.prevent="handleDrop"
-             @click="selectFile"
-             :class="{ 'drag-over': draggingOver }">
-          <p v-if="!imagePreview">Drag & Drop images here or click to select</p>
+        <div class="drop-zone" @dragenter.prevent="draggingOver = true" @dragleave.prevent="draggingOver = false"
+          @dragover.prevent @drop.prevent="handleDrop" @click="selectFile" :class="{ 'drag-over': draggingOver }">
+          <button v-if="imagePreview" @click.stop="clearImage" class="remove-button">
+            <i class="material-icons">delete</i>
+          </button>
+          <p v-if="!imagePreview" class="drop-text">Drag & Drop images here or click to select</p>
           <img :src="imagePreview" v-if="imagePreview" alt="Image Preview" class="image-preview">
           <p class="filename">{{ fileName }}</p>
           <input type="file" id="image" ref="fileInput" style="display: none;" accept="image/*"
             @change="handleFileChange">
         </div>
       </div>
-      
+
       <button type="submit" class="submit-button">Upload</button>
       <div class="messages">
         <div v-if="error" class="error-message">{{ error }}</div>
@@ -150,6 +150,11 @@ export default {
     selectFile() {
       this.$refs.fileInput.click();
     },
+    clearImage() {
+      this.file = null;
+      this.imagePreview = '';
+      this.fileName = '';
+    },
     handleFileChange(event) {
       const file = event.target.files[0];
       this.file = file;
@@ -218,7 +223,60 @@ export default {
   grid-template-columns: auto;
   align-items: center;
   margin-bottom: 10px;
-  
+
+}
+
+.drop-zone {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  position: relative;
+}
+
+.drag-over {
+  background-color: #ffffff17;
+}
+
+.drop-text {
+  pointer-events: none;
+}
+
+.filename {
+  pointer-events: none;
+}
+
+.drop-content {
+  position: relative;
+  z-index: 1;
+}
+
+.remove-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  width: 30px;
+  background: transparent;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 20px;
+  color: white;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.remove-button:hover {
+  color: red;
+}
+
+.image-preview {
+  max-width: 100%;
+  max-height: 200px;
 }
 
 .card-header {
@@ -237,7 +295,10 @@ label {
   text-align: left;
   padding-bottom: 7px;
   color: var(--text-color);
+  pointer-events: none;
+
 }
+
 
 input[type="text"],
 input[type="email"],
@@ -282,7 +343,7 @@ input[type="password"] {
   align-items: center;
 }
 
-.filename{
+.filename {
   margin: 0;
   margin-top: 10px;
 }
@@ -347,6 +408,7 @@ input[type="password"] {
   transition: background-color 0.2s ease-in-out;
   position: relative;
 }
+
 .drop-zone:hover {
   background-color: #ffffff17;
   z-index: 1;
@@ -394,6 +456,7 @@ input[type="password"] {
 .image-preview {
   max-width: 100%;
   max-height: 200px;
+  pointer-events: none;
 }
 
 
