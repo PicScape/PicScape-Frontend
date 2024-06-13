@@ -247,9 +247,7 @@ export default {
   pointer-events: none;
 }
 
-.filename {
-  pointer-events: none;
-}
+
 
 
 
@@ -274,10 +272,6 @@ export default {
   color: red;
 }
 
-.image-preview {
-  max-width: 100%;
-  max-height: 200px;
-}
 
 .card-header {
   background-color: var(--primary-color);
@@ -299,9 +293,6 @@ label {
 
 }
 
-.card-header {
-  padding-left: 2999px;
-}
 
 
 input[type="text"],
@@ -350,6 +341,8 @@ input[type="password"] {
 .filename {
   margin: 0;
   margin-top: 10px;
+  pointer-events: none;
+
 }
 
 .toggle-auth-option button {
