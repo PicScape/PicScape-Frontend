@@ -50,7 +50,6 @@ export default {
       let accountData = null;
       try {
         accountData = await axiosService.checkTokenValidity();
-        console.log(accountData)
 
         this.isLoggedIn = !!accountData;
       } catch (error) {
@@ -134,17 +133,19 @@ nav {
 
 .dropdown {
   position: relative;
+
 }
 
 .dropdown-content {
   display: none;
   position: absolute;
   top: 100%;
-  left: 0;
+  right: 0;
   background-color: var(--navbar-color);
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
+
 }
 
 .dropdown-content .sub-nav {
@@ -153,10 +154,12 @@ nav {
   color: var(--text-color);
   text-decoration: none;
   transition: background-color 0.3s;
+
 }
 
 .dropdown-content .nav-link:hover {
   background-color: var(--primary-color);
+  
 }
 
 .dropdown:hover .dropdown-content {
