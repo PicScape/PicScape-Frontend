@@ -25,16 +25,22 @@
         <input type="text" id="tags" v-model="tagInput" @keydown.enter.prevent="addTag">
       </div>
       <div class="form-group">
-  <label for="uploadType">Upload Type:</label>
-  <select v-model="type" id="uploadType" class="upload-type-select" required>
-    <option value="wallpaper">Wallpaper</option>
-    <option value="pfp">Profile Picture</option>
-  </select>
-</div>
+        <label for="uploadType">Upload Type:</label>
+        <select v-model="type" id="uploadType" class="upload-type-select" required>
+          <option value="wallpaper">Wallpaper</option>
+          <option value="pfp">Profile Picture</option>
+        </select>
+      </div>
 
       <div class="form-group">
         <label for="image">Image:</label>
-        <div class="drop-zone" @dragover.prevent @drop="handleDrop" @click="selectFile">
+        <div class="drop-zone" 
+             @dragenter.prevent="draggingOver = true"
+             @dragleave.prevent="draggingOver = false"
+             @dragover.prevent
+             @drop.prevent="handleDrop"
+             @click="selectFile"
+             :class="{ 'drag-over': draggingOver }">
           <p v-if="!imagePreview">Drag & Drop images here or click to select</p>
           <img :src="imagePreview" v-if="imagePreview" alt="Image Preview" class="image-preview">
           <p class="filename">{{ fileName }}</p>
@@ -47,7 +53,7 @@
       <div class="messages">
         <div v-if="error" class="error-message">{{ error }}</div>
         <div v-if="success" class="success-message">{{ success }}</div>
-    </div>
+      </div>
     </form>
 
     <div v-else class="login-prompt">
@@ -76,7 +82,8 @@ export default {
       leavingTags: [],
       type: '',
       error: '',
-      success: ''
+      success: '',
+      draggingOver: false // Track whether a file is being dragged over the drop zone
     };
   },
   created() {
@@ -95,31 +102,28 @@ export default {
       }
     },
     async submitForm() {
-  try {
+      try {
+        if (this.type === 'wallpaper') {
+          await axiosService.uploadWallpaper(this.title, this.file, this.tags);
+        } else {
+          await axiosService.uploadProfilePicture(this.title, this.file, this.tags);
+        }
 
-    if (this.type === 'wallpaper') {
-      await axiosService.uploadWallpaper(this.title, this.file, this.tags);
-    } else {
-      await axiosService.uploadProfilePicture(this.title, this.file, this.tags);
-    }
+        this.title = '';
+        this.description = '';
+        this.tagInput = '';
+        this.tags = [];
+        this.file = null;
+        this.imagePreview = '';
+        this.fileName = '';
+        this.type = '';
 
-    this.title = '';
-    this.description = '';
-    this.tagInput = '';
-    this.tags = [];
-    this.file = null;
-    this.imagePreview = '';
-    this.fileName = '';
-    this.type = '';
-
-
-    console.log("Upload successful!");
-  } catch (error) {
-    console.error("Upload failed:", error.message);
-    this.error = error.error;
-  }
-},
-  
+        console.log("Upload successful!");
+      } catch (error) {
+        console.error("Upload failed:", error.message);
+        this.error = error.error;
+      }
+    },
     removeTag(index) {
       this.leavingTags.push(index);
       this.tags.splice(index, 1);
@@ -141,25 +145,25 @@ export default {
       if (files.length > 0) {
         this.handleFileChange({ target: { files: [files[0]] } });
       }
+      this.draggingOver = false; // Reset draggingOver state after handling drop
     },
     selectFile() {
       this.$refs.fileInput.click();
     },
     handleFileChange(event) {
-  const file = event.target.files[0];
-  this.file = file;
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.imagePreview = reader.result;
-      this.fileName = file.name;
-    };
-    reader.readAsDataURL(file);
-  } else {
-    this.imagePreview = '';
-    this.fileName = '';
-  }
-
+      const file = event.target.files[0];
+      this.file = file;
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.imagePreview = reader.result;
+          this.fileName = file.name;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        this.imagePreview = '';
+        this.fileName = '';
+      }
     },
     logout() {
       this.isLoggedIn = false;
@@ -341,14 +345,17 @@ input[type="password"] {
   text-align: center;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
-
+  position: relative; /* Ensure the drop zone is positioned relative */
 }
-
 .drop-zone:hover {
   background-color: #ffffff17;
+  z-index: 1;
 
 }
 
+.drag-over {
+  background-color: #ffffff17;
+}
 
 .login-prompt {
   background-color: #f8d7da;
