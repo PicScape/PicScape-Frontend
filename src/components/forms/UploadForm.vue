@@ -83,7 +83,7 @@ export default {
       type: '',
       error: '',
       success: '',
-      draggingOver: false // Track whether a file is being dragged over the drop zone
+      draggingOver: false
     };
   },
   created() {
@@ -145,7 +145,7 @@ export default {
       if (files.length > 0) {
         this.handleFileChange({ target: { files: [files[0]] } });
       }
-      this.draggingOver = false; // Reset draggingOver state after handling drop
+      this.draggingOver = false;
     },
     selectFile() {
       this.$refs.fileInput.click();
@@ -345,7 +345,7 @@ input[type="password"] {
   text-align: center;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
-  position: relative; /* Ensure the drop zone is positioned relative */
+  position: relative;
 }
 .drop-zone:hover {
   background-color: #ffffff17;
