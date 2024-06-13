@@ -12,6 +12,15 @@
 
       </div>
       <div class="form-group">
+        <label for="roles">Roles:</label>
+
+      <div class="tags-container">
+        <div v-for="(role, index) in roles" :key="index" class="tag">
+          {{ role }}
+        </div>
+      </div>
+    </div>
+      <div class="form-group">
         <label for="email">Email:</label>
         <input type="email" id="email" :placeholder=email_placeholder v-model=email autocomplete="email">
       </div>
@@ -22,16 +31,19 @@
         </div>
         <div class="form-group">
           <label for="confirmPassword">Confirm Password:</label>
-          <input type="password" id="confirmPassword" name="confirmPassword"
-            autocomplete="new-password" v-model=confirmPassword>
+          <input type="password" id="confirmPassword" name="confirmPassword" autocomplete="new-password"
+            v-model=confirmPassword>
         </div>
       </div>
+
 
       <button type="submit" class="submit-button">Update Credentials</button>
       <div class="messages">
         <div v-if="error" class="error-message">{{ error }}</div>
         <div v-if="success" class="success-message">{{ success }}</div>
       </div>
+
+
     </form>
 
     <div v-else class="login-prompt">
@@ -53,7 +65,7 @@ export default {
       password: '',
       username: '',
       email: '',
-      roles: '',
+      roles: [],
       isLoggedIn: false,
       isLoaded: false,
       error: '',
@@ -71,6 +83,8 @@ export default {
         this.isLoggedIn = !!accountData;
         this.username_placeholder = accountData.user.username
         this.email_placeholder = await this.censorEmail(accountData.user.email);
+        this.roles = accountData.user.roles || [];
+
 
       } catch (error) {
         this.isLoggedIn = false;
@@ -180,6 +194,18 @@ export default {
 };
 </script>
 <style scoped>
+.tag {
+  background-color: #d3d3d3;
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  display: inline-block;
+  margin-bottom: 0;
+  color: black;
+}
+
+
 .auth-form-container {
   max-width: 600px;
   margin: auto;
@@ -418,7 +444,6 @@ input[type="password"] {
   border-radius: 4px;
   padding: 4px 8px;
   margin-right: 8px;
-  margin-bottom: 8px;
   display: flex;
   align-items: center;
   animation-duration: 0.3s;
