@@ -81,22 +81,22 @@ export default {
     },
     async submitForm() {
       try {
-        if (this.password == this.confirmPassword){
+        if (this.password === this.confirmPassword) {
+          const response = await axiosService.updateCredentials(this.username, this.email, this.password);
+          this.success = response.message || 'Credentials updated successfully!';
+          this.checkTokenValidity();
+          this.error = '';
           this.username = '';
           this.email = '';
           this.password = '';
           this.confirmPassword = '';
-
-        console.log("update successful!");
         } else {
-          this.error = "Passwords do not match"
+          this.error = 'Passwords do not match';
         }
-        
-
-        
       } catch (error) {
-        console.error("Upload failed:", error.message);
-        this.error = error.error;
+        console.error("Update failed:", error.message);
+        this.error = error.message || 'Failed to update credentials';
+        this.success = '';
       }
     },
     async censorEmail(email) {
@@ -367,17 +367,14 @@ input[type="password"] {
 .password-group {
   display: flex;
   justify-content: space-between;
-  /* Ensures the two password inputs are spaced evenly */
 }
 
 .password-group .form-group {
   flex: 1;
-  /* Each password input takes half the available space */
 }
 
 .password-group .form-group:not(:last-child) {
   margin-right: 10px;
-  /* Add some space between password inputs */
 }
 
 .tag-text {

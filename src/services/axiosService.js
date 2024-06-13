@@ -9,7 +9,6 @@ const axiosInstance = axios.create({
   }
 });
 
-// Set Authorization header for every request
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = Cookies.get('token');
@@ -113,7 +112,14 @@ export const uploadProfilePicture = async (title, image, tags) => {
   }
 };
 
-
+export const updateCredentials = async (username, email, password) => {
+  try {
+    const response = await axiosInstance.put('/auth/edit', { username, email, password });
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
 
 export default {
   login,
@@ -121,5 +127,6 @@ export default {
   logout,
   checkTokenValidity,
   uploadProfilePicture,
-  uploadWallpaper
+  uploadWallpaper,
+  updateCredentials
 };
