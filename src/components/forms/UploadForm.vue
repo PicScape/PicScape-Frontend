@@ -39,7 +39,7 @@
         <div class="drop-zone" @dragenter.prevent="draggingOver = true" @dragleave.prevent="draggingOver = false"
           @dragover.prevent @drop.prevent="handleDrop" @click="selectFile" :class="{ 'drag-over': draggingOver }">
           <button v-if="imagePreview" @click.stop="clearImage" class="remove-button">
-            <i class="material-icons">delete</i>
+            <i class="material-icons">close</i>
           </button>
           <p v-if="!imagePreview" class="drop-text">Drag & Drop images here or click to select</p>
           <img :src="imagePreview" v-if="imagePreview" alt="Image Preview" class="image-preview">
@@ -156,20 +156,23 @@ export default {
       this.fileName = '';
     },
     handleFileChange(event) {
-      const file = event.target.files[0];
+  const file = event.target.files[0];
+
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
       this.file = file;
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.imagePreview = reader.result;
-          this.fileName = file.name;
-        };
-        reader.readAsDataURL(file);
-      } else {
-        this.imagePreview = '';
-        this.fileName = '';
-      }
-    },
+      this.imagePreview = reader.result;
+      this.fileName = file.name;
+    };
+    reader.readAsDataURL(file);
+  } else {
+    this.file = null;
+    this.imagePreview = '';
+    this.fileName = '';
+  }
+},
+
     logout() {
       this.isLoggedIn = false;
       Cookies.remove('token');
@@ -232,7 +235,7 @@ export default {
   padding: 20px;
   text-align: center;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.15s ease-in-out;
   position: relative;
 }
 
@@ -248,10 +251,7 @@ export default {
   pointer-events: none;
 }
 
-.drop-content {
-  position: relative;
-  z-index: 1;
-}
+
 
 .remove-button {
   position: absolute;
@@ -297,6 +297,10 @@ label {
   color: var(--text-color);
   pointer-events: none;
 
+}
+
+.card-header {
+  padding-left: 2999px;
 }
 
 
@@ -372,22 +376,14 @@ input[type="password"] {
   flex-wrap: wrap;
 }
 
-.tag {
-  background-color: #d3d3d3;
-  border-radius: 4px;
-  padding: 4px 8px;
-  margin-right: 8px;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-}
+
 
 .tag-text {
   color: black;
 }
 
 .tag button {
-  margin-left: 8px;
+  margin-left: 5px;
   background: none;
   border: none;
   cursor: pointer;
@@ -399,19 +395,10 @@ input[type="password"] {
   color: red;
 }
 
-.drop-zone {
-  border: 2px dashed #ccc;
-  border-radius: 8px;
-  padding: 20px;
-  text-align: center;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-  position: relative;
-}
+
 
 .drop-zone:hover {
-  background-color: #ffffff17;
-  z-index: 1;
+  background-color: #ffffff0e;
 
 }
 
