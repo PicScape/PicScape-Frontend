@@ -7,57 +7,11 @@
           <router-link to="/" class="nav-link">Home</router-link>
           <router-link to="/upload" class="nav-link">Upload</router-link>
           <router-link to="/login" class="nav-link">Login</router-link>
-          <router-link v-if="isLoggedIn" to="/profile" class="nav-link">Profile</router-link>
-          <div v-if="isLoggedIn" class="dropdown">
-            <button @click="toggleDropdown" class="profile-button">
-              {{ username }} <i class="fa fa-caret-down"></i>
-            </button>
-            <div v-if="isDropdownOpen" class="dropdown-content">
-              <router-link to="/settings" class="dropdown-link">Settings</router-link>
-              <button @click="logout" class="dropdown-link">Logout</button>
-            </div>
-          </div>
         </nav>
       </div>
     </header>
   </div>
 </template>
-
-<script>
-import axiosService from '@/services/axiosService';
-import Cookies from 'js-cookie';
-
-export default {
-  data() {
-    return {
-      isLoggedIn: false,
-      username: "",
-    };
-  },
-  async created() {
-    try {
-      const accountData = await axiosService.checkTokenValidity();
-      if (accountData) {
-        this.isLoggedIn = true;
-      }
-    } catch (error) {
-      this.isLoggedIn = false;
-      Cookies.remove('token');
-    } finally {
-      this.isLoaded = true;
-    }
-  },
-  methods: {
-    
-    logout() {
-      this.isLoggedIn = false;
-      Cookies.remove('token');
-    }
-  }
-};
-</script>
-
-
 
 <style>
 
