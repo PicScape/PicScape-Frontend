@@ -105,6 +105,7 @@ export default {
           this.error = '';
           await axiosService.login(this.loginEmail, this.loginPassword);
           this.isLoggedIn = true;
+          window.location.href = '/';
 
         }
       } catch (error) {
@@ -125,6 +126,7 @@ export default {
     logout() {
       this.isLoggedIn = false;
       Cookies.remove('token');
+      window.location.reload()
     }
   }
 };

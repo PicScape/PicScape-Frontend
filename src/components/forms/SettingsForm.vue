@@ -3,53 +3,31 @@
 
   <div v-if="isLoaded" class="auth-form-container" :class="{ 'fly-in': isLoaded }">
     <div class="card-header">
-      <div>Upload</div>
+      <div>Account Settings</div>
     </div>
     <form @submit.prevent="submitForm" v-if="isLoggedIn" class="auth-form upload-form">
       <div class="form-group">
-        <label for="title">Title:</label>
-        <input type="text" id="title" v-model="title" required>
-      </div>
+        <label for="username">Username:</label>
+        <input type="text" :placeholder=username_placeholder v-model=username id="username" autocomplete="username">
 
-      <div class="form-group">
-        <label for="description">Description:</label>
-        <input type="text" id="description" v-model="description" required>
       </div>
       <div class="form-group">
-        <label for="tags">Tags:</label>
-        <div class="tags-container">
-          <div v-for="(tag, index) in tags" :key="index" class="tag"
-            :class="{ 'jump-in': isTagEntering(index), 'jump-out': isTagLeaving(index) }">
-            <span class="tag-text">{{ tag }}</span>
-            <button @click="removeTag(index)" type="button">✖</button>
-          </div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" :placeholder=email_placeholder v-model=email autocomplete="email">
+      </div>
+      <div class="password-group">
+        <div class="form-group">
+          <label for="password">New Password:</label>
+          <input type="password" id="password" name="password" autocomplete="new-password" v-model=password>
         </div>
-        <input type="text" id="tags" v-model="tagInput" @keydown.enter.prevent="addTag">
-      </div>
-      <div class="form-group">
-        <label for="uploadType">Upload Type:</label>
-        <select v-model="type" id="uploadType" class="upload-type-select" required>
-          <option value="wallpaper">Wallpaper</option>
-          <option value="pfp">Profile Picture</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="image">Image:</label>
-        <div class="drop-zone" @dragenter.prevent="draggingOver = true" @dragleave.prevent="draggingOver = false"
-          @dragover.prevent @drop.prevent="handleDrop" @click="selectFile" :class="{ 'drag-over': draggingOver }">
-          <button v-if="imagePreview" @click.stop="clearImage" class="remove-button">
-            <i class="material-icons">close</i>
-          </button>
-          <p v-if="!imagePreview" class="drop-text">Drag & Drop images here or click to select</p>
-          <img :src="imagePreview" v-if="imagePreview" alt="Image Preview" class="image-preview">
-          <p class="filename">{{ fileName }}</p>
-          <input type="file" id="image" ref="fileInput" style="display: none;" accept="image/*"
-            @change="handleFileChange">
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password:</label>
+          <input type="password" id="confirmPassword" name="confirmPassword"
+            autocomplete="new-password" v-model=confirmPassword>
         </div>
       </div>
 
-      <button type="submit" class="submit-button">Upload</button>
+      <button type="submit" class="submit-button">Update Credentials</button>
       <div class="messages">
         <div v-if="error" class="error-message">{{ error }}</div>
         <div v-if="success" class="success-message">{{ success }}</div>
@@ -57,7 +35,7 @@
     </form>
 
     <div v-else class="login-prompt">
-      <p>You need to <router-link to="/login">login</router-link> to upload images.</p>
+      <p>You are not logged in.</p>
     </div>
   </div>
 </template>
@@ -69,31 +47,31 @@ import Cookies from 'js-cookie';
 export default {
   data() {
     return {
-      title: '',
-      description: '',
-      tagInput: '',
-      tags: [],
-      file: null,
-      imagePreview: '',
-      fileName: '',
+      username_placeholder: '',
+      email_placeholder: '',
+      confirmPassword: '',
+      password: '',
+      username: '',
+      email: '',
+      roles: '',
       isLoggedIn: false,
       isLoaded: false,
-      enteringTags: [],
-      leavingTags: [],
-      type: '',
       error: '',
       success: '',
-      draggingOver: false
     };
   },
   created() {
     this.checkTokenValidity();
   },
   methods: {
+
     async checkTokenValidity() {
       try {
         const accountData = await axiosService.checkTokenValidity();
         this.isLoggedIn = !!accountData;
+        this.username_placeholder = accountData.user.username
+        this.email_placeholder = await this.censorEmail(accountData.user.email);
+
       } catch (error) {
         this.isLoggedIn = false;
         Cookies.remove('token');
@@ -103,26 +81,39 @@ export default {
     },
     async submitForm() {
       try {
-        if (this.type === 'wallpaper') {
-          await axiosService.uploadWallpaper(this.title, this.file, this.tags);
+        if (this.password === this.confirmPassword) {
+          const response = await axiosService.updateCredentials(this.username, this.email, this.password);
+          this.success = response.message || 'Credentials updated successfully!';
+          this.checkTokenValidity();
+          this.error = '';
+          this.username = '';
+          this.email = '';
+          this.password = '';
+          this.confirmPassword = '';
         } else {
-          await axiosService.uploadProfilePicture(this.title, this.file, this.tags);
+          this.error = 'Passwords do not match';
         }
-
-        this.title = '';
-        this.description = '';
-        this.tagInput = '';
-        this.tags = [];
-        this.file = null;
-        this.imagePreview = '';
-        this.fileName = '';
-        this.type = '';
-
-        console.log("Upload successful!");
       } catch (error) {
-        console.error("Upload failed:", error.message);
-        this.error = error.error;
+        console.error("Update failed:", error.message);
+        this.error = error.message || 'Failed to update credentials';
+        this.success = '';
       }
+    },
+    async censorEmail(email) {
+      let parts = email.split('@');
+
+      if (parts.length !== 2) {
+        return email;
+      }
+
+      let localPart = parts[0];
+      let domain = parts[1];
+
+      let censoredLocalPart = localPart.substring(0, 3) + '*'.repeat(localPart.length - 3);
+
+      let censoredEmail = censoredLocalPart + '@' + domain;
+
+      return censoredEmail;
     },
     removeTag(index) {
       this.leavingTags.push(index);
@@ -190,7 +181,7 @@ export default {
 </script>
 <style scoped>
 .auth-form-container {
-  max-width: 500px;
+  max-width: 600px;
   margin: auto;
   padding: 20px;
   margin-top: 80px;
@@ -228,8 +219,8 @@ export default {
   grid-template-columns: auto;
   align-items: center;
   margin-bottom: 10px;
-
 }
+
 
 .drop-zone {
   border: 2px dashed #ccc;
@@ -328,6 +319,8 @@ input[type="password"] {
   color: red;
 }
 
+
+
 .success-message {
   margin-top: 5px;
   color: green;
@@ -371,7 +364,18 @@ input[type="password"] {
   flex-wrap: wrap;
 }
 
+.password-group {
+  display: flex;
+  justify-content: space-between;
+}
 
+.password-group .form-group {
+  flex: 1;
+}
+
+.password-group .form-group:not(:last-child) {
+  margin-right: 10px;
+}
 
 .tag-text {
   color: black;
