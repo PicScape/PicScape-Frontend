@@ -121,6 +121,20 @@ export const updateCredentials = async (username, email, password) => {
   }
 };
 
+export const getNewestUploads = async (type) => {
+  try {
+    const response = await axiosInstance.get('/image/newest/', {
+      params: {
+        type: type
+      }
+    });
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+    throw error;
+  }
+};
+
 export default {
   login,
   register,
@@ -128,5 +142,6 @@ export default {
   checkTokenValidity,
   uploadProfilePicture,
   uploadWallpaper,
-  updateCredentials
+  updateCredentials,
+  getNewestUploads
 };
