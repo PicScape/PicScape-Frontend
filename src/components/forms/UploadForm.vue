@@ -120,8 +120,8 @@ export default {
 
         console.log("Upload successful!");
       } catch (error) {
-        console.error("Upload failed:", error.message);
-        this.error = error.error;
+        console.error("Upload failed:", error);
+        this.error = error.message;
       }
     },
     removeTag(index) {
