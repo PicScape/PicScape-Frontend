@@ -87,11 +87,13 @@ export default {
   height: 100px;
   overflow: hidden;
   text-align: center;
-  transition: transform 0.3s ease;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
+
 
 .image-container:hover {
   transform: scale(1.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
 .image-container img {
