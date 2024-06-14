@@ -117,6 +117,7 @@ export default {
         this.imagePreview = '';
         this.fileName = '';
         this.type = '';
+        this.error = '';
 
         console.log("Upload successful!");
       } catch (error) {
@@ -155,8 +156,12 @@ export default {
       this.imagePreview = '';
       this.fileName = '';
       this.$refs.fileInput.value = null;
+      this.error = '';
+
     },
     handleFileChange(event) {
+      this.error = '';
+
       const file = event.target.files[0];
 
       if (file) {
