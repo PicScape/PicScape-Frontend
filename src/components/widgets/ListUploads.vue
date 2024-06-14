@@ -43,11 +43,10 @@
       async fetchNewestImages() {
         try {
           const response = await axiosService.getNewestUploads("pfp");
-          console.log(response);
           this.images = response.uploads.map(image => ({
             ...image,
-            url: `/image/view/${image.imgId}`,
-          }));
+            url: `http://localhost:3000/image/view/${image.imgId}`,
+        }));
         } catch (error) {
           console.error('Error fetching images:', error);
           this.showInfoBox = true;
