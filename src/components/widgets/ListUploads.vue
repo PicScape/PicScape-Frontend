@@ -9,7 +9,7 @@
         >
           <img :src="image.url" :alt="image.title" />
           <div class="overlay">
-            <button @click="openModal(image)">View Details</button>
+            <button @click="openModal(image)">View</button>
           </div>
         </div>
       </div>
@@ -119,10 +119,18 @@ export default {
 }
 
 .overlay button {
-  background-color: #fff;
-  padding: 10px 20px;
+  color: white;
+  background-color: var(--submit-btn-primary);
+  padding: 7px 15px;
   border: none;
+  border-radius: 3px;
   cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.overlay button:hover {
+  background-color: var(--submit-btn-secondary);
 }
 
 .info-box {
