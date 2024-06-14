@@ -21,13 +21,24 @@
     >
       <p>Unable to reach the API.</p>
     </div>
+
+    <!-- Modal component usage -->
+    <ImageModal
+      :show-modal="modalId !== null"
+      :modal-content="findImageById(modalId)"
+      @close="modalId = null"
+    />
   </div>
 </template>
 
 <script>
 import axiosService from '@/services/axiosService';
+import ImageModal from '@/components/widgets/ImageModal.vue';
 
 export default {
+  components: {
+    ImageModal,
+  },
   data() {
     return {
       images: [],
@@ -53,6 +64,9 @@ export default {
     },
     openModal(image) {
       this.modalId = image.imgId;
+    },
+    findImageById(id) {
+      return this.images.find(image => image.imgId === id);
     },
   },
 };

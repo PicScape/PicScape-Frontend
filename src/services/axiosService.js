@@ -72,10 +72,12 @@ export const checkTokenValidity = async () => {
   
 };
 
-export const uploadWallpaper = async (title, image, tags) => {
+export const uploadWallpaper = async (title, image, tags, description) => {
   try {
     const formData = new FormData();
     formData.append('title', title);
+    formData.append('description', description);
+
     formData.append('image', image);
     tags.forEach(tag => {
       formData.append('tags', tag);
@@ -92,10 +94,12 @@ export const uploadWallpaper = async (title, image, tags) => {
   }
 };
 
-export const uploadProfilePicture = async (title, image, tags) => {
+export const uploadProfilePicture = async (title, image, tags, description) => {
   try {
     const formData = new FormData();
     formData.append('title', title);
+    formData.append('description', description);
+
     formData.append('image', image);
     tags.forEach(tag => {
       formData.append('tags', tag);
