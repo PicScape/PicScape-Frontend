@@ -135,6 +135,17 @@ export const getNewestUploads = async (type) => {
   }
 };
 
+export const getImageDetails = async (imageId) => {
+  try {
+    const response = await axiosInstance.get(`/image/data/${imageId}`);
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+    throw error;
+  }
+};
+
+
 export default {
   login,
   register,
@@ -143,5 +154,6 @@ export default {
   uploadProfilePicture,
   uploadWallpaper,
   updateCredentials,
-  getNewestUploads
+  getNewestUploads,
+  getImageDetails
 };
