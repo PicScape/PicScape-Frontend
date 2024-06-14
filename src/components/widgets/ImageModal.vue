@@ -1,54 +1,52 @@
 <template>
-  <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
-    <div class="modal-content">
-      <button class="close" @click="closeModal">&times;</button>
-
-      <div class="image-modal-details-container">
-     <img :src="imageURL" id="modal-image" />
-
-        <div class="information-box">
-          <h3 class="img-title text-set-large"></h3>
-          <h3 class="img-id text-set-middle-sub"></h3>
-
+    <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
+      <div class="modal-content">
+        <button class="close" @click="closeModal">&times;</button>
+  
+        <div class="image-modal-details-container">
+          <img :src="imageURL" id="modal-image" />
+  
+          <div class="information-box">
+            <h3 class="img-title text-set-large">{{ modalContent.title }}</h3>
+            <h3 class="img-id text-set-middle-sub">{{ modalContent.imgId }}</h3>
+          </div>
+          <hr>
+  
+          <div class="information-box">
+            <div>
+              <div class="text-set-middle-bottom">Description:</div>
+              <div class="img-description text-set-middle-bottom-sub">{{ modalContent.description }}</div>
+            </div>
+  
+            <div>
+              <div class="text-set-middle-bottom" style="margin-bottom: 5px">Tags:</div>
+              <div class="img-tags text-set-middle-bottom-sub">
+                <span v-for="tag in modalContent.tags" :key="tag" class="img-tag">{{ tag }}</span>
+              </div>
+            </div>
+  
+            <div>
+              <div class="text-set-middle-bottom">Uploaded by:</div>
+              <div class="img-author text-set-middle-bottom-sub">{{ modalContent.author }}</div>
+            </div>
+  
+            <div>
+              <div class="text-set-middle-bottom">Publish Date:</div>
+              <div class="img-upload-date text-set-middle-bottom-sub">{{ modalContent.uploadedDate }}</div>
+            </div>
+          </div>
         </div>
-        <hr>
-
-        <div class="information-box">
-          <div>
-            <div class="text-set-middle-bottom">Description:</div>
-            <div class="img-description text-set-middle-bottom-sub">{{ modalContent.description }}</div>
-          </div>
-
-          <div>
-            <div class="text-set-middle-bottom" style="margin-bottom: 5px">Tags:</div>
-            <div class="img-tags text-set-middle-bottom-sub"><span  v-for="tag in modalContent.tags" :key="tag" class="img-tag">{{ tag }}</span></div>
-          </div>
-
-          <div >
-            <div class="text-set-middle-bottom">Uploaded by:</div>
-            <div class="img-author text-set-middle-bottom-sub">{{ modalContent.author }}</div>
-          </div>
-
-
-          <div>
-            <div class="text-set-middle-bottom">Publish Date:</div>
-            <div class="img-upload-date text-set-middle-bottom-sub">{{ modalContent.uploadedDate }}</div>
-          </div>
-        </div>
-
-
+  
+        <button v-if="canDelete" id="delete-button" @click="handleDelete">Delete</button>
+  
+        <button id="downloadButton">Download</button>
       </div>
-
-      <button id="delete-button" @click="confirmDelete">Delete</button>
-
-      <button id="downloadButton">Download</button>
-
     </div>
-  </div>
-</template>
-
+  </template>
   
   <script>
+  import axiosService from '@/services/axiosService';
+  
   export default {
     props: {
       showModal: {
@@ -60,11 +58,31 @@
         default: null
       }
     },
+  
     data() {
       return {
-        imageURL: ''
+        imageURL: '',
+        userId: null,
+        authorId: null
       };
     },
+  
+    computed: {
+      canDelete() {
+        return this.userId == this.modalContent.author;
+      }
+    },
+  
+    async created() {
+      try {
+        const response = await axiosService.checkTokenValidity();
+        this.userId = response.user.id;
+        
+      } catch (error) {
+        console.error('Error fetching user ID:', error.message);
+      }
+    },
+  
     watch: {
       modalContent: {
         immediate: true,
@@ -75,17 +93,36 @@
         }
       }
     },
+  
     methods: {
       closeModal() {
         this.$emit('close');
       },
-      confirmDelete() {
-        this.$emit('delete');
+  
+      async handleDelete() {
+        let confirmMessage = '';
+        if (this.modalContent.type === 'pfp') {
+          confirmMessage = 'Are you sure you want to delete this Profile Picture?';
+        } else if (this.modalContent.type === 'wallpaper') {
+          confirmMessage = 'Are you sure you want to delete this Wallpaper?';
+        } else {
+          confirmMessage = 'Are you sure you want to delete this upload?';
+        }
+  
+        if (window.confirm(confirmMessage)) {
+          try {
+            await axiosService.deleteUpload(this.modalContent.imgId);
+            this.$emit('delete-success', this.modalContent.imgId);
+            this.closeModal();
+          } catch (error) {
+            console.error('Error deleting upload:', error.message);
+          }
+        }
       }
     }
   };
   </script>
-  
+
   <style>
 
 .modal {

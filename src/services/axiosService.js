@@ -150,6 +150,22 @@ export const getImageDetails = async (imageId) => {
 };
 
 
+export const deleteUpload = async (imgId) => {
+  try {
+    console.log(Cookies.get("token"))
+
+    const response = await axiosInstance.delete(`/image/delete/${imgId}`, {
+
+      
+    });
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+
+
 export default {
   login,
   register,
@@ -159,5 +175,6 @@ export default {
   uploadWallpaper,
   updateCredentials,
   getNewestUploads,
-  getImageDetails
+  getImageDetails,
+  deleteUpload
 };

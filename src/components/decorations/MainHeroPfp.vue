@@ -27,7 +27,6 @@
     },
     methods: {
       filterProducts() {
-        // Your filtering logic here
       }
     }
   };

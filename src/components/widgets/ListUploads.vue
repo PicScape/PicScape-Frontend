@@ -27,6 +27,7 @@
       :show-modal="modalId !== null"
       :modal-content="findImageById(modalId)"
       @close="modalId = null"
+      @delete-success="fetchNewestImages"
     />
   </div>
 </template>
@@ -48,8 +49,11 @@ export default {
   },
   mounted() {
     this.fetchNewestImages();
+    
   },
+
   methods: {
+
     async fetchNewestImages() {
       try {
         const response = await axiosService.getNewestUploads("pfp");
