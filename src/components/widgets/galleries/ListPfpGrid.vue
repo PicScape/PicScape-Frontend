@@ -34,9 +34,10 @@
 
 <script>
 import axiosService from '@/services/axiosService';
-import ImageModal from '@/components/widgets/ImageModal.vue';
+import ImageModal from '@/components/widgets/modals/UploadModal.vue';
 
 export default {
+
   components: {
     ImageModal,
   },

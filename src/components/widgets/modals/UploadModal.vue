@@ -5,8 +5,8 @@
             <div class="image-modal-details-container">
                 <img :src="imageURL" id="modal-image" :alt="modalContent.title" />
                 <div class="information-box">
-                    <h3 class="img-title text-set-large">{{ modalContent.title }}</h3>
-                    <h3 class="img-id text-set-middle-sub">{{ modalContent.imgId }}</h3>
+                    <div class="img-title text-set-large">{{ modalContent.title }}</div>
+                    <div class="img-id text-set-middle-sub">{{ modalContent.imgId }}</div>
                 </div>
                 <hr>
                 <div class="information-box">
@@ -141,11 +141,27 @@ export default {
             },
 
             downloadImage() {
-                const link = document.createElement('a');
-                link.href = this.imageURL;
-                link.download = this.modalContent.title || 'download';
-                link.click();
-            }
+    fetch(this.imageURL)
+        .then(response => response.blob())
+        .then(blob => {
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+
+            const filename = `${this.modalContent.title}-${this.modalContent.imgId}`.replace(/\s+/g, '_') + '.jpg';
+            link.download = filename || 'download';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            URL.revokeObjectURL(url);
+        })
+        .catch(error => {
+            console.error('Error downloading image:', error);
+        });
+}
+
         }
     };
 </script>
@@ -241,7 +257,7 @@ export default {
 #delete-button {
     float: right;
     margin-right: 15px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     padding: 10px 20px;
     background-color: #ff0000;
     color: white;
@@ -263,7 +279,7 @@ export default {
 #downloadButton {
     float: left;
     margin-left: 15px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     padding: 10px 20px;
     background-color: #007bff;
     color: white;
@@ -316,11 +332,19 @@ hr {
 
 .text-set-large {
     font-size: 30px;
+    color: #e7e7e7;
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-top: 35px;
+
+
 }
 
 .text-set-middle-sub {
     font-size: 16px;
     color: #919191;
+    font-weight: bold;
+
 }
 
 .text-set-middle-bottom-sub {

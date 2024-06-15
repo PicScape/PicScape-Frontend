@@ -1,17 +1,17 @@
 <template>
     <MainHeroPfp/>
-    <ListUploads/>
+    <ListPfpGrid/>
 </template>
   
   <script>
   import MainHeroPfp from '@/components/decorations/MainHeroPfp.vue';
-  import ListUploads from '@/components/widgets/ListUploads.vue';
+  import ListPfpGrid from '@/components/widgets/galleries/ListPfpGrid.vue';
   
   export default {
     components: {
         MainHeroPfp,
-        ListUploads
-    }
-  };
-  
+        ListPfpGrid
+    },
+
+};
   </script>
