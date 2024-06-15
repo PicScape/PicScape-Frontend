@@ -4,6 +4,7 @@
             <button class="close" @click="closeModal" aria-label="Close modal">&times;</button>
             <div class="image-modal-details-container">
                 <div class="image-modal-img-wrapper" :class="{ 'magnified': isImageMagnified }">
+                    
                     <img v-if="!isImageMagnified"
                          :src="imageURL" :alt="modalContent.title"
                          :class="getImageClass(modalContent.type)"
@@ -348,6 +349,7 @@ export default {
     background-color: #8d0000;
 
 }
+
 
 #downloadButton {
     float: left;
