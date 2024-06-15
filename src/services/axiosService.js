@@ -164,6 +164,29 @@ export const deleteUpload = async (imgId) => {
   }
 };
 
+export const getUser = async (identifier, value) => {
+  try {
+    let response;
+    if (identifier === 'userId') {
+      response = await axiosInstance.get(`/fetch/user`, {
+        params: {
+          userId: value
+        }
+      });
+    } else if (identifier === 'username') {
+      response = await axiosInstance.get(`/fetch/user`, {
+        params: {
+          username: value
+        }
+      });
+    } else {
+      throw new Error('Invalid identifier. Use "userId" or "username".');
+    }
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
 
 
 export default {
@@ -176,5 +199,6 @@ export default {
   updateCredentials,
   getNewestUploads,
   getImageDetails,
-  deleteUpload
+  deleteUpload,
+  getUser
 };
