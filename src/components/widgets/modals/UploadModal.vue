@@ -3,7 +3,8 @@
         <div class="modal-content">
             <button class="close" @click="closeModal" aria-label="Close modal">&times;</button>
             <div class="image-modal-details-container">
-                <img :src="imageURL" id="modal-image" :alt="modalContent.title" />
+                <img :src="imageURL" :alt="modalContent.title"
+                     :class="{ 'modal-image-pfp': modalContent.type === 'pfp', 'modal-image-wallpaper': modalContent.type === 'wallpaper' }" />
                 <div class="information-box">
                     <div class="img-title text-set-large">{{ modalContent.title }}</div>
                     <div class="img-id text-set-middle-sub">{{ modalContent.imgId }}</div>
@@ -306,7 +307,9 @@ export default {
     padding-bottom: 10px;
 }
 
-#modal-image {
+
+
+.modal-image-pfp {
     width: 150px;
     height: 150px;
     margin: 15px;
@@ -314,8 +317,16 @@ export default {
     border-radius: 15%;
     background-color: #101213;
     box-shadow: 10px 10px #15181a;
+}
 
-
+.modal-image-wallpaper {
+    width: calc(100% - 40px);
+    max-height: 240px;
+    object-fit: contain;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: 15px;
+    height: auto;
 }
 
 
