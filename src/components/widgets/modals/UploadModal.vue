@@ -3,11 +3,14 @@
         <div class="modal-content">
             <button class="close" @click="closeModal" aria-label="Close modal">&times;</button>
             <div class="image-modal-details-container">
-                <img :src="imageURL" :alt="modalContent.title"
-                     :class="{ 'modal-image-pfp': modalContent.type === 'pfp', 'modal-image-wallpaper': modalContent.type === 'wallpaper' }" />
-                <div class="information-box">
-                    <div class="img-title text-set-large">{{ modalContent.title }}</div>
-                    <div class="img-id text-set-middle-sub">{{ modalContent.imgId }}</div>
+                
+                <div class="image-modal-wallpaper-wrapper" @click="toggleImageSize" :class="{ 'magnified': isImageMagnified }">
+                    <img v-if="!isImageMagnified"
+                         :src="imageURL" :alt="modalContent.title"
+                         :class="getImageClass(modalContent.type)" />
+                    <img v-else
+                         :src="imageURL" :alt="modalContent.title"
+                         class="modal-image-wallpaper-magnified" />
                 </div>
                 <hr>
                 <div class="information-box">
@@ -65,7 +68,8 @@ export default {
             imageURL: '',
             userId: null,
             authorId: null,
-            authorUsername: null
+            authorUsername: null,
+            isImageMagnified: false
         };
     },
 
@@ -115,6 +119,16 @@ export default {
         },
 
         methods: {
+            toggleImageSize() {
+            this.isImageMagnified = !this.isImageMagnified;
+        },
+        getImageClass(type) {
+            // Determine the class based on the image type (pfp or wallpaper)
+            return {
+                'modal-image-pfp': type === 'pfp',
+                'modal-image-wallpaper': type === 'wallpaper'
+            };
+        },
             closeModal() {
                 this.$emit('close');
             },
@@ -179,6 +193,54 @@ export default {
     background-color: rgb(0, 0, 0);
     background-color: rgba(0, 0, 0, 0.4);
     animation: fadeIn 0.5s ease-in-out;
+}
+
+.image-modal-wallpaper-wrapper.magnified {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+}
+
+.image-modal-wallpaper-wrapper.magnified img {
+    max-height: 80vh;
+    max-width: 80%;
+    display: block;
+    margin: auto;
+}
+
+.modal-image-pfp {
+    width: 150px;
+    height: 150px;
+    margin: 15px;
+    margin-bottom: 0;
+    border-radius: 15%;
+    margin-bottom: 30px;
+    background-color: #101213;
+    box-shadow: 10px 10px #15181a;
+}
+
+.modal-image-wallpaper {
+    width: calc(100% - 40px);
+    max-height: 240px;
+    object-fit: contain;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    height: auto;
+    box-shadow: 0 5px 9px rgba(0, 0, 0, 0.4);
+}
+
+.modal-image-wallpaper-magnified {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }
 
 @keyframes fadeIn {
