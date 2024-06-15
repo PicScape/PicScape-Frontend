@@ -1,51 +1,42 @@
 <template>
     <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
         <div class="modal-content">
-            <button class="close" @click="closeModal">&times;</button>
-
+            <button class="close" @click="closeModal" aria-label="Close modal">&times;</button>
             <div class="image-modal-details-container">
-                <img :src="imageURL" id="modal-image" />
-
+                <img :src="imageURL" id="modal-image" :alt="modalContent.title" />
                 <div class="information-box">
                     <h3 class="img-title text-set-large">{{ modalContent.title }}</h3>
                     <h3 class="img-id text-set-middle-sub">{{ modalContent.imgId }}</h3>
                 </div>
                 <hr>
-
                 <div class="information-box">
                     <div>
                         <div class="text-set-middle-bottom">Description:</div>
                         <div class="img-description text-set-middle-bottom-sub">{{ modalContent.description }}</div>
                     </div>
-
                     <div>
                         <div class="text-set-middle-bottom" style="margin-bottom: 5px">Tags:</div>
                         <div class="img-tags text-set-middle-bottom-sub">
                             <span v-for="tag in modalContent.tags" :key="tag" class="img-tag">{{ tag }}</span>
                         </div>
                     </div>
-
                     <div>
                         <div class="text-set-middle-bottom">Uploaded by:</div>
-                        <div class="img-author text-set-middle-bottom-sub">{{ authorUsername }}</div>
+                        <div class="img-author text-set-middle-bottom-sub">{{ modalContent.username }}</div>
                     </div>
-
                     <div>
                         <div class="text-set-middle-bottom">Publish Date:</div>
                         <div class="img-upload-date text-set-middle-bottom-sub">{{ formattedDate }}</div>
                     </div>
                 </div>
             </div>
-
             <button v-if="canDelete" id="delete-button" @click="handleDelete">Delete</button>
-
-            <button id="downloadButton">Download</button>
+            <button id="downloadButton" @click="downloadImage">Download</button>
         </div>
     </div>
 </template>
 
 <script>
-
 import axiosService from '@/services/axiosService';
 
 export default {
@@ -56,7 +47,15 @@ export default {
         },
         modalContent: {
             type: Object,
-            default: null
+            default: () => ({
+                title: '',
+                imgId: '',
+                description: '',
+                tags: [],
+                username: '',
+                uploadedDate: '',
+                author: ''
+            })
         }
     },
 
@@ -71,7 +70,7 @@ export default {
 
     computed: {
         canDelete() {
-            return this.userId == this.modalContent.author;
+            return this.userId === this.modalContent.author;
         },
         formattedDate() {
             if (this.modalContent.uploadedDate) {
@@ -88,19 +87,7 @@ export default {
         }
     },
 
-    async created() {
-        try {
-        const user = await axiosService.checkTokenValidity();
-        this.userId = user.user.id;
-        
-        if (this.modalContent && this.modalContent.author) {
-            const author = await axiosService.getUser("userId", this.modalContent.author);
-            this.authorUsername = author.user.username;
-        }
-    } catch (error) {
-        console.error('Error fetching user ID:', error.message);
-    }
-    },
+ 
 
     watch: {
         modalContent: {
@@ -135,13 +122,20 @@ export default {
                     this.closeModal();
                 } catch (error) {
                     console.error('Error deleting upload:', error.message);
+                    this.$emit('error', 'Failed to delete the image.');
                 }
             }
+        },
+
+        downloadImage() {
+            const link = document.createElement('a');
+            link.href = this.imageURL;
+            link.download = this.modalContent.title || 'download';
+            link.click();
         }
     }
 };
 </script>
-
 <style>
 .modal {
     display: none;
