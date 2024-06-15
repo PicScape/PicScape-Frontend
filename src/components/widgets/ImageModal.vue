@@ -20,7 +20,7 @@
                             <span v-for="tag in modalContent.tags" :key="tag" class="img-tag">{{ tag }}</span>
                         </div>
                     </div>
-                    <div>
+                    <div v-if="modalContent.username">
                         <div class="text-set-middle-bottom">Uploaded by:</div>
                         <div class="img-author text-set-middle-bottom-sub">{{ modalContent.username }}</div>
                     </div>
@@ -68,9 +68,11 @@ export default {
         };
     },
 
+
     computed: {
         canDelete() {
-            return this.userId === this.modalContent.author;
+            return this.userId === this.modalContent.authorId;
+
         },
         formattedDate() {
             if (this.modalContent.uploadedDate) {
@@ -86,55 +88,66 @@ export default {
             return '';
         }
     },
-
- 
-
-    watch: {
-        modalContent: {
-            immediate: true,
-            handler(newVal) {
-                if (newVal && newVal.imgId) {
-                    this.imageURL = `http://localhost:3000/image/view/${newVal.imgId}`;
-                }
-            }
+    async created() {
+        try {
+            const user = await axiosService.checkTokenValidity();
+            this.userId = user.user.id;
+            if (this.modalContent && this.modalContent.author) {
+            const author = await axiosService.getUser("userId", this.modalContent.author);
+            this.authorUsername = author.user.username;
         }
+    } catch (error) {
+        console.error('Error fetching user ID:', error.message);
+      }
+        
     },
 
-    methods: {
-        closeModal() {
-            this.$emit('close');
-        },
-
-        async handleDelete() {
-            let confirmMessage = '';
-            if (this.modalContent.type === 'pfp') {
-                confirmMessage = 'Are you sure you want to delete this Profile Picture?';
-            } else if (this.modalContent.type === 'wallpaper') {
-                confirmMessage = 'Are you sure you want to delete this Wallpaper?';
-            } else {
-                confirmMessage = 'Are you sure you want to delete this upload?';
-            }
-
-            if (window.confirm(confirmMessage)) {
-                try {
-                    await axiosService.deleteUpload(this.modalContent.imgId);
-                    this.$emit('delete-success', this.modalContent.imgId);
-                    this.closeModal();
-                } catch (error) {
-                    console.error('Error deleting upload:', error.message);
-                    this.$emit('error', 'Failed to delete the image.');
+        watch: {
+            modalContent: {
+                immediate: true,
+                    handler(newVal) {
+                    if (newVal && newVal.imgId) {
+                        this.imageURL = `http://localhost:3000/image/view/${newVal.imgId}`;
+                    }
                 }
             }
         },
 
-        downloadImage() {
-            const link = document.createElement('a');
-            link.href = this.imageURL;
-            link.download = this.modalContent.title || 'download';
-            link.click();
+        methods: {
+            closeModal() {
+                this.$emit('close');
+            },
+
+        async handleDelete() {
+                let confirmMessage = '';
+                if (this.modalContent.type === 'pfp') {
+                    confirmMessage = 'Are you sure you want to delete this Profile Picture?';
+                } else if (this.modalContent.type === 'wallpaper') {
+                    confirmMessage = 'Are you sure you want to delete this Wallpaper?';
+                } else {
+                    confirmMessage = 'Are you sure you want to delete this upload?';
+                }
+
+                if (window.confirm(confirmMessage)) {
+                    try {
+                        await axiosService.deleteUpload(this.modalContent.imgId);
+                        this.$emit('delete-success', this.modalContent.imgId);
+                        this.closeModal();
+                    } catch (error) {
+                        console.error('Error deleting upload:', error.message);
+                        this.$emit('error', 'Failed to delete the image.');
+                    }
+                }
+            },
+
+            downloadImage() {
+                const link = document.createElement('a');
+                link.href = this.imageURL;
+                link.download = this.modalContent.title || 'download';
+                link.click();
+            }
         }
-    }
-};
+    };
 </script>
 <style>
 .modal {
