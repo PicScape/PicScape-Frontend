@@ -104,9 +104,9 @@ export default {
     async submitForm() {
       try {
         if (this.type === 'wallpaper') {
-          await axiosService.uploadWallpaper(this.title, this.file, this.tags);
+          await axiosService.uploadWallpaper(this.title, this.file, this.tags, this.description);
         } else {
-          await axiosService.uploadProfilePicture(this.title, this.file, this.tags);
+          await axiosService.uploadProfilePicture(this.title, this.file, this.tags, this.description);
         }
 
         this.title = '';
@@ -117,11 +117,13 @@ export default {
         this.imagePreview = '';
         this.fileName = '';
         this.type = '';
+        this.error = '';
 
         console.log("Upload successful!");
+        this.success = "Upload successful!"
       } catch (error) {
-        console.error("Upload failed:", error.message);
-        this.error = error.error;
+        console.error("Upload failed:", error);
+        this.error = error.message;
       }
     },
     removeTag(index) {
@@ -155,8 +157,12 @@ export default {
       this.imagePreview = '';
       this.fileName = '';
       this.$refs.fileInput.value = null;
+      this.error = '';
+
     },
     handleFileChange(event) {
+      this.error = '';
+
       const file = event.target.files[0];
 
       if (file) {
