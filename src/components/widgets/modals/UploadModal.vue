@@ -3,14 +3,19 @@
         <div class="modal-content">
             <button class="close" @click="closeModal" aria-label="Close modal">&times;</button>
             <div class="image-modal-details-container">
-                
-                <div class="image-modal-wallpaper-wrapper" @click="toggleImageSize" :class="{ 'magnified': isImageMagnified }">
+                <div class="image-modal-img-wrapper" :class="{ 'magnified': isImageMagnified }">
                     <img v-if="!isImageMagnified"
                          :src="imageURL" :alt="modalContent.title"
-                         :class="getImageClass(modalContent.type)" />
+                         :class="getImageClass(modalContent.type)"
+                         @click="toggleImageSize" />
                     <img v-else
                          :src="imageURL" :alt="modalContent.title"
-                         class="modal-image-wallpaper-magnified" />
+                         class="modal-image-img-magnified"
+                         @click="toggleImageSize" />
+                </div>
+                <div class="information-box">
+                    <h3 class="img-title text-set-large">{{ modalContent.title }}</h3>
+                    <h3 class="img-id text-set-middle-sub">{{ modalContent.imgId }}</h3>
                 </div>
                 <hr>
                 <div class="information-box">
@@ -195,7 +200,7 @@ export default {
     animation: fadeIn 0.5s ease-in-out;
 }
 
-.image-modal-wallpaper-wrapper.magnified {
+.image-modal-img-wrapper.magnified {
     position: fixed;
     z-index: 1000;
     top: 0;
@@ -207,7 +212,7 @@ export default {
     padding: 20px;
 }
 
-.image-modal-wallpaper-wrapper.magnified img {
+.image-modal-img-wrapper.magnified img {
     max-height: 80vh;
     max-width: 80%;
     display: block;
@@ -218,12 +223,13 @@ export default {
     width: 150px;
     height: 150px;
     margin: 15px;
-    margin-bottom: 0;
     border-radius: 15%;
-    margin-bottom: 30px;
+    margin-bottom: 0px;
     background-color: #101213;
     box-shadow: 10px 10px #15181a;
 }
+
+
 
 .modal-image-wallpaper {
     width: calc(100% - 40px);
@@ -235,6 +241,10 @@ export default {
     margin-bottom: 5px;
     height: auto;
     box-shadow: 0 5px 9px rgba(0, 0, 0, 0.4);
+    width: auto;
+    max-width: calc(100% - 30px); 
+
+
 }
 
 .modal-image-wallpaper-magnified {
@@ -369,32 +379,6 @@ export default {
     padding-bottom: 10px;
 }
 
-
-
-.modal-image-pfp {
-    width: 150px;
-    height: 150px;
-    margin: 15px;
-    margin-bottom: 0;
-    border-radius: 15%;
-    margin-bottom: 30px;
-
-    background-color: #101213;
-    box-shadow: 10px 10px #15181a;
-}
-
-.modal-image-wallpaper {
-    width: calc(100% - 40px);
-    max-height: 240px;
-    object-fit: contain;
-    margin-left: 15px;
-    margin-right: 15px;
-    margin-top: 15px;
-    margin-bottom: 5px;
-    height: auto;
-    box-shadow: 0 5px 9px rgba(0, 0, 0, 0.4);
-
-}
 
 
 .information-box {
