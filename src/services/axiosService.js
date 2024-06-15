@@ -72,10 +72,12 @@ export const checkTokenValidity = async () => {
   
 };
 
-export const uploadWallpaper = async (title, image, tags) => {
+export const uploadWallpaper = async (title, image, tags, description) => {
   try {
     const formData = new FormData();
     formData.append('title', title);
+    formData.append('description', description);
+
     formData.append('image', image);
     tags.forEach(tag => {
       formData.append('tags', tag);
@@ -92,10 +94,12 @@ export const uploadWallpaper = async (title, image, tags) => {
   }
 };
 
-export const uploadProfilePicture = async (title, image, tags) => {
+export const uploadProfilePicture = async (title, image, tags, description) => {
   try {
     const formData = new FormData();
     formData.append('title', title);
+    formData.append('description', description);
+
     formData.append('image', image);
     tags.forEach(tag => {
       formData.append('tags', tag);
@@ -121,6 +125,69 @@ export const updateCredentials = async (username, email, password) => {
   }
 };
 
+export const getNewestUploads = async (type) => {
+  try {
+    const response = await axiosInstance.get('/image/newest/', {
+      params: {
+        type: type
+      }
+    });
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+    throw error;
+  }
+};
+
+export const getImageDetails = async (imageId) => {
+  try {
+    const response = await axiosInstance.get(`/image/data/${imageId}`);
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+    throw error;
+  }
+};
+
+
+export const deleteUpload = async (imgId) => {
+  try {
+
+    const response = await axiosInstance.delete(`/image/delete/${imgId}`, {
+
+      
+    });
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+export const getUser = async (identifier, value) => {
+  try {
+    let response;
+    if (identifier === 'userId') {
+      response = await axiosInstance.get(`/fetch/user`, {
+        params: {
+          userId: value
+        }
+      });
+    } else if (identifier === 'username') {
+      response = await axiosInstance.get(`/fetch/user`, {
+        params: {
+          username: value
+        }
+      });
+    } else {
+      throw new Error('Invalid identifier. Use "userId" or "username".');
+    }
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+
 export default {
   login,
   register,
@@ -128,5 +195,9 @@ export default {
   checkTokenValidity,
   uploadProfilePicture,
   uploadWallpaper,
-  updateCredentials
+  updateCredentials,
+  getNewestUploads,
+  getImageDetails,
+  deleteUpload,
+  getUser
 };
