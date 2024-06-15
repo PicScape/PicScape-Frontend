@@ -152,7 +152,6 @@ export const getImageDetails = async (imageId) => {
 
 export const deleteUpload = async (imgId) => {
   try {
-    console.log(Cookies.get("token"))
 
     const response = await axiosInstance.delete(`/image/delete/${imgId}`, {
 
