@@ -315,6 +315,8 @@ export default {
     margin: 15px;
     margin-bottom: 0;
     border-radius: 15%;
+    margin-bottom: 30px;
+
     background-color: #101213;
     box-shadow: 10px 10px #15181a;
 }
@@ -326,7 +328,10 @@ export default {
     margin-left: 15px;
     margin-right: 15px;
     margin-top: 15px;
+    margin-bottom: 5px;
     height: auto;
+    box-shadow: 0 5px 9px rgba(0, 0, 0, 0.4);
+
 }
 
 
@@ -346,7 +351,6 @@ hr {
     color: #e7e7e7;
     font-weight: bold;
     margin-bottom: 10px;
-    margin-top: 35px;
 
 
 }
