@@ -1,10 +1,7 @@
 <template>
   <div>
     <div id="slider-container" ref="sliderContainer">
-      <div
-        id="slider"
-        :style="{ transform: `translateX(-${currentSlide * 100}%)` }"
-      >
+      <div id="slider" :style="{ transform: `translateX(-${currentSlide * 50}%)` }">
         <div
           v-for="(image, index) in images"
           :key="index"
@@ -17,7 +14,8 @@
         </div>
       </div>
       <button class="slider-button left" @click="prevSlide">‹</button>
-      <button class="slider-button right" @click="nextSlide">›</button>
+      <button v-if="currentSlide <= 4" class="slider-button right" @click="nextSlide">›</button>
+      <button v-else class="slider-button right" @click="redirectToAnotherPage">Show More</button>
     </div>
 
     <div id="info-box" v-if="showInfoBox" class="info-box">
@@ -35,10 +33,10 @@
 
 
 <script>
-const baseURL = process.env.VUE_APP_API_URL;
-
 import axiosService from '@/services/axiosService';
 import ImageModal from '@/components/widgets/modals/UploadModal.vue';
+
+const baseURL = process.env.VUE_APP_API_URL;
 
 export default {
   components: {
@@ -84,6 +82,9 @@ export default {
         this.currentSlide++;
       }
     },
+    redirectToAnotherPage() {
+      this.$router.push('/another-page');
+    },
   },
 };
 </script>
@@ -91,8 +92,10 @@ export default {
 <style scoped>
 #slider-container {
   position: relative;
-  width: 100%;
+  width: 60%;
   overflow: hidden;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #slider {
@@ -176,18 +179,23 @@ export default {
   right: 0;
 }
 
-.info-box {
-  background-color: #f8d7da;
-  color: #721c24;
-  padding: 10px;
-  border: 1px solid #f5c6cb;
-  border-radius: 5px;
-  margin: 10px auto;
-  width: 500px;
-  text-align: center;
-  position: fixed;
+.show-more-button {
+  position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  right: 10px;
+  transform: translateY(-50%);
+  background-color: var(--submit-btn-primary);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.show-more-button:hover {
+  background-color: var(--submit-btn-secondary);
 }
 </style>
+
