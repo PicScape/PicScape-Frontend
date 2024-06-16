@@ -33,6 +33,8 @@
 </template>
 
 <script>
+const baseURL = process.env.VUE_APP_API_URL;
+
 import axiosService from '@/services/axiosService';
 import ImageModal from '@/components/widgets/modals/UploadModal.vue';
 
@@ -60,7 +62,7 @@ export default {
         const response = await axiosService.getNewestUploads("pfp");
         this.images = response.uploads.map(image => ({
           ...image,
-          url: `http://localhost:3000/image/view/${image.imgId}`,
+          url: `${baseURL}/image/view/${image.imgId}`,
         }));
       } catch (error) {
         console.error('Error fetching images:', error);
