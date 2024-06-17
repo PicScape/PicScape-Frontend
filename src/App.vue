@@ -8,6 +8,7 @@
 </template>
 
 <script>
+console.log(process.env.VUE_APP_API_URL)
 import NavBar from "@/components/NavBar.vue";
 
 export default {
