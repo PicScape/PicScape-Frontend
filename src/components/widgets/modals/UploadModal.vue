@@ -111,7 +111,7 @@ export default {
             this.authorUsername = author.user.username;
         }
     } catch (error) {
-        console.error('Error fetching user ID:', error.message);
+        console.info('Error fetching user ID:', error.message);
       }
         
     },
