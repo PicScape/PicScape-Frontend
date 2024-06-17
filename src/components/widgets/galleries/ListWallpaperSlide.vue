@@ -1,8 +1,8 @@
 <template>
   <div>
     <div id="module-container">
-      <router-link to="/pfps" id="slide-title">
-        Profile Pictures<i> &#11106;</i>
+      <router-link to="/wallpapers" id="slide-title">
+        Wallpapers<i> &#11106;</i>
       </router-link>
     <div id="slider-container" ref="sliderContainer">
       <div id="slider" :style="{ transform: `translateX(-${currentSlide * 700}px)` }">
@@ -60,11 +60,12 @@ export default {
   methods: {
     async fetchNewestImages() {
       try {
-        const response = await axiosService.getNewestUploads("pfp");
+        const response = await axiosService.getNewestUploads("wallpaper");
         this.images = response.uploads.map(image => ({
           ...image,
           url: `${baseURL}/image/view/${image.imgId}`,
         }));
+        console.log(response)
       } catch (error) {
         console.error('Error fetching images:', error);
         this.showInfoBox = true;
@@ -86,9 +87,7 @@ export default {
         this.currentSlide++;
       }
     },
-    redirectToAnotherPage() {
-      this.$router.push('/pfps');
-    },
+
   },
 };
 </script>
@@ -162,9 +161,9 @@ export default {
 
 .image-container {
   position: relative;
-  border-radius: 10%;
-  width: 100px;
-  height: 100px;
+  border-radius: 10px;
+  width: 300px;
+  height: 180px;
   flex-shrink: 0;
   overflow: hidden;
   text-align: center;

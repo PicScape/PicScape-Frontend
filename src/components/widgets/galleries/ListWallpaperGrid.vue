@@ -14,6 +14,7 @@
         </div>
       </div>
     </div>
+
     <div
       id="info-box"
       v-if="showInfoBox"
@@ -32,6 +33,7 @@
   </div>
 </template>
 
+
 <script>
 const baseURL = process.env.VUE_APP_API_URL;
 
@@ -48,38 +50,67 @@ export default {
       images: [],
       showInfoBox: false,
       modalId: null,
+      page: 1,
+      loading: false, 
+      hasMore: true, 
     };
   },
   mounted() {
     this.fetchNewestImages();
-    
+    this.setupScrollListener();
   },
 
   methods: {
 
     async fetchNewestImages() {
-      try {
-        const response = await axiosService.getNewestUploads("wallpaper");
-        this.images = response.uploads.map(image => ({
-          ...image,
-          url: `${baseURL}/image/view/${image.imgId}`,
-        }));
-      } catch (error) {
-        console.error('Error fetching images:', error);
-        this.showInfoBox = true;
-      }
-    },
+  if (!this.hasMore || this.loading) return;
+
+  this.loading = true;
+
+  try {
+    const response = await axiosService.getNewestUploads("wallpaper", this.page);
+    const newImages = response.uploads.map(image => ({
+      ...image,
+      url: `${baseURL}/image/view/${image.imgId}`,
+    }));
+
+    this.images = [...this.images, ...newImages];
+    this.page++;
+    this.loading = false;
+
+    this.hasMore = newImages.length > 0;
+
+    this.checkScrollEnd();
+  } catch (error) {
+    console.error('Error fetching images:', error);
+    this.showInfoBox = true;
+    this.loading = false;
+  }
+},
+checkScrollEnd() {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+    this.fetchNewestImages();
+  }
+},
+
     openModal(image) {
       this.modalId = image.imgId;
     },
+
     findImageById(id) {
       return this.images.find(image => image.imgId === id);
     },
+
+    setupScrollListener() {
+  window.addEventListener('scroll', () => {
+    this.checkScrollEnd();
+  });
+},
   },
 };
 </script>
 
-<style>
+<style scoped>
 #images-pre {
   display: flex;
   justify-content: center;
@@ -89,28 +120,25 @@ export default {
 #images {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: left;
   gap: 20px;
   padding-top: 40px;
+  padding-left: calc((100% - (200px * 3) - (2 * 10px)) / 3);
+  padding-right: calc((100% - (200px * 3) - (2 * 10px)) / 3);
 }
 
-@media (min-width: 768px) {
-  #images {
-    padding-left: calc((100% - (200px * 4) - (3 * 10px)) / 2);
-    padding-right: calc((100% - (200px * 4) - (3 * 10px)) / 2);
-  }
-}
 
 .image-container {
   position: relative;
-  border-radius: 10%;
-  width: 100px;
-  height: 100px;
+  border-radius: 10px;
+  width: 300px; 
+  height: 180px;
+  flex-shrink: 0;
   overflow: hidden;
   text-align: center;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  margin: 10px;
 }
-
 
 .image-container:hover {
   transform: scale(1.1);
