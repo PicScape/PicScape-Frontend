@@ -10,5 +10,5 @@ services:
       - "80:80"
     restart: always
     pull_policy: build
-    env_file:
-      - stack.env
+    environment:
+      VUE_APP_API_URL: ${VUE_APP_API_URL}
