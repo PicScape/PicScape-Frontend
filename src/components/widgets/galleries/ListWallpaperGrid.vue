@@ -96,21 +96,22 @@ export default {
 
 @media (min-width: 768px) {
   #images {
-    padding-left: calc((100% - (200px * 4) - (3 * 10px)) / 2);
-    padding-right: calc((100% - (200px * 4) - (3 * 10px)) / 2);
+    padding-left: calc((100% - (200px * 4) - (3 * 10px)) / 3);
+    padding-right: calc((100% - (200px * 4) - (3 * 10px)) / 3);
   }
 }
 
 .image-container {
   position: relative;
-  border-radius: 10%;
-  width: 100px;
-  height: 100px;
+  border-radius: 10px;
+  width: 300px;
+  height: 180px;
+  flex-shrink: 0;
   overflow: hidden;
   text-align: center;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  margin: 10px;
 }
-
 
 .image-container:hover {
   transform: scale(1.1);
