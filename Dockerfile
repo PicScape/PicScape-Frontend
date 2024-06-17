@@ -2,6 +2,10 @@ FROM node:16-alpine AS build-stage
 
 WORKDIR /app
 
+ARG VUE_APP_API_URL
+
+ENV VUE_APP_API_URL=$VUE_APP_API_URL
+
 COPY package*.json ./
 
 RUN npm install

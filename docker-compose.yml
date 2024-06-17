@@ -3,12 +3,13 @@ version: '3.8'
 services:
   web:
     container_name: PicScape-WEB
-    environment:
-      - VUE_APP_API_URL=${VUE_APP_API_URL}
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - VUE_APP_API_URL=${VUE_APP_API_URL}
     ports:
       - "80:80"
+    environment:
+      - VUE_APP_API_URL=${VUE_APP_API_URL}
     restart: always
-    pull_policy: build
