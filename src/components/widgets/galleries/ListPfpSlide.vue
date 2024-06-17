@@ -1,7 +1,8 @@
 <template>
   <div>
     <div id="slider-container" ref="sliderContainer">
-      <div id="slider" :style="{ transform: `translateX(-${currentSlide * 50}%)` }">
+      
+      <div id="slider" :style="{ transform: `translateX(-${currentSlide * 700}px)` }">
         <div
           v-for="(image, index) in images"
           :key="index"
@@ -83,7 +84,7 @@ export default {
       }
     },
     redirectToAnotherPage() {
-      this.$router.push('/another-page');
+      this.$router.push('/pfps');
     },
   },
 };
@@ -92,12 +93,32 @@ export default {
 <style scoped>
 #slider-container {
   position: relative;
-  width: 60%;
-  overflow: hidden;
+  width: 1100px;
+  overflow: hidden; 
   margin-left: auto;
   margin-right: auto;
 }
 
+#slider-container::before,
+#slider-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 20%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+#slider-container::before {
+  left: 0;
+  background: linear-gradient(to right, var(--background-color), rgba(255, 255, 255, 0));
+}
+
+#slider-container::after {
+  right: 0;
+  background: linear-gradient(to left, var(--background-color), rgba(255, 255, 255, 0));
+}
 #slider {
   display: flex;
   transition: transform 0.5s ease-in-out;
@@ -173,10 +194,13 @@ export default {
 
 .slider-button.left {
   left: 0;
+  z-index: 3;
+
 }
 
 .slider-button.right {
   right: 0;
+  z-index: 3;
 }
 
 .show-more-button {
