@@ -1,7 +1,10 @@
 <template>
   <div>
+    <div id="module-container">
+      <router-link to="/pfps" id="slide-title">
+        Profile Pictures<i> &#11106;</i>
+      </router-link>
     <div id="slider-container" ref="sliderContainer">
-      
       <div id="slider" :style="{ transform: `translateX(-${currentSlide * 700}px)` }">
         <div
           v-for="(image, index) in images"
@@ -18,7 +21,7 @@
       <button v-if="currentSlide <= 4" class="slider-button right" @click="nextSlide">›</button>
       <button v-else class="slider-button right" @click="redirectToAnotherPage">Show More</button>
     </div>
-
+  </div>
     <div id="info-box" v-if="showInfoBox" class="info-box">
       <p>Unable to reach the API.</p>
     </div>
@@ -91,12 +94,44 @@ export default {
 </script>
 
 <style scoped>
+
+#slide-title {
+  font-size: 25px;
+  font-weight: bold;
+  margin-left: 5px;
+  margin-bottom: 10px;
+  display: inline-block;
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+
+}
+
+#slide-title:hover {
+  text-decoration: underline;
+}
+
+#slide-title i {
+  font-size: 25px;
+  font-weight: bold;
+  text-align: left;
+  margin-left: -1px;
+  font-style: normal;
+}
+
 #slider-container {
   position: relative;
-  width: 1100px;
   overflow: hidden; 
+
+}
+
+#module-container{
   margin-left: auto;
   margin-right: auto;
+  width: 1000px;
+  text-align: left;
+
+
 }
 
 #slider-container::before,
@@ -104,7 +139,7 @@ export default {
   content: '';
   position: absolute;
   top: 0;
-  width: 20%;
+  width: 10%;
   height: 100%;
   pointer-events: none;
   z-index: 1;
