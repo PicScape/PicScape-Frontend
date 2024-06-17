@@ -125,11 +125,12 @@ export const updateCredentials = async (username, email, password) => {
   }
 };
 
-export const getNewestUploads = async (type) => {
+export const getNewestUploads = async (type, page = 1) => {
   try {
     const response = await axiosInstance.get('/image/newest/', {
       params: {
-        type: type
+        type: type,
+        page: page
       }
     });
     return response.data;
