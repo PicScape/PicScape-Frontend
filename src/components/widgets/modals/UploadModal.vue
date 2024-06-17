@@ -1,9 +1,11 @@
 <template>
     <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
         <div class="modal-content">
-            <button class="close" @click="closeModal" aria-label="Close modal">&times;</button>
+                <button class="close" @click="closeModal" aria-label="Close modal">&times;</button>
+
+
             <div class="image-modal-details-container">
-                <div class="image-modal-img-wrapper" :class="{ 'magnified': isImageMagnified }">
+                <div class="image-modal-img-wrapper" :class="{ 'magnified': isImageMagnified, 'centered': modalContent.type === 'wallpaper' }">
                     
                     <img v-if="!isImageMagnified"
                          :src="imageURL" :alt="modalContent.title"
@@ -129,7 +131,6 @@ export default {
             this.isImageMagnified = !this.isImageMagnified;
         },
         getImageClass(type) {
-            // Determine the class based on the image type (pfp or wallpaper)
             return {
                 'modal-image-pfp': type === 'pfp',
                 'modal-image-wallpaper': type === 'wallpaper'
@@ -216,6 +217,7 @@ export default {
 .image-modal-img-wrapper.magnified img {
     max-height: 80vh;
     max-width: 80%;
+    min-width: 20%;
     display: block;
     margin: auto;
 }
@@ -224,21 +226,25 @@ export default {
     width: 150px;
     height: 150px;
     margin: 15px;
-    border-radius: 15%;
+    border-radius: 20px;
     margin-bottom: 0px;
     background-color: #101213;
     box-shadow: 10px 10px #15181a;
 }
 
 
+.centered {
+    text-align: center;
+}
 
 .modal-image-wallpaper {
     width: calc(100% - 40px);
-    max-height: 240px;
+    max-height: 230px;
     object-fit: contain;
     margin-left: 15px;
+    border-radius: 5px;
     margin-right: 15px;
-    margin-top: 15px;
+    margin-top: 40px;
     margin-bottom: 5px;
     height: auto;
     box-shadow: 0 5px 9px rgba(0, 0, 0, 0.4);
@@ -265,17 +271,19 @@ export default {
 }
 
 .modal-content {
+    position: relative;
     background-color: #23272a;
     margin: 5% auto;
     padding: 20px;
-    border-radius: 3%;
-
+    border-radius: 20px;
     width: 430px;
     max-height: 80%;
     overflow-y: auto;
-
     animation: slideIn 0.5s ease-in-out;
 }
+
+
+
 
 @keyframes slideIn {
     from {
@@ -287,6 +295,12 @@ export default {
         transform: translateY(0);
         opacity: 1;
     }
+}
+
+.close-div {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .modal-overlay {
@@ -305,19 +319,19 @@ export default {
 
 
 
-
 .close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
     color: #757575;
-    float: right;
-
-    top: 10px;
-    right: 10px;
     background: none;
     border: none;
     font-size: 24px;
     cursor: pointer;
     transition: 0.2s ease-in-out;
+    z-index: 10; 
 }
+
 
 .close:hover {
     color: #ff0000;
