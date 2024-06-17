@@ -65,7 +65,6 @@ export default {
           ...image,
           url: `${baseURL}/image/view/${image.imgId}`,
         }));
-        console.log(response)
       } catch (error) {
         console.error('Error fetching images:', error);
         this.showInfoBox = true;
