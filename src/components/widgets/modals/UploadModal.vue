@@ -188,7 +188,7 @@ export default {
         }
     };
 </script>
-<style>
+<style scoped>
 .modal {
     display: none;
     position: fixed;
