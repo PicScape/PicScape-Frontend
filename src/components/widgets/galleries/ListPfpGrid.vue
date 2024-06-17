@@ -118,7 +118,7 @@ checkScrollEnd() {
 #images {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: left;
   gap: 20px;
   padding-top: 40px;
   justify-content: left;
