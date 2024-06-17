@@ -50,6 +50,7 @@
 
 <script>
 import axiosService from '@/services/axiosService';
+const baseURL = process.env.VUE_APP_API_URL;
 
 export default {
     props: {
@@ -120,7 +121,7 @@ export default {
                 immediate: true,
                     handler(newVal) {
                     if (newVal && newVal.imgId) {
-                        this.imageURL = `http://localhost:3000/image/view/${newVal.imgId}`;
+                        this.imageURL = `${baseURL}/image/view/${newVal.imgId}`;
                     }
                 }
             }
