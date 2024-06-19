@@ -63,7 +63,7 @@ export default {
         const response = await axiosService.getNewestUploads("pfp");
         this.images = response.uploads.map(image => ({
           ...image,
-          url: `${baseURL}/image/view/${image.imgId}`,
+          url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,
         }));
       } catch (error) {
         console.error('Error fetching images:', error);

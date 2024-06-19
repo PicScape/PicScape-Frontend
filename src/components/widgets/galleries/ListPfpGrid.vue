@@ -69,7 +69,7 @@ export default {
     const response = await axiosService.getNewestUploads("pfp", this.page);
     const newImages = response.uploads.map(image => ({
       ...image,
-      url: `${baseURL}/image/view/${image.imgId}`,
+      url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,
     }));
 
     this.images = [...this.images, ...newImages];
