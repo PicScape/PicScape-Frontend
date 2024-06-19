@@ -113,8 +113,10 @@ checkScrollEnd() {
   display: flex;
   justify-content: center;
   padding-bottom: 20px;
-  padding-left: calc((100% - (170px * 4) - (3 * 10px)) / 2);
-  padding-right: calc((100% - (170px * 4) - (3 * 10px)) / 2);
+  padding-left: calc((100% - (800px)) / 2);
+  padding-right: calc((100% - (800px)) / 2);
+
+
 }
 
 #images {
@@ -125,6 +127,9 @@ checkScrollEnd() {
   padding-top: 40px;
   padding: auto;
   justify-content: center;
+  margin-left: 50px;
+  margin-right: 50px;
+
 
 
 

@@ -135,6 +135,19 @@ export default {
 
 }
 
+@media screen and (max-width: 768px) {
+  #module-container{
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+  text-align: left;
+
+
+}
+
+}
+
+
 #slider-container::before,
 #slider-container::after {
   content: '';
