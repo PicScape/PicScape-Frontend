@@ -5,7 +5,7 @@
         Profile Pictures<i> &#11106;</i>
       </router-link>
     <div id="slider-container" ref="sliderContainer">
-      <div id="slider" :style="{ transform: `translateX(-${currentSlide * 700}px)` }">
+      <div id="slider" :style="{ transform: `translateX(-${currentSlide * 60}%)` }">
         <div
           v-for="(image, index) in images"
           :key="index"
@@ -63,7 +63,7 @@ export default {
         const response = await axiosService.getNewestUploads("pfp");
         this.images = response.uploads.map(image => ({
           ...image,
-          url: `${baseURL}/image/view/${image.imgId}`,
+          url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,
         }));
       } catch (error) {
         console.error('Error fetching images:', error);

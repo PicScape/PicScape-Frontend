@@ -71,7 +71,7 @@ export default {
     const response = await axiosService.getNewestUploads("wallpaper", this.page);
     const newImages = response.uploads.map(image => ({
       ...image,
-      url: `${baseURL}/image/view/${image.imgId}`,
+      url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,
     }));
 
     this.images = [...this.images, ...newImages];
