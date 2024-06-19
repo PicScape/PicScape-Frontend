@@ -218,9 +218,7 @@ export default {
     display: inline-block;
 }
 
-.rounded img {
-    border-radius: 50%;
-}
+
 
 .overlay-button {
     background-color: rgba(0, 0, 0, 0.281); 
@@ -280,6 +278,17 @@ export default {
     background-color: rgba(0, 0, 0, 0.8);
     padding: 20px;
 }
+
+.rounded img {
+
+    border-radius: 50%;
+    transition: border-radius 0.3s ease;
+}
+
+.image-modal-img-wrapper img {
+    transition: border-radius 0.3s ease;
+}
+
 
 .image-modal-img-wrapper.magnified img {
     max-height: 80vh;
