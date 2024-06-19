@@ -94,6 +94,7 @@ export default {
             isImageMagnified: false,
             isRounded: false
 
+
         };
     },
 
@@ -119,6 +120,9 @@ export default {
     },
     async created() {
         try {
+            const storedIsRounded = localStorage.getItem("isRounded");
+            this.isRounded = storedIsRounded ? JSON.parse(storedIsRounded) : false;
+
             const user = await axiosService.checkTokenValidity();
             this.userId = user.user.id;
             if (this.modalContent && this.modalContent.author) {
@@ -201,6 +205,8 @@ export default {
         },
         toggleRoundImage() {
             this.isRounded = !this.isRounded;
+            localStorage.setItem("isRounded", this.isRounded.toString());
+
         }
 
     }
@@ -220,13 +226,12 @@ export default {
     background-color: rgba(0, 0, 0, 0.281); 
     color: white;
     border: none;
-    font-size: 20px;
+    font-size: 18px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    padding: 8px;
     border-radius: 5px;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     vertical-align: middle;
 
 }
@@ -237,7 +242,7 @@ export default {
     position: absolute;
     transform: translateX(-50%);
     left: 50%;
-    bottom: calc(50% - 30px);
+    bottom: calc(50% - 26px);
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
     gap: 10px;
