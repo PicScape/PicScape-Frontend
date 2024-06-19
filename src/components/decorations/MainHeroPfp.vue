@@ -24,11 +24,9 @@ export default {
   },
   methods: {
     filterProducts() {
-      // Implement your filtering logic here
     }
   },
   mounted() {
-    // Add a class when the component is mounted to trigger the animation
     this.$refs.textContainer.classList.add('fly-in');
   }
 };
@@ -109,7 +107,7 @@ input[type="text"] {
 
 @media screen and (max-width: 768px) {
   .grid-container-hero {
-    width: 100%;
+    width: 80%;
   }
 
   .title-container-hero {

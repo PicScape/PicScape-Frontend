@@ -127,7 +127,7 @@ export default {
 #module-container{
   margin-left: auto;
   margin-right: auto;
-  width: 1200px;
+  width: 65%;
   text-align: left;
 
 
