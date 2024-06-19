@@ -5,7 +5,7 @@
         Wallpapers<i> &#11106;</i>
       </router-link>
     <div id="slider-container" ref="sliderContainer">
-      <div id="slider" :style="{ transform: `translateX(-${currentSlide * 700}px)` }">
+      <div id="slider" :style="{ transform: `translateX(-${currentSlide * 60}%)` }">
         <div
           v-for="(image, index) in images"
           :key="index"
