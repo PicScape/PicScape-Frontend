@@ -1,21 +1,34 @@
 <template>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
         <div class="modal-content">
-                <button class="close" @click="closeModal" aria-label="Close modal">&times;</button>
+            <button class="close" @click="closeModal" aria-label="Close modal">&times;</button>
 
 
-            <div class="image-modal-details-container">
-                <div class="image-modal-img-wrapper" :class="{ 'magnified': isImageMagnified, 'centered': modalContent.type === 'wallpaper' }">
-                    
-                    <img v-if="!isImageMagnified"
-                         :src="imageURL" :alt="modalContent.title"
-                         :class="getImageClass(modalContent.type)"
-                         @click="toggleImageSize" />
-                    <img v-else
-                         :src="imageURL" :alt="modalContent.title"
-                         class="modal-image-img-magnified"
-                         @click="toggleImageSize" />
+            <div class="image-modal-details-container" >
+                <div class="image-modal-img-wrapper" 
+                    :class="{ 'magnified': isImageMagnified, 'centered': modalContent.type === 'wallpaper', 'rounded': isRounded }">
+                    <div :class="{ 'image-group': !isImageMagnified }">
+                        <img v-if="!isImageMagnified" :src="imageURL" :alt="modalContent.title"
+                            :class="getImageClass(modalContent.type)"  />
+                        <img v-else :src="imageURL" :alt="modalContent.title" class="modal-image-img-magnified"
+                            @click="toggleImageSize" />
+
+                        <div class="overlay-button-group" v-if="!isImageMagnified">
+                            <button @click="toggleImageSize" class="overlay-button"><span
+                                    class="material-symbols-outlined">
+                                    fullscreen
+                                </span></button>
+                            <button @click="toggleRoundImage" v-if="modalContent.type === 'pfp'" class="overlay-button">
+                                <span v-if="!isRounded" class="material-symbols-outlined">circle</span>
+                                <span v-if="isRounded" class="material-symbols-outlined">crop_square</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
+
+
                 <div class="information-box">
                     <h3 class="img-title text-set-large">{{ modalContent.title }}</h3>
                     <h3 class="img-id text-set-middle-sub">{{ modalContent.imgId }}</h3>
@@ -71,14 +84,17 @@ export default {
             })
         }
     },
-
+    emits: ['close', 'delete-success'],
     data() {
         return {
             imageURL: '',
             userId: null,
             authorId: null,
             authorUsername: null,
-            isImageMagnified: false
+            isImageMagnified: false,
+            isRounded: false
+
+
         };
     },
 
@@ -104,31 +120,34 @@ export default {
     },
     async created() {
         try {
+            const storedIsRounded = localStorage.getItem("isRounded");
+            this.isRounded = storedIsRounded ? JSON.parse(storedIsRounded) : false;
+
             const user = await axiosService.checkTokenValidity();
             this.userId = user.user.id;
             if (this.modalContent && this.modalContent.author) {
-            const author = await axiosService.getUser("userId", this.modalContent.author);
-            this.authorUsername = author.user.username;
+                const author = await axiosService.getUser("userId", this.modalContent.author);
+                this.authorUsername = author.user.username;
+            }
+        } catch (error) {
+            console.info('Error fetching user ID:', error.message);
         }
-    } catch (error) {
-        console.info('Error fetching user ID:', error.message);
-      }
-        
+
     },
 
-        watch: {
-            modalContent: {
-                immediate: true,
-                    handler(newVal) {
-                    if (newVal && newVal.imgId) {
-                        this.imageURL = `${baseURL}/image/view/${newVal.imgId}`;
-                    }
+    watch: {
+        modalContent: {
+            immediate: true,
+            handler(newVal) {
+                if (newVal && newVal.imgId) {
+                    this.imageURL = `${baseURL}/image/view/${newVal.imgId}`;
                 }
             }
-        },
+        }
+    },
 
-        methods: {
-            toggleImageSize() {
+    methods: {
+        toggleImageSize() {
             this.isImageMagnified = !this.isImageMagnified;
         },
         getImageClass(type) {
@@ -137,58 +156,105 @@ export default {
                 'modal-image-wallpaper': type === 'wallpaper'
             };
         },
-            closeModal() {
-                this.$emit('close');
-            },
+        closeModal() {
+            this.$emit('close');
+        },
 
         async handleDelete() {
-                let confirmMessage = '';
-                if (this.modalContent.type === 'pfp') {
-                    confirmMessage = 'Are you sure you want to delete this Profile Picture?';
-                } else if (this.modalContent.type === 'wallpaper') {
-                    confirmMessage = 'Are you sure you want to delete this Wallpaper?';
-                } else {
-                    confirmMessage = 'Are you sure you want to delete this upload?';
+            let confirmMessage = '';
+            if (this.modalContent.type === 'pfp') {
+                confirmMessage = 'Are you sure you want to delete this Profile Picture?';
+            } else if (this.modalContent.type === 'wallpaper') {
+                confirmMessage = 'Are you sure you want to delete this Wallpaper?';
+            } else {
+                confirmMessage = 'Are you sure you want to delete this upload?';
+            }
+
+            if (window.confirm(confirmMessage)) {
+                try {
+                    await axiosService.deleteUpload(this.modalContent.imgId);
+                    this.$emit('delete-success', this.modalContent.imgId);
+                    this.closeModal();
+                } catch (error) {
+                    console.error('Error deleting upload:', error.message);
+                    this.$emit('error', 'Failed to delete the image.');
                 }
+            }
+        },
 
-                if (window.confirm(confirmMessage)) {
-                    try {
-                        await axiosService.deleteUpload(this.modalContent.imgId);
-                        this.$emit('delete-success', this.modalContent.imgId);
-                        this.closeModal();
-                    } catch (error) {
-                        console.error('Error deleting upload:', error.message);
-                        this.$emit('error', 'Failed to delete the image.');
-                    }
-                }
-            },
+        downloadImage() {
+            fetch(this.imageURL)
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
 
-            downloadImage() {
-    fetch(this.imageURL)
-        .then(response => response.blob())
-        .then(blob => {
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
+                    const filename = `${this.modalContent.title}-${this.modalContent.imgId}`.replace(/\s+/g, '_') + '.jpg';
+                    link.download = filename || 'download';
 
-            const filename = `${this.modalContent.title}-${this.modalContent.imgId}`.replace(/\s+/g, '_') + '.jpg';
-            link.download = filename || 'download';
-            
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
 
-            URL.revokeObjectURL(url);
-        })
-        .catch(error => {
-            console.error('Error downloading image:', error);
-        });
-}
+                    URL.revokeObjectURL(url);
+                })
+                .catch(error => {
+                    console.error('Error downloading image:', error);
+                });
+        },
+        toggleRoundImage() {
+            this.isRounded = !this.isRounded;
+            localStorage.setItem("isRounded", this.isRounded.toString());
 
         }
-    };
+
+    }
+};
 </script>
 <style scoped>
+.image-group {
+    position: relative;
+    display: inline-block;
+}
+
+.rounded img {
+    border-radius: 50%;
+}
+
+.overlay-button {
+    background-color: rgba(0, 0, 0, 0.281); 
+    color: white;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+    width: 36px;
+    height: 36px;
+    vertical-align: middle;
+
+}
+
+
+.overlay-button-group {
+    display: flex;
+    position: absolute;
+    transform: translateX(-50%);
+    left: 50%;
+    bottom: calc(50% - 26px);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    gap: 10px;
+
+}
+
+.image-group img:hover + .overlay-button-group {
+    opacity: 1;
+}
+.overlay-button-group:hover {
+    opacity: 1;
+}
 .modal {
     display: none;
     position: fixed;
@@ -250,7 +316,7 @@ export default {
     height: auto;
     box-shadow: 0 5px 9px rgba(0, 0, 0, 0.4);
     width: auto;
-    max-width: calc(100% - 30px); 
+    max-width: calc(100% - 30px);
 
 
 }
@@ -330,7 +396,7 @@ export default {
     font-size: 24px;
     cursor: pointer;
     transition: 0.2s ease-in-out;
-    z-index: 10; 
+    z-index: 10;
 }
 
 
