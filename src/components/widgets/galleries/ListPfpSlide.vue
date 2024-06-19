@@ -129,7 +129,7 @@ export default {
 #module-container{
   margin-left: auto;
   margin-right: auto;
-  width: 65%;
+  width: 60%;
   text-align: left;
 
 
