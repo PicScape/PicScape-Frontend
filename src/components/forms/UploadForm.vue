@@ -24,7 +24,10 @@
             <button @click="removeTag(index)" type="button">✖</button>
           </div>
         </div>
-        <input type="text" id="tags" v-model="tagInput" @keydown.enter.prevent="addTag">
+        <div class="tag-input-container">
+          <input type="text" id="tags" v-model="tagInput" @keydown.enter.prevent="addTag">
+          <button type="button" @click="addTag" class="add-tag-button">Add</button>
+        </div>
       </div>
       <div class="form-group">
         <label for="uploadType">Upload Type:</label>
@@ -194,6 +197,7 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 .auth-form-container {
   max-width: 500px;
@@ -255,10 +259,6 @@ export default {
   pointer-events: none;
 }
 
-
-
-
-
 .remove-button {
   position: absolute;
   top: 10px;
@@ -280,7 +280,6 @@ export default {
   color: red;
 }
 
-
 .card-header {
   background-color: var(--primary-color);
   color: var(--text-color);
@@ -298,10 +297,7 @@ label {
   padding-bottom: 7px;
   color: var(--text-color);
   pointer-events: none;
-
 }
-
-
 
 input[type="text"],
 input[type="email"],
@@ -377,8 +373,6 @@ input[type="password"] {
   flex-wrap: wrap;
 }
 
-
-
 .tag-text {
   color: black;
 }
@@ -396,11 +390,8 @@ input[type="password"] {
   color: red;
 }
 
-
-
 .drop-zone:hover {
   background-color: #ffffff0e;
-
 }
 
 .drag-over {
@@ -440,13 +431,11 @@ input[type="password"] {
   }
 }
 
-
 .image-preview {
   max-width: 100%;
   max-height: 200px;
   pointer-events: none;
 }
-
 
 .upload-type-select {
   background-color: var(--white-primary);
@@ -465,5 +454,31 @@ input[type="password"] {
 .upload-type-select option {
   background-color: var(--white-primary);
   color: var(--text-color-bk);
+}
+
+.tag-input-container {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+#tags {
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+.add-tag-button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8.5px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.add-tag-button:hover {
+  background-color: var(--submit-btn-secondary);
 }
 </style>
