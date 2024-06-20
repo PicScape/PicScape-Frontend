@@ -6,12 +6,12 @@
             <button class="close" @click="closeModal" aria-label="Close modal">&times;</button>
 
 
-            <div class="image-modal-details-container" >
-                <div class="image-modal-img-wrapper" 
-                    :class="{ 'magnified': isImageMagnified, 'centered': modalContent.type === 'wallpaper', 'rounded': isRounded }">
+            <div class="image-modal-details-container">
+                <div class="image-modal-img-wrapper"
+                    :class="{ 'magnified': isImageMagnified, 'centered': modalContent.type === 'wallpaper', 'rounded': isRounded && modalContent.type === 'pfp' }">
                     <div :class="{ 'image-group': !isImageMagnified }">
                         <img v-if="!isImageMagnified" :src="imageURL" :alt="modalContent.title"
-                            :class="getImageClass(modalContent.type)"  />
+                            :class="getImageClass(modalContent.type)" />
                         <img v-else :src="imageURL" :alt="modalContent.title" class="modal-image-img-magnified"
                             @click="toggleImageSize" />
 
@@ -221,7 +221,7 @@ export default {
 
 
 .overlay-button {
-    background-color: rgba(0, 0, 0, 0.281); 
+    background-color: rgba(0, 0, 0, 0.281);
     color: white;
     border: none;
     font-size: 18px;
@@ -247,12 +247,14 @@ export default {
 
 }
 
-.image-group img:hover + .overlay-button-group {
+.image-group img:hover+.overlay-button-group {
     opacity: 1;
 }
+
 .overlay-button-group:hover {
     opacity: 1;
 }
+
 .modal {
     display: none;
     position: fixed;
