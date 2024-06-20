@@ -92,7 +92,8 @@ export default {
             authorId: null,
             authorUsername: null,
             isImageMagnified: false,
-            isRounded: false
+            isRounded: false,
+            isAdmin: false,
 
 
         };
@@ -101,7 +102,7 @@ export default {
 
     computed: {
         canDelete() {
-            return this.userId === this.modalContent.authorId;
+            return this.userId === this.modalContent.authorId || this.isAdmin === true;
 
         },
         formattedDate() {
@@ -122,9 +123,9 @@ export default {
         try {
             const storedIsRounded = localStorage.getItem("isRounded");
             this.isRounded = storedIsRounded ? JSON.parse(storedIsRounded) : false;
-
             const user = await axiosService.checkTokenValidity();
             this.userId = user.user.id;
+            this.isAdmin = user.user.isAdmin;
             if (this.modalContent && this.modalContent.author) {
                 const author = await axiosService.getUser("userId", this.modalContent.author);
                 this.authorUsername = author.user.username;
