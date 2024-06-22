@@ -6,7 +6,7 @@ import Pfps from '../views/PfpsView.vue';
 import Wallpapers from '../views/WallpapersView.vue';
 import Settings from '../views/SettingsView.vue';
 import MyScape from '../views/MyScape.vue';
-
+import ActivateAccount from '../views/ActivateAccountView.vue';
 const routes = [
   { path: '/', component: Home },
   { path: '/pfps', component: Pfps },
@@ -15,6 +15,7 @@ const routes = [
   { path: '/login', component: Login },
   { path: '/settings', component: Settings },
   { path: '/myscape', component: MyScape },
+  { path: '/account/activate', component: ActivateAccount, props: route => ({ activationToken: route.query.activationToken }) }
 ];
 
 const router = createRouter({

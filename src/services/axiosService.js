@@ -45,6 +45,10 @@ export const login = async (email, password) => {
 };
 
 
+
+
+
+
 export const verifyLoginCode = async (email, code) => {
   try {
     const response = await axiosInstance.post('/auth/verify', { email, code });
@@ -55,6 +59,17 @@ export const verifyLoginCode = async (email, code) => {
     handleApiError(error);
   }
 };
+
+
+export const ActivateAccount = async (activationToken) => {
+    try {
+      const response = await axiosInstance.get(`/auth/activate?activationToken=${activationToken}`);
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  };
+  
 
 export const register = async (email, username, password) => {
   try {
@@ -213,5 +228,6 @@ export default {
   getImageDetails,
   deleteUpload,
   getUser,
-  verifyLoginCode
+  verifyLoginCode,
+  ActivateAccount
 };
