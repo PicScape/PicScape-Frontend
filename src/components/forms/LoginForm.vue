@@ -30,31 +30,37 @@
 
     <form @submit.prevent="submitForm" v-else-if="!isLoggedIn" class="auth-form">
       <div v-if="!codePrompt">
-
-      <div class="form-group">
-        <label for="loginEmail">Email:</label>
-        <input type="email" id="loginEmail" v-model="loginEmail" name="loginEmail" required autocomplete="email">
+        <div class="form-group">
+          <label for="loginEmail">Email:</label>
+          <input type="email" id="loginEmail" v-model="loginEmail" name="loginEmail" required autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password:</label>
+          <input type="password" id="loginPassword" v-model="loginPassword" name="loginPassword" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="submit-button">Login</button>
+        <div class="toggle-auth-option">
+          <span>Don't have an account yet?</span>
+          <button type="button" @click="toggleAuthOption">Register</button>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="loginPassword">Password:</label>
-        <input type="password" id="loginPassword" v-model="loginPassword" name="loginPassword" required autocomplete="current-password">
+      <div v-else class="auth-form">
+        <div class="form-group code-inputs">
+          <label for="code">Verification Code:</label>
+          <div class="code-input-container">
+            <input ref="code1" type="text" id="code1" v-model="code[0]" name="code1" maxlength="1" @input="handleCodeInput(0, $event)" @keydown="handleCodeKeydown(0, $event)" required>
+            <input ref="code2" type="text" id="code2" v-model="code[1]" name="code2" maxlength="1" @input="handleCodeInput(1, $event)" @keydown="handleCodeKeydown(1, $event)" required>
+            <input ref="code3" type="text" id="code3" v-model="code[2]" name="code3" maxlength="1" @input="handleCodeInput(2, $event)" @keydown="handleCodeKeydown(2, $event)" required>
+            <input ref="code4" type="text" id="code4" v-model="code[3]" name="code4" maxlength="1" @input="handleCodeInput(3, $event)" @keydown="handleCodeKeydown(3, $event)" required>
+            <input ref="code5" type="text" id="code5" v-model="code[4]" name="code5" maxlength="1" @input="handleCodeInput(4, $event)" @keydown="handleCodeKeydown(4, $event)" required>
+          </div>
+        </div>
+        <button type="submit" class="submit-button">Verify Code</button>
+        <div class="toggle-auth-option">
+          <span>Didn't receive a code?</span>
+          <button type="button" @click="resendCode" class="link-button">Resend</button>
+        </div>
       </div>
-      <button type="submit" class="submit-button">Login</button>
-      <div class="toggle-auth-option">
-        <span>Don't have an account yet?</span>
-        <button type="button" @click="toggleAuthOption">Register</button>
-      </div>
-
-    </div>
-    <div v-else-if="!isLoggedIn">
-      <div class="form-group">
-        <label for="code">Code:</label>
-        <input type="code" id="code" v-model="code" name="code" required autocomplete="code">
-      </div>
-      <button type="submit" class="submit-button">Verify Code</button>
-
-    </div>
-
     </form>
 
     <button v-if="isLoggedIn" @click="logout" class="submit-button">Logout</button>
@@ -65,8 +71,6 @@
   </div>
 </template>
 
-
-
 <script>
 import axiosService from '@/services/axiosService';
 import Cookies from 'js-cookie';
@@ -74,6 +78,7 @@ import Cookies from 'js-cookie';
 export default {
   data() {
     return {
+      code: ['', '', '', '', ''],
       isRegistering: false,
       email: '',
       username: '',
@@ -107,13 +112,11 @@ export default {
       this.success = '';
 
       try {
-        if (this.codePrompt){
-          this.error = '';
-          await axiosService.verifyLoginCode(this.loginEmail, this.code);
+        if (this.codePrompt) {
+          const verificationCode = this.code.join('');
+          await axiosService.verifyLoginCode(this.loginEmail, verificationCode);
           this.isLoggedIn = true;
-          window.location.href = '/';
-        }
-        else if (this.isRegistering) {
+        } else if (this.isRegistering) {
           if (this.password !== this.confirmPassword) {
             this.error = 'Passwords do not match';
             return;
@@ -122,10 +125,8 @@ export default {
           this.success = 'An email has been sent to verify your email address. Please check your inbox.';
           this.isRegistering = false;
         } else {
-          this.error = '';
           await axiosService.login(this.loginEmail, this.loginPassword);
           this.codePrompt = true;
-
         }
       } catch (error) {
         this.error = error.message;
@@ -145,9 +146,49 @@ export default {
     logout() {
       this.isLoggedIn = false;
       Cookies.remove('token');
-      window.location.reload()
-    }
-  }
+      window.location.reload();
+    },
+    handleCodeInput(index, event) {
+      this.code[index] = event.target.value.trim();
+
+      if (event.data === null) {
+        this.focusPrevious(index);
+      } else if (index < this.code.length - 1) {
+        this.$refs[`code${index + 2}`].focus();
+      }
+
+      if (this.isCodeComplete()) {
+        this.submitForm();
+      }
+    },
+    handleCodeKeydown(index, event) {
+      if (event.key === 'Backspace' && index > 0 && !this.code[index]) {
+        this.focusPrevious(index);
+      } else if (event.key.length === 1 && index < this.code.length - 1) {
+        try{
+          this.$refs[`code${index + 1}`].focus();
+
+        }catch{
+          console.log("") 
+        }
+      }
+    },
+    focusPrevious(index) {
+      try{
+        this.$refs[`code${index}`].focus();
+
+        }catch{
+          console.log("") 
+        }
+    },
+    isCodeComplete() {
+      return this.code.every(input => input !== '');
+    },
+    resendCode() {
+
+      console.log('Resending verification code');
+    },
+  },
 };
 </script>
 
@@ -205,6 +246,18 @@ input[type="code"] {
   padding: 8px;
   width: 100%;
   box-sizing: border-box;
+}
+.code-input-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.code-input-container input[type="text"] {
+  width: calc(20% - 8px); 
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
 }
 
 .submit-button {
