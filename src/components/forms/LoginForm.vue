@@ -48,11 +48,14 @@
         <div class="form-group code-inputs">
           <label for="code">Verification Code:</label>
           <div class="code-input-container">
-            <input ref="code1" type="text" id="code1" v-model="code[0]" name="code1" maxlength="1" @input="handleCodeInput(0, $event)" @keydown="handleCodeKeydown(0, $event)" required>
-            <input ref="code2" type="text" id="code2" v-model="code[1]" name="code2" maxlength="1" @input="handleCodeInput(1, $event)" @keydown="handleCodeKeydown(1, $event)" required>
-            <input ref="code3" type="text" id="code3" v-model="code[2]" name="code3" maxlength="1" @input="handleCodeInput(2, $event)" @keydown="handleCodeKeydown(2, $event)" required>
-            <input ref="code4" type="text" id="code4" v-model="code[3]" name="code4" maxlength="1" @input="handleCodeInput(3, $event)" @keydown="handleCodeKeydown(3, $event)" required>
-            <input ref="code5" type="text" id="code5" v-model="code[4]" name="code5" maxlength="1" @input="handleCodeInput(4, $event)" @keydown="handleCodeKeydown(4, $event)" required>
+            <!-- Use v-model for each input -->
+            <input ref="code1" type="text" id="code1" v-model="code[0]" name="code1" maxlength="1" @input="handleCodeInput(0, $event)" @keydown="handleCodeKeydown(0, $event)" @paste="handlePaste($event)" required>
+            <input ref="code2" type="text" id="code2" v-model="code[1]" name="code2" maxlength="1" @input="handleCodeInput(1, $event)" @keydown="handleCodeKeydown(1, $event)" @paste="handlePaste($event)" required>
+            <input ref="code3" type="text" id="code3" v-model="code[2]" name="code3" maxlength="1" @input="handleCodeInput(2, $event)" @keydown="handleCodeKeydown(2, $event)" @paste="handlePaste($event)" required>
+            <input ref="code4" type="text" id="code4" v-model="code[3]" name="code4" maxlength="1" @input="handleCodeInput(3, $event)" @keydown="handleCodeKeydown(3, $event)" @paste="handlePaste($event)" required>
+            <input ref="code5" type="text" id="code5" v-model="code[4]" name="code5" maxlength="1" @input="handleCodeInput(4, $event)" @keydown="handleCodeKeydown(4, $event)" @paste="handlePaste($event)" required>
+            <input ref="code6" type="text" id="code6" v-model="code[5]" name="code6" maxlength="1" @input="handleCodeInput(5, $event)" @keydown="handleCodeKeydown(5, $event)" @paste="handlePaste($event)" required>
+
           </div>
         </div>
         <button type="submit" class="submit-button">Verify Code</button>
@@ -78,7 +81,7 @@ import Cookies from 'js-cookie';
 export default {
   data() {
     return {
-      code: ['', '', '', '', ''],
+      code: ['', '', '', '', '', ''],
       isRegistering: false,
       email: '',
       username: '',
@@ -116,6 +119,8 @@ export default {
           const verificationCode = this.code.join('');
           await axiosService.verifyLoginCode(this.loginEmail, verificationCode);
           this.isLoggedIn = true;
+          window.location.href = '/';
+
         } else if (this.isRegistering) {
           if (this.password !== this.confirmPassword) {
             this.error = 'Passwords do not match';
@@ -149,41 +154,46 @@ export default {
       window.location.reload();
     },
     handleCodeInput(index, event) {
-      this.code[index] = event.target.value.trim();
+    this.code[index] = event.target.value.trim();
 
-      if (event.data === null) {
-        this.focusPrevious(index);
-      } else if (index < this.code.length - 1) {
-        this.$refs[`code${index + 2}`].focus();
-      }
+    if (event.data === null) {
+      this.focusPrevious(index);
+    } else if (index < this.code.length - 1) {
+      this.$refs[`code${index + 2}`].focus();
+    }
 
-      if (this.isCodeComplete()) {
-        this.submitForm();
-      }
-    },
+    if (this.isCodeComplete()) {
+      this.submitForm();
+    }
+  },
     handleCodeKeydown(index, event) {
-      if (event.key === 'Backspace' && index > 0 && !this.code[index]) {
-        this.focusPrevious(index);
-      } else if (event.key.length === 1 && index < this.code.length - 1) {
-        try{
-          this.$refs[`code${index + 1}`].focus();
+    if (event.key === 'Backspace' && index > 0 && !this.code[index]) {
+      this.focusPrevious(index);
+    } else if (event.key.length === 1 && index < this.code.length - 1) {
+      this.$refs[`code${index + 1}`].focus();
+    }
+  },
+    handlePaste(event) {
+    event.preventDefault();
+    const clipboardData = event.clipboardData || window.clipboardData;
+    const pastedText = clipboardData.getData('text');
 
-        }catch{
-          console.log("") 
-        }
-      }
-    },
+    for (let i = 0; i < this.code.length && i < pastedText.length; i++) {
+      this.code[i] = pastedText.charAt(i);
+    }
+
+    if (this.isCodeComplete()) {
+      this.submitForm();
+    }
+  },
     focusPrevious(index) {
-      try{
-        this.$refs[`code${index}`].focus();
-
-        }catch{
-          console.log("") 
-        }
-    },
+    if (index > 0) {
+      this.$refs[`code${index}`].focus();
+    }
+  },
     isCodeComplete() {
-      return this.code.every(input => input !== '');
-    },
+    return this.code.every(input => input !== '');
+  },
     resendCode() {
 
       console.log('Resending verification code');
@@ -253,7 +263,7 @@ input[type="code"] {
 }
 
 .code-input-container input[type="text"] {
-  width: calc(20% - 8px); 
+  width: calc(20% - 20px); 
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
