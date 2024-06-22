@@ -29,6 +29,8 @@
     </form>
 
     <form @submit.prevent="submitForm" v-else-if="!isLoggedIn" class="auth-form">
+      <div v-if="!codePrompt">
+
       <div class="form-group">
         <label for="loginEmail">Email:</label>
         <input type="email" id="loginEmail" v-model="loginEmail" name="loginEmail" required autocomplete="email">
@@ -42,6 +44,17 @@
         <span>Don't have an account yet?</span>
         <button type="button" @click="toggleAuthOption">Register</button>
       </div>
+
+    </div>
+    <div v-else-if="!isLoggedIn">
+      <div class="form-group">
+        <label for="code">Code:</label>
+        <input type="code" id="code" v-model="code" name="code" required autocomplete="code">
+      </div>
+      <button type="submit" class="submit-button">Verify Code</button>
+
+    </div>
+
     </form>
 
     <button v-if="isLoggedIn" @click="logout" class="submit-button">Logout</button>
@@ -71,7 +84,8 @@ export default {
       isLoggedIn: false,
       isLoaded: false,
       error: '',
-      success: ''
+      success: '',
+      codePrompt: false,
     };
   },
   async created() {
@@ -93,19 +107,24 @@ export default {
       this.success = '';
 
       try {
-        if (this.isRegistering) {
+        if (this.codePrompt){
+          this.error = '';
+          await axiosService.verifyLoginCode(this.loginEmail, this.code);
+          this.isLoggedIn = true;
+          window.location.href = '/';
+        }
+        else if (this.isRegistering) {
           if (this.password !== this.confirmPassword) {
             this.error = 'Passwords do not match';
             return;
           }
           await axiosService.register(this.email, this.username, this.password);
-          this.success = 'Registered successfully';
+          this.success = 'An email has been sent to verify your email address. Please check your inbox.';
           this.isRegistering = false;
         } else {
           this.error = '';
           await axiosService.login(this.loginEmail, this.loginPassword);
-          this.isLoggedIn = true;
-          window.location.href = '/';
+          this.codePrompt = true;
 
         }
       } catch (error) {
@@ -178,7 +197,8 @@ label {
 
 input[type="text"],
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+input[type="code"] {
   background-color: var(--white-primary);
   border: 1px solid var(--white-secondary);
   border-radius: 4px;
