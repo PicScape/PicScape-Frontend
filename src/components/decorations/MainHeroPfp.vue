@@ -108,18 +108,18 @@ input[type="text"] {
 @media screen and (max-width: 768px) {
   .grid-container-hero {
     width: 80%;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .hero-img {
+    display: block;
+    margin: 0 auto 20px;
+    order: -1; /* Ensures the image comes first */
   }
 
   .title-container-hero {
     margin-bottom: 20px;
-  }
-
-  .hero-img {
-    display: none;
-  }
-
-  .grid-container-hero {
-    grid-gap: 0;
   }
 }
 

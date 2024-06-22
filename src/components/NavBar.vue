@@ -5,7 +5,7 @@
     <header class="navbar">
       <div class="header-container">
         <router-link to="/" class="logo">PicScape</router-link>
-        <nav v-if="isLoaded">
+        <nav v-if="isLoaded" :class="{ 'nav-open': isNavOpen }">
           <router-link to="/" class="nav-link">Home</router-link>
           <router-link to="/upload" class="nav-link">Upload</router-link>
           <router-link v-if="!isLoggedIn" to="/login" class="nav-link">Login</router-link>
@@ -25,6 +25,11 @@
             </div>
           </div>
         </nav>
+        <button class="hamburger" @click="toggleNav">
+          <span class="material-symbols-outlined">
+            menu
+          </span>
+        </button>
       </div>
     </header>
   </div>
@@ -40,6 +45,7 @@ export default {
       isLoggedIn: false,
       isLoaded: false,
       username: '',
+      isNavOpen: false
     };
   },
   created() {
@@ -66,6 +72,9 @@ export default {
       this.isLoggedIn = false;
       Cookies.remove('token');
     },
+    toggleNav() {
+      this.isNavOpen = !this.isNavOpen;
+    }
   }
 };
 </script>
@@ -74,7 +83,6 @@ export default {
 .logout-btn:hover {
   background-color: red !important;
 }
-
 
 .navbar {
   background-color: var(--navbar-color);
@@ -133,7 +141,6 @@ nav {
 
 .dropdown {
   position: relative;
-
 }
 
 .dropdown-content {
@@ -145,7 +152,6 @@ nav {
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
-
 }
 
 .dropdown-content .sub-nav {
@@ -154,12 +160,10 @@ nav {
   color: var(--text-color);
   text-decoration: none;
   transition: background-color 0.3s;
-
 }
 
 .dropdown-content .nav-link:hover {
   background-color: var(--primary-color);
-  
 }
 
 .dropdown:hover .dropdown-content {
@@ -187,5 +191,49 @@ nav {
   vertical-align: middle;
   display: inline-block;
   font-size: 20px;
+}
+
+.hamburger {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 24px;
+  cursor: pointer;
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  nav {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+    background-color: var(--navbar-color);
+    position: absolute;
+    top: 60px;
+    left: 0;
+    z-index: 1;
+  }
+
+  .dropdown-content {
+
+  top: 100%;
+  right: 0;
+  background-color: var(--navbar-color);
+  min-width: 100%;
+
+}
+
+  .nav-open {
+    display: flex;
+  }
+
+  .nav-link {
+    margin: 10px 10px;
+  }
+
+  .hamburger {
+    display: block;
+  }
 }
 </style>
