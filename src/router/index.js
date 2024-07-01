@@ -15,6 +15,7 @@ const routes = [
   { path: '/login', component: Login },
   { path: '/settings', component: Settings },
   { path: '/myscape/:userid', component: MyScape },
+  { path: '/myscape', component: MyScape },
   { path: '/account/activate', component: ActivateAccount, props: route => ({ activationToken: route.query.activationToken }) }
 ];
 

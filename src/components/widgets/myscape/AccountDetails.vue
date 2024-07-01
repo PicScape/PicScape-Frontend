@@ -30,6 +30,10 @@ export default {
   },
   async mounted() {
     this.userid = this.$route.params.userid;
+    if (!this.userid){
+      const user = await axiosService.checkTokenValidity()
+      this.userid = user.user.id
+    }
 
     try {
       const response = await axiosService.getUser("userId", this.userid);
