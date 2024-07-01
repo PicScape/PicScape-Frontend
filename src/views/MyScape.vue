@@ -1,13 +1,13 @@
 <template>
-    <AccountDetails/>
+    <ManageUploads/>
 </template>
   
   <script>
-  import AccountDetails from '@/components/widgets/myscape/AccountDetails.vue';
+  import ManageUploads from '@/components/widgets/ManageUploads.vue';
   
   export default {
     components: {
-      AccountDetails
+        ManageUploads
     }
   };
   

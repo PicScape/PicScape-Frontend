@@ -167,41 +167,6 @@ export const getNewestUploads = async (type, page = 1) => {
   }
 };
 
-
-
-export const getUploadsFromUser = async (userid, type, page = 1) => {
-  try {
-    const response = await axiosInstance.get('/image/myscape/', {
-      params: {
-        userid: userid,
-        type: type,
-        page: page
-      }
-    });
-    return response.data;
-  } catch (error) {
-    handleApiError(error);
-    throw error;
-  }
-};
-
-
-export const getMyUploads = async (type, page = 1) => {
-  try {
-    const response = await axiosInstance.get('/image/newest/', {
-      params: {
-        type: type,
-        page: page
-      }
-    });
-    return response.data;
-  } catch (error) {
-    handleApiError(error);
-    throw error;
-  }
-};
-
-
 export const getImageDetails = async (imageId) => {
   try {
     const response = await axiosInstance.get(`/image/data/${imageId}`);
@@ -264,7 +229,5 @@ export default {
   deleteUpload,
   getUser,
   verifyLoginCode,
-  ActivateAccount,
-  getUploadsFromUser,
-  
+  ActivateAccount
 };
