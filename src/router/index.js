@@ -14,7 +14,7 @@ const routes = [
   { path: '/upload', component: Upload },
   { path: '/login', component: Login },
   { path: '/settings', component: Settings },
-  { path: '/myscape', component: MyScape },
+  { path: '/myscape/:userid', component: MyScape },
   { path: '/account/activate', component: ActivateAccount, props: route => ({ activationToken: route.query.activationToken }) }
 ];
 
