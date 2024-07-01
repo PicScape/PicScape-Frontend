@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>MyScape</h1>
     <p>User ID: {{ userid }}</p>
   </div>
   <div class="profile-card">
