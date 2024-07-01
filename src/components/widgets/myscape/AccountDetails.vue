@@ -8,7 +8,7 @@
         <img src="https://api.picscape.xyz/image/view/22970" alt="Profile Picture" class="profile-pic">
         <div class="details-container">
           <div class="username">{{ userObj ? userObj.user.username : 'Loading...' }}</div>
-          <div class="userid">Joined on 12.02.2023 20:23</div>
+          <div class="userid">Joined 12.02.2023 20:23</div>
           <div class="roles-container">
         <div v-for="(role, index) in roles" :key="index" class="role">
           {{ role }}
@@ -103,7 +103,7 @@ export default {
   display: flex;
   align-items: center;
   position: relative;
-  bottom: 40px;
+  bottom: 35px;
   left: 5%;
 }
 
