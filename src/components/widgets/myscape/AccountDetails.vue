@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <p>User ID: {{ userid }}</p>
-  </div>
+
   <div class="profile-card">
     <div class="top">
     </div>
@@ -72,11 +70,19 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 45%;
+  width: 870px;
   background-color: var(--card-color);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin: auto;
+  margin-top: 20px;
+
+}
+
+@media (max-width: 890px) {
+  .profile-card {
+    width: calc(100% - 20px);
+  }
 }
 
 .top {
@@ -102,8 +108,8 @@ export default {
 }
 
 .profile-pic {
-  width: 100px;
-  height: 100px;
+  width: 130px;
+  height: 130px;
   border-radius: 20px;
   margin-right: 20px;
 }
