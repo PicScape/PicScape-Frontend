@@ -86,7 +86,9 @@ export default {
         this.currentSlide++;
       }
     },
-
+    redirectToAnotherPage() {
+      this.$router.push('/wallpapers');
+    },
   },
 };
 </script>
