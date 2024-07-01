@@ -21,7 +21,7 @@
         <label for="confirmPassword">Confirm Password:</label>
         <input type="password" id="confirmPassword" v-model="confirmPassword" name="confirmPassword" required autocomplete="new-password">
       </div>
-      <button type="submit" class="submit-button">Register</button>
+      <button type="submit" class="submit-button" :disabled="isSubmitting">Register</button>
       <div class="toggle-auth-option">
         <span>Already have an account?</span>
         <button type="button" @click="toggleAuthOption">Login</button>
@@ -38,7 +38,7 @@
           <label for="loginPassword">Password:</label>
           <input type="password" id="loginPassword" v-model="loginPassword" name="loginPassword" required autocomplete="current-password">
         </div>
-        <button type="submit" class="submit-button">Login</button>
+        <button type="submit" class="submit-button" :disabled="isSubmitting">Login</button>
         <div class="toggle-auth-option">
           <span>Don't have an account yet?</span>
           <button type="button" @click="toggleAuthOption">Register</button>
@@ -55,10 +55,9 @@
             <input ref="code4" type="text" id="code4" v-model="code[3]" name="code4" maxlength="1" @input="handleCodeInput(3, $event)" @keydown="handleCodeKeydown(3, $event)" @paste="handlePaste($event)" required>
             <input ref="code5" type="text" id="code5" v-model="code[4]" name="code5" maxlength="1" @input="handleCodeInput(4, $event)" @keydown="handleCodeKeydown(4, $event)" @paste="handlePaste($event)" required>
             <input ref="code6" type="text" id="code6" v-model="code[5]" name="code6" maxlength="1" @input="handleCodeInput(5, $event)" @keydown="handleCodeKeydown(5, $event)" @paste="handlePaste($event)" required>
-
           </div>
         </div>
-        <button type="submit" class="submit-button">Verify Code</button>
+        <button type="submit" class="submit-button" :disabled="isSubmitting">Verify Code</button>
         <div class="toggle-auth-option">
           <span>Didn't receive a code?</span>
           <button type="button" @click="resendCode" class="link-button">Resend</button>
@@ -94,6 +93,7 @@ export default {
       error: '',
       success: '',
       codePrompt: false,
+      isSubmitting: false,
     };
   },
   async created() {
@@ -113,6 +113,8 @@ export default {
     async submitForm() {
       this.error = '';
       this.success = '';
+      if (this.isSubmitting) return;
+      this.isSubmitting = true;
 
       try {
         if (this.codePrompt) {
@@ -120,7 +122,6 @@ export default {
           await axiosService.verifyLoginCode(this.loginEmail, verificationCode);
           this.isLoggedIn = true;
           window.location.href = '/';
-
         } else if (this.isRegistering) {
           if (this.password !== this.confirmPassword) {
             this.error = 'Passwords do not match';
@@ -135,6 +136,8 @@ export default {
         }
       } catch (error) {
         this.error = error.message;
+      } finally {
+        this.isSubmitting = false;
       }
     },
     toggleAuthOption() {
@@ -154,48 +157,47 @@ export default {
       window.location.reload();
     },
     handleCodeInput(index, event) {
-    this.code[index] = event.target.value.trim();
+      this.code[index] = event.target.value.trim();
 
-    if (event.data === null) {
-      this.focusPrevious(index);
-    } else if (index < this.code.length - 1) {
-      this.$refs[`code${index + 2}`].focus();
-    }
+      if (event.data === null) {
+        this.focusPrevious(index);
+      } else if (index < this.code.length - 1) {
+        this.$refs[`code${index + 2}`].focus();
+      }
 
-    if (this.isCodeComplete()) {
-      this.submitForm();
-    }
-  },
+      if (this.isCodeComplete()) {
+        this.submitForm();
+      }
+    },
     handleCodeKeydown(index, event) {
-    if (event.key === 'Backspace' && index > 0 && !this.code[index]) {
-      this.focusPrevious(index);
-    } else if (event.key.length === 1 && index < this.code.length - 1) {
-      this.$refs[`code${index + 1}`].focus();
-    }
-  },
+      if (event.key === 'Backspace' && index > 0 && !this.code[index]) {
+        this.focusPrevious(index);
+      } else if (event.key.length === 1 && index < this.code.length - 1) {
+        this.$refs[`code${index + 1}`].focus();
+      }
+    },
     handlePaste(event) {
-    event.preventDefault();
-    const clipboardData = event.clipboardData || window.clipboardData;
-    const pastedText = clipboardData.getData('text');
+      event.preventDefault();
+      const clipboardData = event.clipboardData || window.clipboardData;
+      const pastedText = clipboardData.getData('text');
 
-    for (let i = 0; i < this.code.length && i < pastedText.length; i++) {
-      this.code[i] = pastedText.charAt(i);
-    }
+      for (let i = 0; i < this.code.length && i < pastedText.length; i++) {
+        this.code[i] = pastedText.charAt(i);
+      }
 
-    if (this.isCodeComplete()) {
-      this.submitForm();
-    }
-  },
+      if (this.isCodeComplete()) {
+        this.submitForm();
+      }
+    },
     focusPrevious(index) {
-    if (index > 0) {
-      this.$refs[`code${index}`].focus();
-    }
-  },
+      if (index > 0) {
+        this.$refs[`code${index}`].focus();
+      }
+    },
     isCodeComplete() {
-    return this.code.every(input => input !== '');
-  },
+      return this.code.every(input => input !== '');
+    },
     resendCode() {
-
       console.log('Resending verification code');
     },
   },
@@ -283,6 +285,11 @@ input[type="code"] {
 
 .submit-button:hover {
   background-color: var(--submit-btn-secondary);
+}
+
+.submit-button:disabled {
+  background-color: var(--disabled-btn-color);
+  cursor: not-allowed;
 }
 
 .error-message {
