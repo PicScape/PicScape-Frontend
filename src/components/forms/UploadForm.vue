@@ -21,12 +21,12 @@
           <div v-for="(tag, index) in tags" :key="index" class="tag"
             :class="{ 'jump-in': isTagEntering(index), 'jump-out': isTagLeaving(index) }">
             <span class="tag-text">{{ tag }}</span>
-            <button :disabled="isSubmitting" @click="removeTag(index)" type="button">✖</button>
+            <button @click="removeTag(index)" type="button">✖</button>
           </div>
         </div>
         <div class="tag-input-container">
           <input type="text" id="tags" v-model="tagInput" @keydown.enter.prevent="addTag">
-          <button :disabled="isSubmitting" type="button" @click="addTag" class="add-tag-button">Add</button>
+          <button type="button" @click="addTag" class="add-tag-button">Add</button>
         </div>
       </div>
       <div class="form-group">
@@ -41,7 +41,7 @@
         <label for="image">Image:</label>
         <div class="drop-zone" @dragenter.prevent="draggingOver = true" @dragleave.prevent="draggingOver = false"
           @dragover.prevent @drop.prevent="handleDrop" @click="selectFile" :class="{ 'drag-over': draggingOver }">
-          <button v-if="imagePreview" @click.stop="clearImage" :disabled="isSubmitting" class="remove-button">
+          <button v-if="imagePreview" @click.stop="clearImage" class="remove-button">
             <i class="material-icons">close</i>
           </button>
           <p v-if="!imagePreview" class="drop-text">Drag & Drop images here or click to select</p>
@@ -52,7 +52,7 @@
         </div>
       </div>
 
-      <button :disabled="isSubmitting" type="submit" class="submit-button">Upload</button>
+      <button type="submit" class="submit-button">Upload</button>
       <div class="messages">
         <div v-if="error" class="error-message">{{ error }}</div>
         <div v-if="success" class="success-message">{{ success }}</div>
@@ -86,8 +86,7 @@ export default {
       type: '',
       error: '',
       success: '',
-      draggingOver: false,
-      isSubmitting: false
+      draggingOver: false
     };
   },
   created() {
@@ -106,8 +105,6 @@ export default {
       }
     },
     async submitForm() {
-      if (this.isSubmitting) return;
-      this.isSubmitting = true;
       try {
         if (this.type === 'wallpaper') {
           await axiosService.uploadWallpaper(this.title, this.file, this.tags, this.description);
@@ -127,10 +124,7 @@ export default {
 
         console.log("Upload successful!");
         this.success = "Upload successful!"
-        this.isSubmitting = false;
-
       } catch (error) {
-        this.isSubmitting = false;
         console.error("Upload failed:", error);
         this.error = error.message;
       }
@@ -265,12 +259,6 @@ export default {
   pointer-events: none;
 }
 
-.submit-button:disabled {
-  background-color: var(--disabled-btn-color);
-  cursor: not-allowed;
-}
-
-
 .remove-button {
   position: absolute;
   top: 10px;
@@ -335,10 +323,6 @@ input[type="password"] {
 
 .submit-button:hover {
   background-color: var(--submit-btn-secondary);
-}
-
-.submit-button:disabled:hover {
-  background-color: var(--disabled-btn-color);
 }
 
 .error-message {
