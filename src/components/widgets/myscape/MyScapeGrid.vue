@@ -47,11 +47,17 @@ export default {
       loading: false,
       hasMore: true,
       imageType: 'pfp',
-      user: '',
+      userid: '',
     };
   },
   async mounted() {
-    this.user = await axiosService.checkTokenValidity()
+    if (this.$route.params.userid){
+      this.userid = this.$route.params.userid;
+
+    }else{
+      this.user = await axiosService.checkTokenValidity()
+
+    }
     this.fetchNewestImages();
     this.setupScrollListener();
 
@@ -63,7 +69,7 @@ export default {
       this.loading = true;
 
       try {
-        const response = await axiosService.getUploadsFromUser(this.imageType, this.page, this.user.user.id);
+        const response = await axiosService.getUploadsFromUser(this.imageType, this.page, this.userid);
         const newImages = response.uploads.map(image => ({
           ...image,
           url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,

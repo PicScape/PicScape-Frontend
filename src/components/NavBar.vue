@@ -69,8 +69,11 @@ export default {
       }
     },
     logout() {
+
       this.isLoggedIn = false;
       Cookies.remove('token');
+      window.location.href = '/';
+
     },
     toggleNav() {
       this.isNavOpen = !this.isNavOpen;
