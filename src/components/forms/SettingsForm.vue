@@ -6,44 +6,46 @@
       <div>Account Settings</div>
     </div>
     <form @submit.prevent="submitForm" v-if="isLoggedIn" class="auth-form upload-form">
-      <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" :placeholder=username_placeholder v-model=username id="username" autocomplete="username">
-
-      </div>
-      <div class="form-group">
-        <label for="roles">Roles:</label>
-
-      <div class="tags-container">
-        <div v-for="(role, index) in roles" :key="index" class="tag">
-          {{ role }}
+      <div class="grid-container1">
+        <div class="pfp-container">
+          <img :src="getProfilePictureUrl()" alt="Profile Picture">
+        </div>
+        <div class="input-field-container">
+          <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" :placeholder="username_placeholder" v-model="username" id="username" autocomplete="username">
+          </div>
+          <div class="form-group">
+            <label for="roles">Roles:</label>
+            <div class="tags-container">
+              <div v-for="(role, index) in roles" :key="index" class="tag">
+                {{ role }}
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" :placeholder="email_placeholder" v-model="email" autocomplete="email">
+          </div>
         </div>
       </div>
-    </div>
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" id="email" :placeholder=email_placeholder v-model=email autocomplete="email">
-      </div>
+
       <div class="password-group">
         <div class="form-group">
           <label for="password">New Password:</label>
-          <input type="password" id="password" name="password" autocomplete="new-password" v-model=password>
+          <input type="password" id="password" name="password" autocomplete="new-password" v-model="password">
         </div>
         <div class="form-group">
           <label for="confirmPassword">Confirm Password:</label>
-          <input type="password" id="confirmPassword" name="confirmPassword" autocomplete="new-password"
-            v-model=confirmPassword>
+          <input type="password" id="confirmPassword" name="confirmPassword" autocomplete="new-password" v-model="confirmPassword">
         </div>
       </div>
-
 
       <button type="submit" class="submit-button">Update Credentials</button>
       <div class="messages">
         <div v-if="error" class="error-message">{{ error }}</div>
         <div v-if="success" class="success-message">{{ success }}</div>
       </div>
-
-
     </form>
 
     <div v-else class="login-prompt">
@@ -70,22 +72,26 @@ export default {
       isLoaded: false,
       error: '',
       success: '',
+      pfp_url: '',
     };
   },
   created() {
     this.checkTokenValidity();
   },
   methods: {
-
+    getProfilePictureUrl(){
+      return this.pfp_url
+    },
     async checkTokenValidity() {
       try {
         const accountData = await axiosService.checkTokenValidity();
+
         this.isLoggedIn = !!accountData;
-        this.username_placeholder = accountData.user.username
+        const baseURL = process.env.VUE_APP_BASE_URL || 'http://localhost:3000';
+        this.pfp_url = `${baseURL}/fetch/pfp/${accountData.user.id}`;
+        this.username_placeholder = accountData.user.username;
         this.email_placeholder = await this.censorEmail(accountData.user.email);
         this.roles = accountData.user.roles || [];
-
-
       } catch (error) {
         this.isLoggedIn = false;
         Cookies.remove('token');
@@ -115,19 +121,13 @@ export default {
     },
     async censorEmail(email) {
       let parts = email.split('@');
-
       if (parts.length !== 2) {
         return email;
       }
-
       let localPart = parts[0];
       let domain = parts[1];
-
       let censoredLocalPart = localPart.substring(0, 3) + '*'.repeat(localPart.length - 3);
-
-      let censoredEmail = censoredLocalPart + '@' + domain;
-
-      return censoredEmail;
+      return censoredLocalPart + '@' + domain;
     },
     removeTag(index) {
       this.leavingTags.push(index);
@@ -163,7 +163,6 @@ export default {
     },
     handleFileChange(event) {
       const file = event.target.files[0];
-
       if (file) {
         const reader = new FileReader();
         reader.onload = () => {
@@ -193,7 +192,35 @@ export default {
   }
 };
 </script>
+
 <style scoped>
+.grid-container1 {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.pfp-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 200px;
+}
+
+.pfp-container img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.input-field-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .tag {
   background-color: #d3d3d3;
   border-radius: 4px;
@@ -204,7 +231,6 @@ export default {
   margin-bottom: 0;
   color: black;
 }
-
 
 .auth-form-container {
   max-width: 600px;
@@ -233,7 +259,6 @@ export default {
     opacity: 0;
     transform: translateY(-50px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -246,7 +271,6 @@ export default {
   align-items: center;
   margin-bottom: 10px;
 }
-
 
 .drop-zone {
   border: 2px dashed #ccc;
@@ -265,10 +289,6 @@ export default {
 .drop-text {
   pointer-events: none;
 }
-
-
-
-
 
 .remove-button {
   position: absolute;
@@ -291,7 +311,6 @@ export default {
   color: red;
 }
 
-
 .card-header {
   background-color: var(--primary-color);
   color: var(--text-color);
@@ -309,10 +328,7 @@ label {
   padding-bottom: 7px;
   color: var(--text-color);
   pointer-events: none;
-
 }
-
-
 
 input[type="text"],
 input[type="email"],
@@ -345,8 +361,6 @@ input[type="password"] {
   color: red;
 }
 
-
-
 .success-message {
   margin-top: 5px;
   color: green;
@@ -363,7 +377,6 @@ input[type="password"] {
   margin: 0;
   margin-top: 10px;
   pointer-events: none;
-
 }
 
 .toggle-auth-option button {
@@ -420,11 +433,8 @@ input[type="password"] {
   color: red;
 }
 
-
-
 .drop-zone:hover {
   background-color: #ffffff0e;
-
 }
 
 .drag-over {
@@ -457,19 +467,16 @@ input[type="password"] {
   0% {
     transform: translateY(-10px);
   }
-
   100% {
     transform: translateY(0);
   }
 }
-
 
 .image-preview {
   max-width: 100%;
   max-height: 200px;
   pointer-events: none;
 }
-
 
 .upload-type-select {
   background-color: var(--white-primary);
@@ -488,5 +495,15 @@ input[type="password"] {
 .upload-type-select option {
   background-color: var(--white-primary);
   color: var(--text-color-bk);
+}
+
+@media (max-width: 500px) {
+  .pfp-container{
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .grid-container1 {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

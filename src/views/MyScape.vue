@@ -1,13 +1,16 @@
 <template>
-    <ManageUploads/>
+    <AccountDetails/>
+    <MyScapeGrid/>
 </template>
   
   <script>
-  import ManageUploads from '@/components/widgets/ManageUploads.vue';
+  import AccountDetails from '@/components/widgets/myscape/AccountDetails.vue';
+  import MyScapeGrid from '@/components/widgets/myscape/MyScapeGrid.vue';
   
   export default {
     components: {
-        ManageUploads
+      AccountDetails,
+      MyScapeGrid
     }
   };
   

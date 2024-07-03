@@ -45,7 +45,7 @@
                             <span v-for="tag in modalContent.tags" :key="tag" class="img-tag">{{ tag }}</span>
                         </div>
                     </div>
-                    <div v-if="modalContent.username">
+                    <div v-if="modalContent.username" @click="redirectToAuthorMyScape">
                         <div class="text-set-middle-bottom">Uploaded by:</div>
                         <div class="img-author text-set-middle-bottom-sub">{{ modalContent.username }}</div>
                     </div>
@@ -208,6 +208,10 @@ export default {
             this.isRounded = !this.isRounded;
             localStorage.setItem("isRounded", this.isRounded.toString());
 
+        },
+        redirectToAuthorMyScape(){
+            window.location.href = '/myscape/' + this.userId;
+
         }
 
     }
@@ -299,6 +303,16 @@ export default {
     min-width: 20%;
     display: block;
     margin: auto;
+}
+
+.img-author{
+    cursor:pointer;
+
+}
+
+.img-author:hover{
+    text-decoration: underline;
+    
 }
 
 .modal-image-pfp {
