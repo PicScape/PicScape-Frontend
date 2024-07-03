@@ -32,18 +32,19 @@ export default {
       userid: null,
       userObj: null,
       roles: ["test"],
+      pfp_url: '',
     };
   },
   methods: {
     getProfilePictureUrl() {
-      const baseURL = process.env.VUE_APP_BASE_URL || 'http://localhost:3000';
-      return `${baseURL}/fetch/pfp/${this.userid}`;
+      return this.pfp_url
     }
   },
   async mounted() {
     try {
       
       this.userid = this.$route.params.userid;
+      
       if (!this.userid) {
         const user = await axiosService.checkTokenValidity()
         if (user) {
@@ -54,6 +55,8 @@ export default {
         }
 
       }
+      const baseURL = process.env.VUE_APP_BASE_URL || 'http://localhost:3000';
+      this.pfp_url = `${baseURL}/fetch/pfp/${this.userid}`;
     } catch {
       console.log("error while mount")
     }
