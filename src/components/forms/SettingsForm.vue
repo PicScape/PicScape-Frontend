@@ -8,7 +8,7 @@
     <form @submit.prevent="submitForm" v-if="isLoggedIn" class="auth-form upload-form">
       <div class="grid-container1">
         <div class="pfp-container">
-          <img src="https://avatars.githubusercontent.com/u/69240351?v=4" alt="">
+          <img src="https://avatars.githubusercontent.com/u/69240351?v=4" alt="Profile Picture">
         </div>
         <div class="input-field-container">
           <div class="form-group">
@@ -23,11 +23,10 @@
               </div>
             </div>
           </div>
-          
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" id="email" :placeholder="email_placeholder" v-model="email" autocomplete="email">
-      </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" :placeholder="email_placeholder" v-model="email" autocomplete="email">
+          </div>
         </div>
       </div>
 
@@ -79,16 +78,13 @@ export default {
     this.checkTokenValidity();
   },
   methods: {
-
     async checkTokenValidity() {
       try {
         const accountData = await axiosService.checkTokenValidity();
         this.isLoggedIn = !!accountData;
-        this.username_placeholder = accountData.user.username
+        this.username_placeholder = accountData.user.username;
         this.email_placeholder = await this.censorEmail(accountData.user.email);
         this.roles = accountData.user.roles || [];
-
-
       } catch (error) {
         this.isLoggedIn = false;
         Cookies.remove('token');
@@ -118,19 +114,13 @@ export default {
     },
     async censorEmail(email) {
       let parts = email.split('@');
-
       if (parts.length !== 2) {
         return email;
       }
-
       let localPart = parts[0];
       let domain = parts[1];
-
       let censoredLocalPart = localPart.substring(0, 3) + '*'.repeat(localPart.length - 3);
-
-      let censoredEmail = censoredLocalPart + '@' + domain;
-
-      return censoredEmail;
+      return censoredLocalPart + '@' + domain;
     },
     removeTag(index) {
       this.leavingTags.push(index);
@@ -166,7 +156,6 @@ export default {
     },
     handleFileChange(event) {
       const file = event.target.files[0];
-
       if (file) {
         const reader = new FileReader();
         reader.onload = () => {
@@ -196,9 +185,8 @@ export default {
   }
 };
 </script>
+
 <style scoped>
-
-
 .grid-container1 {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -214,9 +202,11 @@ export default {
   width: 200px;
 }
 
-.pfp-container img{
-  height: 200px;
-  width: 200px;
+.pfp-container img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .input-field-container {
@@ -234,7 +224,6 @@ export default {
   margin-bottom: 0;
   color: black;
 }
-
 
 .auth-form-container {
   max-width: 600px;
@@ -263,7 +252,6 @@ export default {
     opacity: 0;
     transform: translateY(-50px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -276,7 +264,6 @@ export default {
   align-items: center;
   margin-bottom: 10px;
 }
-
 
 .drop-zone {
   border: 2px dashed #ccc;
@@ -295,10 +282,6 @@ export default {
 .drop-text {
   pointer-events: none;
 }
-
-
-
-
 
 .remove-button {
   position: absolute;
@@ -321,7 +304,6 @@ export default {
   color: red;
 }
 
-
 .card-header {
   background-color: var(--primary-color);
   color: var(--text-color);
@@ -339,10 +321,7 @@ label {
   padding-bottom: 7px;
   color: var(--text-color);
   pointer-events: none;
-
 }
-
-
 
 input[type="text"],
 input[type="email"],
@@ -375,8 +354,6 @@ input[type="password"] {
   color: red;
 }
 
-
-
 .success-message {
   margin-top: 5px;
   color: green;
@@ -393,7 +370,6 @@ input[type="password"] {
   margin: 0;
   margin-top: 10px;
   pointer-events: none;
-
 }
 
 .toggle-auth-option button {
@@ -450,11 +426,8 @@ input[type="password"] {
   color: red;
 }
 
-
-
 .drop-zone:hover {
   background-color: #ffffff0e;
-
 }
 
 .drag-over {
@@ -487,19 +460,16 @@ input[type="password"] {
   0% {
     transform: translateY(-10px);
   }
-
   100% {
     transform: translateY(0);
   }
 }
-
 
 .image-preview {
   max-width: 100%;
   max-height: 200px;
   pointer-events: none;
 }
-
 
 .upload-type-select {
   background-color: var(--white-primary);
@@ -518,5 +488,15 @@ input[type="password"] {
 .upload-type-select option {
   background-color: var(--white-primary);
   color: var(--text-color-bk);
+}
+
+@media (max-width: 500px) {
+  .pfp-container{
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .grid-container1 {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
