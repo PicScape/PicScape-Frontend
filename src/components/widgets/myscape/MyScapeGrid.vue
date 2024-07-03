@@ -61,10 +61,13 @@ export default {
       } else {
         window.location.href = '/login';
       }
-      this.fetchNewestImages();
-      this.setupScrollListener();
 
-    }},
+
+    }
+    this.fetchNewestImages();
+    this.setupScrollListener();
+  },
+    
     methods: {
     async fetchNewestImages() {
         if (!this.hasMore || this.loading) return;
