@@ -6,44 +6,47 @@
       <div>Account Settings</div>
     </div>
     <form @submit.prevent="submitForm" v-if="isLoggedIn" class="auth-form upload-form">
-      <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" :placeholder=username_placeholder v-model=username id="username" autocomplete="username">
-
-      </div>
-      <div class="form-group">
-        <label for="roles">Roles:</label>
-
-      <div class="tags-container">
-        <div v-for="(role, index) in roles" :key="index" class="tag">
-          {{ role }}
+      <div class="grid-container1">
+        <div class="pfp-container">
+          <img src="https://avatars.githubusercontent.com/u/69240351?v=4" alt="">
         </div>
-      </div>
-    </div>
+        <div class="input-field-container">
+          <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" :placeholder="username_placeholder" v-model="username" id="username" autocomplete="username">
+          </div>
+          <div class="form-group">
+            <label for="roles">Roles:</label>
+            <div class="tags-container">
+              <div v-for="(role, index) in roles" :key="index" class="tag">
+                {{ role }}
+              </div>
+            </div>
+          </div>
+          
       <div class="form-group">
         <label for="email">Email:</label>
-        <input type="email" id="email" :placeholder=email_placeholder v-model=email autocomplete="email">
+        <input type="email" id="email" :placeholder="email_placeholder" v-model="email" autocomplete="email">
       </div>
+        </div>
+      </div>
+
       <div class="password-group">
         <div class="form-group">
           <label for="password">New Password:</label>
-          <input type="password" id="password" name="password" autocomplete="new-password" v-model=password>
+          <input type="password" id="password" name="password" autocomplete="new-password" v-model="password">
         </div>
         <div class="form-group">
           <label for="confirmPassword">Confirm Password:</label>
-          <input type="password" id="confirmPassword" name="confirmPassword" autocomplete="new-password"
-            v-model=confirmPassword>
+          <input type="password" id="confirmPassword" name="confirmPassword" autocomplete="new-password" v-model="confirmPassword">
         </div>
       </div>
-
 
       <button type="submit" class="submit-button">Update Credentials</button>
       <div class="messages">
         <div v-if="error" class="error-message">{{ error }}</div>
         <div v-if="success" class="success-message">{{ success }}</div>
       </div>
-
-
     </form>
 
     <div v-else class="login-prompt">
@@ -194,6 +197,33 @@ export default {
 };
 </script>
 <style scoped>
+
+
+.grid-container1 {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.pfp-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 200px;
+}
+
+.pfp-container img{
+  height: 200px;
+  width: 200px;
+}
+
+.input-field-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .tag {
   background-color: #d3d3d3;
   border-radius: 4px;
