@@ -8,7 +8,7 @@
         <img :src="getProfilePictureUrl()" alt="Profile Picture" class="profile-pic">
         <div class="details-container">
           <div class="username">{{ userObj ? userObj.user.username : 'Loading...' }}</div>
-          <div class="userid">Joined 12.02.2023 20:23</div>
+          <div class="joined">Joined 12.02.2023 20:23</div>
           <div class="roles-container">
         <div v-for="(role, index) in roles" :key="index" class="role">
           {{ role }}
@@ -139,20 +139,23 @@ export default {
   display: inline-block;
   margin-bottom: 0;
   color: black;
-  font-size: 15px;
+  font-weight: 500;
+  font-size: 13px;
 }
 
 
-.userid {
+.joined {
+  margin-top: 5px;
+
   font-size: 13px;
-  font-weight: bold;
+  font-weight: 400;
 
   color: var(--white-surface-300);
 }
 
 .username {
-  font-size: 22px;
-  font-weight: bold;
+  font-size: 24px;
+  font-weight: 900;
   color: var(--white-surface-100);
 }
 
