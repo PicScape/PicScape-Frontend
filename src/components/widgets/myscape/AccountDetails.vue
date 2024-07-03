@@ -44,8 +44,8 @@ export default {
     try {
       
       this.userid = this.$route.params.userid;
-      
       if (!this.userid) {
+
         const user = await axiosService.checkTokenValidity()
         if (user) {
           this.userid = user.user.id;
@@ -63,6 +63,7 @@ export default {
 
 
     try {
+      
       const response = await axiosService.getUser("userId", this.userid);
       this.roles = response.user.roles || [];
       this.userObj = response;

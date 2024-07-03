@@ -51,72 +51,75 @@ export default {
     };
   },
   async mounted() {
-    if (this.$route.params.userid){
-      this.userid = this.$route.params.userid;
+    this.userid = this.$route.params.userid;
+    if (!this.userid) {
 
-    }else{
-      this.user = await axiosService.checkTokenValidity()
-
-    }
-    this.fetchNewestImages();
-    this.setupScrollListener();
-
-  },
-  methods: {
-    async fetchNewestImages() {
-      if (!this.hasMore || this.loading) return;
-
-      this.loading = true;
-
-      try {
-        const response = await axiosService.getUploadsFromUser(this.imageType, this.page, this.userid);
-        const newImages = response.uploads.map(image => ({
-          ...image,
-          url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,
-        }));
-
-        this.images = [...this.images, ...newImages];
-        this.page++;
-        this.loading = false;
-
-        this.hasMore = newImages.length > 0;
-
-        this.checkScrollEnd();
-      } catch (error) {
-        console.error('Error fetching images:', error);
-        this.showInfoBox = true;
-        this.loading = false;
+      const user = await axiosService.checkTokenValidity()
+      if (user) {
+        this.userid = user.user.id;
+        this.roles = user.user.roles || [];
+      } else {
+        window.location.href = '/login';
       }
-    },
-    checkScrollEnd() {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-        this.fetchNewestImages();
-      }
-    },
-    openModal(image) {
-      this.modalId = image.imgId;
-    },
-    findImageById(id) {
-      return this.images.find(image => image.imgId === id);
-    },
-    setupScrollListener() {
-      window.addEventListener('scroll', () => {
-        this.checkScrollEnd();
-      });
-    },
-    setType(type) {
-      this.imageType = type;
-      this.images = [];
-      this.page = 1;
-      this.hasMore = true;
       this.fetchNewestImages();
+      this.setupScrollListener();
+
+    }},
+    methods: {
+    async fetchNewestImages() {
+        if (!this.hasMore || this.loading) return;
+
+        this.loading = true;
+
+        try {
+          const response = await axiosService.getUploadsFromUser(this.imageType, this.page, this.userid);
+          const newImages = response.uploads.map(image => ({
+            ...image,
+            url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,
+          }));
+
+          this.images = [...this.images, ...newImages];
+          this.page++;
+          this.loading = false;
+
+          this.hasMore = newImages.length > 0;
+
+          this.checkScrollEnd();
+        } catch (error) {
+          console.error('Error fetching images:', error);
+          this.showInfoBox = true;
+          this.loading = false;
+        }
+      },
+      checkScrollEnd() {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+          this.fetchNewestImages();
+        }
+      },
+      openModal(image) {
+        this.modalId = image.imgId;
+      },
+      findImageById(id) {
+        return this.images.find(image => image.imgId === id);
+      },
+      setupScrollListener() {
+        window.addEventListener('scroll', () => {
+          this.checkScrollEnd();
+        });
+      },
+      setType(type) {
+        this.imageType = type;
+        this.images = [];
+        this.page = 1;
+        this.hasMore = true;
+        this.fetchNewestImages();
+      },
     },
-  },
-};
+  };
 </script>
 
 <style scoped>
-.toogle-buttons-container{
+.toogle-buttons-container {
   width: 870px;
   margin-left: auto;
   margin-right: auto;
@@ -132,7 +135,7 @@ export default {
 }
 
 #toggle-buttons.tabs {
-  
+
   display: flex;
   justify-content: left;
   margin-bottom: 20px;
