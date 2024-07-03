@@ -210,7 +210,8 @@ export default {
 
         },
         redirectToAuthorMyScape(){
-            window.location.href = '/myscape/' + this.userId;
+            
+            window.location.href = '/myscape/' + this.modalContent.authorId;
 
         }
 
