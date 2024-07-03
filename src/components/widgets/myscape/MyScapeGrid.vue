@@ -116,22 +116,28 @@ export default {
 </script>
 
 <style scoped>
+.toogle-buttons-container{
+  width: 870px;
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
 @media (max-width: 890px) {
 
   .toogle-buttons-container {
-    padding-left: 10px;
+    width: calc(100% - 20px);
+
   }
 }
 
 #toggle-buttons.tabs {
-  overflow-x: hidden;
+  
   display: flex;
   justify-content: left;
   margin-bottom: 20px;
-  width: 870px;
 
-  margin-left: auto;
-  margin-right: auto;
+
 }
 
 
