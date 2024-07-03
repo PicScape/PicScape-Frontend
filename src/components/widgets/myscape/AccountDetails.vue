@@ -55,7 +55,7 @@ export default {
         }
 
       }
-      const baseURL = process.env.VUE_APP_BASE_URL || 'http://localhost:3000';
+      const baseURL = process.env.VUE_APP_API_URL;
       this.pfp_url = `${baseURL}/fetch/pfp/${this.userid}`;
     } catch {
       console.log("error while mount")

@@ -87,7 +87,8 @@ export default {
         const accountData = await axiosService.checkTokenValidity();
 
         this.isLoggedIn = !!accountData;
-        const baseURL = process.env.VUE_APP_BASE_URL || 'http://localhost:3000';
+        const baseURL = process.env.VUE_APP_API_URL;
+
         this.pfp_url = `${baseURL}/fetch/pfp/${accountData.user.id}`;
         this.username_placeholder = accountData.user.username;
         this.email_placeholder = await this.censorEmail(accountData.user.email);
