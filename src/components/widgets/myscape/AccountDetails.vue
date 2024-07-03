@@ -5,7 +5,7 @@
     </div>
     <div class="bottom">
       <div class="card-content">
-        <img src="https://api.picscape.xyz/image/view/22970" alt="Profile Picture" class="profile-pic">
+        <img :src="getProfilePictureUrl()" alt="Profile Picture" class="profile-pic">
         <div class="details-container">
           <div class="username">{{ userObj ? userObj.user.username : 'Loading...' }}</div>
           <div class="userid">Joined 12.02.2023 20:23</div>
@@ -33,6 +33,12 @@ export default {
       userObj: null,
       roles: ["test"],
     };
+  },
+  methods: {
+    getProfilePictureUrl() {
+      const baseURL = process.env.VUE_APP_BASE_URL || 'http://localhost:3000';
+      return `${baseURL}/fetch/pfp/${this.userid}`;
+    }
   },
   async mounted() {
     try {

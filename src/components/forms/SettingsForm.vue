@@ -8,7 +8,7 @@
     <form @submit.prevent="submitForm" v-if="isLoggedIn" class="auth-form upload-form">
       <div class="grid-container1">
         <div class="pfp-container">
-          <img src="https://avatars.githubusercontent.com/u/69240351?v=4" alt="Profile Picture">
+          <img :src="getProfilePictureUrl()" alt="Profile Picture">
         </div>
         <div class="input-field-container">
           <div class="form-group">
@@ -72,16 +72,23 @@ export default {
       isLoaded: false,
       error: '',
       success: '',
+      pfp_url: '',
     };
   },
   created() {
     this.checkTokenValidity();
   },
   methods: {
+    getProfilePictureUrl(){
+      return this.pfp_url
+    },
     async checkTokenValidity() {
       try {
         const accountData = await axiosService.checkTokenValidity();
+
         this.isLoggedIn = !!accountData;
+        const baseURL = process.env.VUE_APP_BASE_URL || 'http://localhost:3000';
+        this.pfp_url = `${baseURL}/fetch/pfp/${accountData.user.id}`;
         this.username_placeholder = accountData.user.username;
         this.email_placeholder = await this.censorEmail(accountData.user.email);
         this.roles = accountData.user.roles || [];

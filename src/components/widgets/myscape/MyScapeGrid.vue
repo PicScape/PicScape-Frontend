@@ -1,23 +1,13 @@
 <template>
-  <div>
+  <div class="toogle-buttons-container">
     <div id="toggle-buttons" class="tabs">
-      <button
-        :class="{'active': imageType === 'pfp'}"
-        @click="setType('pfp')"
-      >Profile Pictures</button>
-      <button
-        :class="{'active': imageType === 'wallpaper'}"
-        @click="setType('wallpaper')"
-      >Wallpapers</button>
+      <button :class="{ 'active': imageType === 'pfp' }" @click="setType('pfp')">Profile Pictures</button>
+      <button :class="{ 'active': imageType === 'wallpaper' }" @click="setType('wallpaper')">Wallpapers</button>
     </div>
 
     <div id="images-pre">
       <div id="images">
-        <div
-          v-for="(image, index) in images"
-          :key="index"
-          :class="['image-container', { pfp: imageType === 'pfp' }]"
-        >
+        <div v-for="(image, index) in images" :key="index" :class="['image-container', { pfp: imageType === 'pfp' }]">
           <img :src="image.url" :alt="image.title" />
           <div class="overlay">
             <button @click="openModal(image)">View</button>
@@ -31,12 +21,8 @@
     </div>
 
     <!-- Modal component usage -->
-    <ImageModal
-      :show-modal="modalId !== null"
-      :modal-content="findImageById(modalId)"
-      @close="modalId = null"
-      @delete-success="fetchNewestImages"
-    />
+    <ImageModal :show-modal="modalId !== null" :modal-content="findImageById(modalId)" @close="modalId = null"
+      @delete-success="fetchNewestImages" />
   </div>
 </template>
 
@@ -68,34 +54,34 @@ export default {
     this.user = await axiosService.checkTokenValidity()
     this.fetchNewestImages();
     this.setupScrollListener();
-    
+
   },
   methods: {
     async fetchNewestImages() {
-  if (!this.hasMore || this.loading) return;
+      if (!this.hasMore || this.loading) return;
 
-  this.loading = true;
+      this.loading = true;
 
-  try {
-    const response = await axiosService.getUploadsFromUser(this.imageType, this.page, this.user.user.id);
-    const newImages = response.uploads.map(image => ({
-      ...image,
-      url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,
-    }));
+      try {
+        const response = await axiosService.getUploadsFromUser(this.imageType, this.page, this.user.user.id);
+        const newImages = response.uploads.map(image => ({
+          ...image,
+          url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,
+        }));
 
-    this.images = [...this.images, ...newImages];
-    this.page++;
-    this.loading = false;
+        this.images = [...this.images, ...newImages];
+        this.page++;
+        this.loading = false;
 
-    this.hasMore = newImages.length > 0;
+        this.hasMore = newImages.length > 0;
 
-    this.checkScrollEnd();
-  } catch (error) {
-    console.error('Error fetching images:', error);
-    this.showInfoBox = true;
-    this.loading = false;
-  }
-},
+        this.checkScrollEnd();
+      } catch (error) {
+        console.error('Error fetching images:', error);
+        this.showInfoBox = true;
+        this.loading = false;
+      }
+    },
     checkScrollEnd() {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
         this.fetchNewestImages();
@@ -124,22 +110,19 @@ export default {
 </script>
 
 <style scoped>
-
-
-
-
 @media (max-width: 890px) {
-  .profile-card {
-    width: calc(100% - 20px);
+
+  .toogle-buttons-container {
+    padding-left: 10px;
   }
 }
-
 
 #toggle-buttons.tabs {
   display: flex;
   justify-content: left;
   margin-bottom: 20px;
   width: 870px;
+
   margin-left: auto;
   margin-right: auto;
 }
@@ -187,7 +170,7 @@ export default {
   padding-top: 40px;
   padding: auto;
   justify-content: center;
-  
+
 }
 
 .image-container {
@@ -266,5 +249,4 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
 </style>
