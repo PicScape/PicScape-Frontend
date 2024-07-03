@@ -124,6 +124,7 @@ export default {
 }
 
 #toggle-buttons.tabs {
+  overflow-x: hidden;
   display: flex;
   justify-content: left;
   margin-bottom: 20px;
