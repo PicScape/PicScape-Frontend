@@ -1,7 +1,6 @@
 <template>
   <div>
     <div id="toggle-buttons" class="tabs">
-      
       <button
         :class="{'active': imageType === 'pfp'}"
         @click="setType('pfp')"
@@ -17,7 +16,7 @@
         <div
           v-for="(image, index) in images"
           :key="index"
-          class="image-container"
+          :class="['image-container', { pfp: imageType === 'pfp' }]"
         >
           <img :src="image.url" :alt="image.title" />
           <div class="overlay">
@@ -42,6 +41,7 @@
 </template>
 
 
+
 <script>
 const baseURL = process.env.VUE_APP_API_URL;
 
@@ -61,11 +61,14 @@ export default {
       loading: false,
       hasMore: true,
       imageType: 'pfp',
+      user: '',
     };
   },
-  mounted() {
+  async mounted() {
+    this.user = await axiosService.checkTokenValidity()
     this.fetchNewestImages();
     this.setupScrollListener();
+    
   },
   methods: {
     async fetchNewestImages() {
@@ -74,7 +77,7 @@ export default {
   this.loading = true;
 
   try {
-    const response = await axiosService.getUploadsFromUser(this.imageType, this.page);
+    const response = await axiosService.getUploadsFromUser(this.imageType, this.page, this.user.user.id);
     const newImages = response.uploads.map(image => ({
       ...image,
       url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,
@@ -120,7 +123,18 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
+
+
+
+@media (max-width: 890px) {
+  .profile-card {
+    width: calc(100% - 20px);
+  }
+}
+
+
 #toggle-buttons.tabs {
   display: flex;
   justify-content: left;
@@ -128,50 +142,52 @@ export default {
   width: 870px;
   margin-left: auto;
   margin-right: auto;
-  
 }
 
 
 #toggle-buttons.tabs button {
+  font-weight: bold;
+
   margin: 0;
   padding: 10px 20px;
   cursor: pointer;
-  background-color: #f0f0f0;
+  background-color: var(--color-surface-900);
   color: #333;
   border: none;
   border-bottom: 2px solid transparent;
-  transition: background-color 0.3s ease, border-bottom 0.3s ease;
+  transition: color 0.3s ease, border-bottom 0.3s ease;
   font-size: 16px;
+  width: 180px;
 }
 
 #toggle-buttons.tabs button.active {
-  background-color: #fff;
+  background-color: var(--color-surface-1000);
+  color: #dbdbdb;
   border-bottom: 2px solid var(--submit-btn-primary);
-  font-weight: bold;
 }
 
 #toggle-buttons.tabs button:not(.active):hover {
-  background-color: #e0e0e0;
+  color: #a0a0a0;
 }
 
 #images-pre {
   display: flex;
   justify-content: center;
   padding-bottom: 20px;
-  padding-left: calc((100% - (800px)) / 2);
-  padding-right: calc((100% - (800px)) / 2);
+  padding-left: calc((100% - (870px)) / 2);
+  padding-right: calc((100% - (870px)) / 2);
+
 }
 
 #images {
+
   display: flex;
   flex-wrap: wrap;
-  justify-content: left;
-  gap: 20px;
+  gap: 10px;
   padding-top: 40px;
   padding: auto;
   justify-content: center;
-  margin-left: 50px;
-  margin-right: 50px;
+  
 }
 
 .image-container {
@@ -186,16 +202,16 @@ export default {
   margin: 10px;
 }
 
-.image-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 .image-container.pfp {
   border-radius: 10%;
   width: 100px;
   height: 100px;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .image-container:hover {
@@ -250,4 +266,5 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 </style>

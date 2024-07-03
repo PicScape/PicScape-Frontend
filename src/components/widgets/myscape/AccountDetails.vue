@@ -56,7 +56,6 @@ export default {
     try {
       const response = await axiosService.getUser("userId", this.userid);
       this.roles = response.user.roles || [];
-      console.log(response);
       this.userObj = response;
     } catch (error) {
       console.error('Error fetching user:', error);
@@ -72,7 +71,7 @@ export default {
   align-items: center;
   width: 870px;
   background-color: var(--card-color);
-  border-radius: 8px;
+  border-radius: 8px 8px 8px 0px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin: auto;
   margin-top: 20px;

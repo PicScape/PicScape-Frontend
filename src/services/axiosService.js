@@ -167,12 +167,13 @@ export const getNewestUploads = async (type, page = 1) => {
   }
 };
 
-export const getUploadsFromUser = async (type, page = 1) => {
+export const getUploadsFromUser = async (type, page = 1, userid) => {
   try {
-    const response = await axiosInstance.get('/fetch/uploads/', {
+    const response = await axiosInstance.get('/image/myscape/', {
       params: {
         type: type,
-        page: page
+        page: page,
+        userid: userid
       }
     });
     return response.data;
