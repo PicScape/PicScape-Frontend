@@ -2,7 +2,7 @@
   <div>
     <div id="module-container">
       <router-link to="/wallpapers" id="slide-title">
-        Wallpapers<i> &#11106;</i>
+        Wallpapers<i> &#8614;</i>
       </router-link>
     <div id="slider-container" ref="sliderContainer">
       <div id="slider" :style="{ transform: `translateX(-${currentSlide * 60}%)` }">

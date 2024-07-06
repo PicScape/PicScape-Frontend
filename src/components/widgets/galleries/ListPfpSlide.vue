@@ -1,8 +1,9 @@
 <template>
   <div>
+    
     <div id="module-container">
       <router-link to="/pfps" id="slide-title">
-        Profile Pictures<i> &#11106;</i>
+        Profile Pictures<i> &#8614;</i>
       </router-link>
     <div id="slider-container" ref="sliderContainer">
       <div id="slider" :style="{ transform: `translateX(-${currentSlide * 60}%)` }">
