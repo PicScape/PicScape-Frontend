@@ -229,20 +229,24 @@ export default {
 
 .title-container{
     display: flex;
+    align-items: center;
     margin-top: 30px;
     width: 100%;
     
 }
 
 .share-container{
-    align-items: flex-end;
-    vertical-align: middle;
-
+    align-items: center;
+    margin-left: auto;
 }
 
 .share{
     margin-left: auto;
 
+}
+
+.share:hover{
+    cursor: pointer;
 }
 
 .overlay-button {
