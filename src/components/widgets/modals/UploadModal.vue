@@ -101,6 +101,7 @@ export default {
             isImageMagnified: false,
             isRounded: false,
             isAdmin: false,
+            imgId: '',
 
 
         };
@@ -149,6 +150,7 @@ export default {
             handler(newVal) {
                 if (newVal && newVal.imgId) {
                     this.imageURL = `${baseURL}/image/view/${newVal.imgId}`;
+                    this.imgId = newVal.imgId
                 }
             }
         }
@@ -157,7 +159,7 @@ export default {
     methods: {
         shareClick() {
             var x = document.getElementById("snackbar");
-            navigator.clipboard.writeText(this.imageURL);
+            navigator.clipboard.writeText(`${this.imgId}`);
             x.className = "show";
 
             setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
@@ -172,6 +174,10 @@ export default {
             };
         },
         closeModal() {
+            this.imageURL = ''
+            this.imgId = ''
+            this.authorId = ''
+            this.authorUsername = ''
             this.$emit('close');
         },
 
