@@ -138,7 +138,15 @@ export default {
   .image-container.wallpaper {
   width: 40% !important;
   height: 130px;
+}}
+
+@media (max-width: 400px) {
+
+
+.image-container.wallpaper {
+height: 90px !important;
 }
+
 
 }
 
@@ -194,6 +202,7 @@ export default {
   padding-top: 40px;
   padding: auto;
   justify-content: center;
+  width: 100%;
 
 }
 
