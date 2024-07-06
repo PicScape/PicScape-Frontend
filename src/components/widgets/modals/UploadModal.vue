@@ -174,69 +174,76 @@ export default {
             };
         },
         closeModal() {
-            this.imageURL = ''
-            this.imgId = ''
-            this.authorId = ''
-            this.authorUsername = ''
-            this.$emit('close');
-        },
+    this.imgId = this.$route.params.imgId;
+    
+    if (this.imgId) {
+        this.$router.push('/');
+    }
+    
+
+    this.imageURL = '';
+    this.imgId = '';
+    this.authorId = '';
+    this.authorUsername = '';
+    this.$emit('close');
+},
 
         async handleDelete() {
-            let confirmMessage = '';
-            if (this.modalContent.type === 'pfp') {
-                confirmMessage = 'Are you sure you want to delete this Profile Picture?';
-            } else if (this.modalContent.type === 'wallpaper') {
-                confirmMessage = 'Are you sure you want to delete this Wallpaper?';
-            } else {
-                confirmMessage = 'Are you sure you want to delete this upload?';
-            }
-
-            if (window.confirm(confirmMessage)) {
-                try {
-                    await axiosService.deleteUpload(this.modalContent.imgId);
-                    this.$emit('delete-success', this.modalContent.imgId);
-                    this.closeModal();
-                } catch (error) {
-                    console.error('Error deleting upload:', error.message);
-                    this.$emit('error', 'Failed to delete the image.');
+                let confirmMessage = '';
+                if (this.modalContent.type === 'pfp') {
+                    confirmMessage = 'Are you sure you want to delete this Profile Picture?';
+                } else if (this.modalContent.type === 'wallpaper') {
+                    confirmMessage = 'Are you sure you want to delete this Wallpaper?';
+                } else {
+                    confirmMessage = 'Are you sure you want to delete this upload?';
                 }
+
+                if (window.confirm(confirmMessage)) {
+                    try {
+                        await axiosService.deleteUpload(this.modalContent.imgId);
+                        this.$emit('delete-success', this.modalContent.imgId);
+                        this.closeModal();
+                    } catch (error) {
+                        console.error('Error deleting upload:', error.message);
+                        this.$emit('error', 'Failed to delete the image.');
+                    }
+                }
+            },
+
+            downloadImage() {
+                fetch(this.imageURL)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+
+                        const filename = `${this.modalContent.title}-${this.modalContent.imgId}`.replace(/\s+/g, '_') + '.jpg';
+                        link.download = filename || 'download';
+
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+
+                        URL.revokeObjectURL(url);
+                    })
+                    .catch(error => {
+                        console.error('Error downloading image:', error);
+                    });
+            },
+            toggleRoundImage() {
+                this.isRounded = !this.isRounded;
+                localStorage.setItem("isRounded", this.isRounded.toString());
+
+            },
+            redirectToAuthorMyScape() {
+
+                window.location.href = '/myscape/' + this.modalContent.authorId;
+
             }
-        },
-
-        downloadImage() {
-            fetch(this.imageURL)
-                .then(response => response.blob())
-                .then(blob => {
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-
-                    const filename = `${this.modalContent.title}-${this.modalContent.imgId}`.replace(/\s+/g, '_') + '.jpg';
-                    link.download = filename || 'download';
-
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-
-                    URL.revokeObjectURL(url);
-                })
-                .catch(error => {
-                    console.error('Error downloading image:', error);
-                });
-        },
-        toggleRoundImage() {
-            this.isRounded = !this.isRounded;
-            localStorage.setItem("isRounded", this.isRounded.toString());
-
-        },
-        redirectToAuthorMyScape() {
-
-            window.location.href = '/myscape/' + this.modalContent.authorId;
 
         }
-
-    }
-};
+    };
 </script>
 <style scoped>
 .image-group {
