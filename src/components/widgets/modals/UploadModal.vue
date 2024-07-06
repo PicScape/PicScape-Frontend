@@ -32,7 +32,8 @@
                 <div class="information-box">
                     <div class="title-container">
                         <h3 class="img-title text-set-large title-ctn-item">{{ modalContent.title }}</h3>
-                        <div class="share-container">                        <span class="material-symbols-outlined title-ctn-item share">share</span></div>
+                        <div @click="shareClick" class="share-container"><span
+                                class="material-symbols-outlined title-ctn-item share noselect">share</span></div>
                     </div>
                     <h3 class="img-id text-set-middle-sub">{{ modalContent.imgId }}</h3>
                 </div>
@@ -61,7 +62,10 @@
             <button v-if="canDelete" id="delete-button" @click="handleDelete">Delete</button>
             <button id="downloadButton" @click="downloadImage">Download</button>
         </div>
+        <div id="snackbar">Copied to Clipboard</div>
+
     </div>
+
 </template>
 
 <script>
@@ -151,6 +155,13 @@ export default {
     },
 
     methods: {
+        shareClick() {
+            var x = document.getElementById("snackbar");
+            navigator.clipboard.writeText(this.imageURL);
+            x.className = "show";
+
+            setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+        },
         toggleImageSize() {
             this.isImageMagnified = !this.isImageMagnified;
         },
@@ -212,8 +223,8 @@ export default {
             localStorage.setItem("isRounded", this.isRounded.toString());
 
         },
-        redirectToAuthorMyScape(){
-            
+        redirectToAuthorMyScape() {
+
             window.location.href = '/myscape/' + this.modalContent.authorId;
 
         }
@@ -227,25 +238,25 @@ export default {
     display: inline-block;
 }
 
-.title-container{
+.title-container {
     display: flex;
     align-items: center;
     margin-top: 30px;
     width: 100%;
-    
+
 }
 
-.share-container{
+.share-container {
     align-items: center;
     margin-left: auto;
 }
 
-.share{
+.share {
     margin-left: auto;
 
 }
 
-.share:hover{
+.share:hover {
     cursor: pointer;
 }
 
@@ -263,7 +274,7 @@ export default {
 
 }
 
-.title-ctn-item{
+.title-ctn-item {
     flex: auto;
     margin: 0 !important;
 }
@@ -283,6 +294,16 @@ export default {
 
 .image-group img:hover+.overlay-button-group {
     opacity: 1;
+}
+
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .overlay-button-group:hover {
@@ -334,14 +355,14 @@ export default {
     margin: auto;
 }
 
-.img-author{
-    cursor:pointer;
+.img-author {
+    cursor: pointer;
 
 }
 
-.img-author:hover{
+.img-author:hover {
     text-decoration: underline;
-    
+
 }
 
 .modal-image-pfp {
@@ -582,5 +603,76 @@ img-tag {
     border-radius: 3px;
     margin-right: 6px;
     margin-top: 6px;
+}
+
+
+
+#snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+}
+
+#snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
+}
+
+@keyframes fadein {
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeout {
+    from {
+        bottom: 30px;
+        opacity: 1;
+    }
+
+    to {
+        bottom: 0;
+        opacity: 0;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        bottom: 30px;
+        opacity: 1;
+    }
+
+    to {
+        bottom: 0;
+        opacity: 0;
+    }
 }
 </style>
