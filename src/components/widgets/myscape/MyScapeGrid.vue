@@ -7,7 +7,8 @@
 
     <div id="images-pre">
       <div id="images">
-        <div v-for="(image, index) in images" :key="index" :class="['image-container', { pfp: imageType === 'pfp', wallpaper: imageType === 'wallpaper' }]">
+        <div v-for="(image, index) in images" :key="index"
+          :class="['image-container', { pfp: imageType === 'pfp', wallpaper: imageType === 'wallpaper' }]">
           <img :src="image.url" :alt="image.title" />
           <div class="overlay">
             <button @click="openModal(image)">View</button>
@@ -21,8 +22,12 @@
     </div>
 
     <!-- Modal component usage -->
-    <ImageModal :show-modal="modalId !== null" :modal-content="findImageById(modalId)" @close="modalId = null"
-      @delete-success="fetchNewestImages" />
+    <ImageModal
+      :show-modal="modalId !== null"
+      :modal-content="findImageById(modalId)"
+      @close="modalId = null"
+      @delete-success="handleDeleteSuccess"
+    />
   </div>
 </template>
 
@@ -67,58 +72,65 @@ export default {
     this.fetchNewestImages();
     this.setupScrollListener();
   },
-    
-    methods: {
+
+  methods: {
     async fetchNewestImages() {
-        if (!this.hasMore || this.loading) return;
+      if (!this.hasMore || this.loading) return;
 
-        this.loading = true;
+      this.loading = true;
 
-        try {
-          const response = await axiosService.getUploadsFromUser(this.imageType, this.page, this.userid);
-          const newImages = response.uploads.map(image => ({
-            ...image,
-            url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,
-          }));
+      try {
+        const response = await axiosService.getUploadsFromUser(this.imageType, this.page, this.userid);
+        const newImages = response.uploads.map(image => ({
+          ...image,
+          url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,
+        }));
 
-          this.images = [...this.images, ...newImages];
-          this.page++;
-          this.loading = false;
+        this.images = [...this.images, ...newImages];
+        this.page++;
+        this.loading = false;
 
-          this.hasMore = newImages.length > 0;
+        this.hasMore = newImages.length > 0;
 
-          this.checkScrollEnd();
-        } catch (error) {
-          console.error('Error fetching images:', error);
-          this.showInfoBox = true;
-          this.loading = false;
-        }
-      },
-      checkScrollEnd() {
-        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-          this.fetchNewestImages();
-        }
-      },
-      openModal(image) {
-        this.modalId = image.imgId;
-      },
-      findImageById(id) {
-        return this.images.find(image => image.imgId === id);
-      },
-      setupScrollListener() {
-        window.addEventListener('scroll', () => {
-          this.checkScrollEnd();
-        });
-      },
-      setType(type) {
-        this.imageType = type;
-        this.images = [];
-        this.page = 1;
-        this.hasMore = true;
-        this.fetchNewestImages();
-      },
+        this.checkScrollEnd();
+      } catch (error) {
+        console.error('Error fetching images:', error);
+        this.showInfoBox = true;
+        this.loading = false;
+      }
     },
-  };
+    checkScrollEnd() {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        this.fetchNewestImages();
+      }
+    },
+    openModal(image) {
+      this.modalId = image.imgId;
+    },
+    findImageById(id) {
+      return this.images.find(image => image.imgId === id);
+    },
+    setupScrollListener() {
+      window.addEventListener('scroll', () => {
+        this.checkScrollEnd();
+      });
+    },
+    setType(type) {
+      this.imageType = type;
+      this.images = [];
+      this.page = 1;
+      this.hasMore = true;
+      this.fetchNewestImages();
+    },
+    handleDeleteSuccess() {
+      this.modalId = null;
+      this.page = 1;
+      this.images = [];
+      this.hasMore = true;
+      this.fetchNewestImages();
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -135,10 +147,20 @@ export default {
     width: calc(100% - 20px);
 
   }
+
   .image-container.wallpaper {
-  width: 40% !important;
-  height: 130px;
+    width: 40% !important;
+    height: 130px;
+  }
 }
+
+@media (max-width: 400px) {
+
+
+  .image-container.wallpaper {
+    height: 90px !important;
+  }
+
 
 }
 
@@ -194,6 +216,7 @@ export default {
   padding-top: 40px;
   padding: auto;
   justify-content: center;
+  width: 100%;
 
 }
 

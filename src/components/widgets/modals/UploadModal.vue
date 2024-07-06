@@ -30,7 +30,11 @@
 
 
                 <div class="information-box">
-                    <h3 class="img-title text-set-large">{{ modalContent.title }}</h3>
+                    <div class="title-container">
+                        <h3 class="img-title text-set-large title-ctn-item">{{ modalContent.title }}</h3>
+                        <div @click="shareClick" class="share-container"><span
+                                class="material-symbols-outlined title-ctn-item share noselect">share</span></div>
+                    </div>
                     <h3 class="img-id text-set-middle-sub">{{ modalContent.imgId }}</h3>
                 </div>
                 <hr>
@@ -58,7 +62,10 @@
             <button v-if="canDelete" id="delete-button" @click="handleDelete">Delete</button>
             <button id="downloadButton" @click="downloadImage">Download</button>
         </div>
+        <div id="snackbar">Copied to Clipboard</div>
+
     </div>
+
 </template>
 
 <script>
@@ -94,6 +101,7 @@ export default {
             isImageMagnified: false,
             isRounded: false,
             isAdmin: false,
+            imgId: '',
 
 
         };
@@ -142,12 +150,20 @@ export default {
             handler(newVal) {
                 if (newVal && newVal.imgId) {
                     this.imageURL = `${baseURL}/image/view/${newVal.imgId}`;
+                    this.imgId = newVal.imgId
                 }
             }
         }
     },
 
     methods: {
+        shareClick() {
+            var x = document.getElementById("snackbar");
+            navigator.clipboard.writeText(`${window.location}uploads/${this.imgId}`);
+            x.className = "show";
+
+            setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+        },
         toggleImageSize() {
             this.isImageMagnified = !this.isImageMagnified;
         },
@@ -158,65 +174,76 @@ export default {
             };
         },
         closeModal() {
-            this.$emit('close');
-        },
+    this.imgId = this.$route.params.imgId;
+    
+    if (this.imgId) {
+        this.$router.push('/');
+    }
+    
+
+    this.imageURL = '';
+    this.imgId = '';
+    this.authorId = '';
+    this.authorUsername = '';
+    this.$emit('close');
+},
 
         async handleDelete() {
-            let confirmMessage = '';
-            if (this.modalContent.type === 'pfp') {
-                confirmMessage = 'Are you sure you want to delete this Profile Picture?';
-            } else if (this.modalContent.type === 'wallpaper') {
-                confirmMessage = 'Are you sure you want to delete this Wallpaper?';
-            } else {
-                confirmMessage = 'Are you sure you want to delete this upload?';
-            }
-
-            if (window.confirm(confirmMessage)) {
-                try {
-                    await axiosService.deleteUpload(this.modalContent.imgId);
-                    this.$emit('delete-success', this.modalContent.imgId);
-                    this.closeModal();
-                } catch (error) {
-                    console.error('Error deleting upload:', error.message);
-                    this.$emit('error', 'Failed to delete the image.');
+                let confirmMessage = '';
+                if (this.modalContent.type === 'pfp') {
+                    confirmMessage = 'Are you sure you want to delete this Profile Picture?';
+                } else if (this.modalContent.type === 'wallpaper') {
+                    confirmMessage = 'Are you sure you want to delete this Wallpaper?';
+                } else {
+                    confirmMessage = 'Are you sure you want to delete this upload?';
                 }
+
+                if (window.confirm(confirmMessage)) {
+                    try {
+                        await axiosService.deleteUpload(this.modalContent.imgId);
+                        this.$emit('delete-success', this.modalContent.imgId);
+                        this.closeModal();
+                    } catch (error) {
+                        console.error('Error deleting upload:', error.message);
+                        this.$emit('error', 'Failed to delete the image.');
+                    }
+                }
+            },
+
+            downloadImage() {
+                fetch(this.imageURL)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+
+                        const filename = `${this.modalContent.title}-${this.modalContent.imgId}`.replace(/\s+/g, '_') + '.jpg';
+                        link.download = filename || 'download';
+
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+
+                        URL.revokeObjectURL(url);
+                    })
+                    .catch(error => {
+                        console.error('Error downloading image:', error);
+                    });
+            },
+            toggleRoundImage() {
+                this.isRounded = !this.isRounded;
+                localStorage.setItem("isRounded", this.isRounded.toString());
+
+            },
+            redirectToAuthorMyScape() {
+
+                window.location.href = '/myscape/' + this.modalContent.authorId;
+
             }
-        },
-
-        downloadImage() {
-            fetch(this.imageURL)
-                .then(response => response.blob())
-                .then(blob => {
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-
-                    const filename = `${this.modalContent.title}-${this.modalContent.imgId}`.replace(/\s+/g, '_') + '.jpg';
-                    link.download = filename || 'download';
-
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-
-                    URL.revokeObjectURL(url);
-                })
-                .catch(error => {
-                    console.error('Error downloading image:', error);
-                });
-        },
-        toggleRoundImage() {
-            this.isRounded = !this.isRounded;
-            localStorage.setItem("isRounded", this.isRounded.toString());
-
-        },
-        redirectToAuthorMyScape(){
-            
-            window.location.href = '/myscape/' + this.modalContent.authorId;
 
         }
-
-    }
-};
+    };
 </script>
 <style scoped>
 .image-group {
@@ -224,7 +251,27 @@ export default {
     display: inline-block;
 }
 
+.title-container {
+    display: flex;
+    align-items: center;
+    margin-top: 30px;
+    width: 100%;
 
+}
+
+.share-container {
+    align-items: center;
+    margin-left: auto;
+}
+
+.share {
+    margin-left: auto;
+
+}
+
+.share:hover {
+    cursor: pointer;
+}
 
 .overlay-button {
     background-color: rgba(0, 0, 0, 0.281);
@@ -238,6 +285,11 @@ export default {
     height: 36px;
     vertical-align: middle;
 
+}
+
+.title-ctn-item {
+    flex: auto;
+    margin: 0 !important;
 }
 
 
@@ -255,6 +307,16 @@ export default {
 
 .image-group img:hover+.overlay-button-group {
     opacity: 1;
+}
+
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .overlay-button-group:hover {
@@ -306,14 +368,14 @@ export default {
     margin: auto;
 }
 
-.img-author{
-    cursor:pointer;
+.img-author {
+    cursor: pointer;
 
 }
 
-.img-author:hover{
+.img-author:hover {
     text-decoration: underline;
-    
+
 }
 
 .modal-image-pfp {
@@ -554,5 +616,76 @@ img-tag {
     border-radius: 3px;
     margin-right: 6px;
     margin-top: 6px;
+}
+
+
+
+#snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+}
+
+#snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
+}
+
+@keyframes fadein {
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeout {
+    from {
+        bottom: 30px;
+        opacity: 1;
+    }
+
+    to {
+        bottom: 0;
+        opacity: 0;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        bottom: 30px;
+        opacity: 1;
+    }
+
+    to {
+        bottom: 0;
+        opacity: 0;
+    }
 }
 </style>
