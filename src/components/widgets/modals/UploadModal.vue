@@ -30,7 +30,10 @@
 
 
                 <div class="information-box">
-                    <h3 class="img-title text-set-large">{{ modalContent.title }}</h3>
+                    <div class="title-container">
+                        <h3 class="img-title text-set-large title-ctn-item">{{ modalContent.title }}</h3>
+                        <div class="share-container">                        <span class="material-symbols-outlined title-ctn-item share">share</span></div>
+                    </div>
                     <h3 class="img-id text-set-middle-sub">{{ modalContent.imgId }}</h3>
                 </div>
                 <hr>
@@ -224,7 +227,23 @@ export default {
     display: inline-block;
 }
 
+.title-container{
+    display: flex;
+    margin-top: 30px;
+    width: 100%;
+    
+}
 
+.share-container{
+    align-items: flex-end;
+    vertical-align: middle;
+
+}
+
+.share{
+    margin-left: auto;
+
+}
 
 .overlay-button {
     background-color: rgba(0, 0, 0, 0.281);
@@ -238,6 +257,11 @@ export default {
     height: 36px;
     vertical-align: middle;
 
+}
+
+.title-ctn-item{
+    flex: auto;
+    margin: 0 !important;
 }
 
 
