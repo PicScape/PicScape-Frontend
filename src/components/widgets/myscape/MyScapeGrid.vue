@@ -7,7 +7,7 @@
 
     <div id="images-pre">
       <div id="images">
-        <div v-for="(image, index) in images" :key="index" :class="['image-container', { pfp: imageType === 'pfp' }]">
+        <div v-for="(image, index) in images" :key="index" :class="['image-container', { pfp: imageType === 'pfp', wallpaper: imageType === 'wallpaper' }]">
           <img :src="image.url" :alt="image.title" />
           <div class="overlay">
             <button @click="openModal(image)">View</button>
@@ -135,6 +135,11 @@ export default {
     width: calc(100% - 20px);
 
   }
+  .image-container.wallpaper {
+  width: 40% !important;
+  height: 130px;
+}
+
 }
 
 #toggle-buttons.tabs {
@@ -195,8 +200,7 @@ export default {
 .image-container {
   position: relative;
   border-radius: 10px;
-  width: 300px;
-  height: 180px;
+
   flex-shrink: 0;
   overflow: hidden;
   text-align: center;
@@ -209,6 +213,14 @@ export default {
   width: 100px;
   height: 100px;
 }
+
+.image-container.wallpaper {
+  width: 30%;
+  height: 150px;
+}
+
+
+
 
 .image-container img {
   width: 100%;
