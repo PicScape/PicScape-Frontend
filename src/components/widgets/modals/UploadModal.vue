@@ -102,16 +102,11 @@ export default {
             isRounded: false,
             isAdmin: false,
             imgId: '',
-
-
         };
     },
-
-
     computed: {
         canDelete() {
             return this.userId === this.modalContent.authorId || this.isAdmin === true;
-
         },
         formattedDate() {
             if (this.modalContent.uploadedDate) {
@@ -138,24 +133,33 @@ export default {
                 const author = await axiosService.getUser("userId", this.modalContent.author);
                 this.authorUsername = author.user.username;
             }
+
+            // Add or remove no-scroll class when showModal changes
+            if (this.showModal) {
+                document.body.classList.add('no-scroll');
+            }
         } catch (error) {
             console.info('Error fetching user ID:', error.message);
         }
-
     },
-
     watch: {
+        showModal(newVal) {
+            if (newVal) {
+                document.body.classList.add('no-scroll');
+            } else {
+                document.body.classList.remove('no-scroll');
+            }
+        },
         modalContent: {
             immediate: true,
             handler(newVal) {
                 if (newVal && newVal.imgId) {
                     this.imageURL = `${baseURL}/image/view/${newVal.imgId}`;
-                    this.imgId = newVal.imgId
+                    this.imgId = newVal.imgId;
                 }
             }
         }
     },
-
     methods: {
         shareClick() {
             var x = document.getElementById("snackbar");
@@ -174,78 +178,79 @@ export default {
             };
         },
         closeModal() {
-    this.imgId = this.$route.params.imgId;
-    
-    if (this.imgId) {
-        this.$router.push('/');
-    }
-    
+            this.imgId = this.$route.params.imgId;
 
-    this.imageURL = '';
-    this.imgId = '';
-    this.authorId = '';
-    this.authorUsername = '';
-    this.$emit('close');
-},
-
-        async handleDelete() {
-                let confirmMessage = '';
-                if (this.modalContent.type === 'pfp') {
-                    confirmMessage = 'Are you sure you want to delete this Profile Picture?';
-                } else if (this.modalContent.type === 'wallpaper') {
-                    confirmMessage = 'Are you sure you want to delete this Wallpaper?';
-                } else {
-                    confirmMessage = 'Are you sure you want to delete this upload?';
-                }
-
-                if (window.confirm(confirmMessage)) {
-                    try {
-                        await axiosService.deleteUpload(this.modalContent.imgId);
-                        this.$emit('delete-success', this.modalContent.imgId);
-                        this.closeModal();
-                    } catch (error) {
-                        console.error('Error deleting upload:', error.message);
-                        this.$emit('error', 'Failed to delete the image.');
-                    }
-                }
-            },
-
-            downloadImage() {
-                fetch(this.imageURL)
-                    .then(response => response.blob())
-                    .then(blob => {
-                        const url = URL.createObjectURL(blob);
-                        const link = document.createElement('a');
-                        link.href = url;
-
-                        const filename = `${this.modalContent.title}-${this.modalContent.imgId}`.replace(/\s+/g, '_') + '.jpg';
-                        link.download = filename || 'download';
-
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-
-                        URL.revokeObjectURL(url);
-                    })
-                    .catch(error => {
-                        console.error('Error downloading image:', error);
-                    });
-            },
-            toggleRoundImage() {
-                this.isRounded = !this.isRounded;
-                localStorage.setItem("isRounded", this.isRounded.toString());
-
-            },
-            redirectToAuthorMyScape() {
-
-                window.location.href = '/myscape/' + this.modalContent.authorId;
-
+            if (this.imgId) {
+                this.$router.push('/');
             }
 
+            this.imageURL = '';
+            this.imgId = '';
+            this.authorId = '';
+            this.authorUsername = '';
+            this.$emit('close');
+            document.body.classList.remove('no-scroll'); // Remove no-scroll class when modal is closed
+        },
+        async handleDelete() {
+            let confirmMessage = '';
+            if (this.modalContent.type === 'pfp') {
+                confirmMessage = 'Are you sure you want to delete this Profile Picture?';
+            } else if (this.modalContent.type === 'wallpaper') {
+                confirmMessage = 'Are you sure you want to delete this Wallpaper?';
+            } else {
+                confirmMessage = 'Are you sure you want to delete this upload?';
+            }
+
+            if (window.confirm(confirmMessage)) {
+                try {
+                    await axiosService.deleteUpload(this.modalContent.imgId);
+                    this.$emit('delete-success', this.modalContent.imgId);
+                    this.closeModal();
+                } catch (error) {
+                    console.error('Error deleting upload:', error.message);
+                    this.$emit('error', 'Failed to delete the image.');
+                }
+            }
+        },
+        downloadImage() {
+            fetch(this.imageURL)
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+
+                    const filename = `${this.modalContent.title}-${this.modalContent.imgId}`.replace(/\s+/g, '_') + '.jpg';
+                    link.download = filename || 'download';
+
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    URL.revokeObjectURL(url);
+                })
+                .catch(error => {
+                    console.error('Error downloading image:', error);
+                });
+        },
+        toggleRoundImage() {
+            this.isRounded = !this.isRounded;
+            localStorage.setItem("isRounded", this.isRounded.toString());
+        },
+        redirectToAuthorMyScape() {
+            window.location.href = '/myscape/' + this.modalContent.authorId;
         }
-    };
+    }
+};
+
 </script>
 <style scoped>
+
+.no-scroll {
+    overflow: hidden;
+}
+
+
 .image-group {
     position: relative;
     display: inline-block;
@@ -429,16 +434,14 @@ export default {
 .modal-content {
     position: relative;
     background-color: #23272a;
-    margin: 5% auto;
+    margin: auto auto;
     padding: 20px;
     border-radius: 20px;
     width: 430px;
-    max-height: 80%;
-    overflow-y: auto;
+    max-height: none;
+    overflow: visible;
     animation: slideIn 0.5s ease-in-out;
 }
-
-
 
 
 @keyframes slideIn {
@@ -469,8 +472,9 @@ export default {
     z-index: 999;
     display: flex;
     justify-content: center;
-    align-items: center;
-    animation: fadeIn 0.5s ease-in-out;
+    align-items: flex-start;
+    overflow-y: auto;
+    padding-top: 0px;
 }
 
 
