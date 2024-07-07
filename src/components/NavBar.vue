@@ -6,9 +6,9 @@
       <div class="header-container">
         <router-link to="/" class="logo">PicScape</router-link>
         <nav v-if="isLoaded" :class="{ 'nav-open': isNavOpen }">
-          <router-link to="/" class="nav-link">Home</router-link>
-          <router-link to="/upload" class="nav-link">Upload</router-link>
-          <router-link v-if="!isLoggedIn" to="/login" class="nav-link">Login</router-link>
+          <router-link to="/" class="nav-link" @click="closeNav">Home</router-link>
+          <router-link to="/upload" class="nav-link" @click="closeNav">Upload</router-link>
+          <router-link v-if="!isLoggedIn" to="/login" class="nav-link" @click="closeNav">Login</router-link>
           <div v-else>
             <div class="dropdown nav-link">
               <button class="dropdown-toggle">
@@ -18,8 +18,8 @@
                 </span>
               </button>
               <div class="dropdown-content">
-                <router-link to="/myscape" class="nav-link sub-nav">My Scape</router-link>
-                <router-link to="/settings" class="nav-link sub-nav">Settings</router-link>
+                <router-link to="/myscape" class="nav-link sub-nav" @click="closeNav">My Scape</router-link>
+                <router-link to="/settings" class="nav-link sub-nav" @click="closeNav">Settings</router-link>
                 <router-link to="/" @click="logout" class="nav-link sub-nav logout-btn">Logout</router-link>
               </div>
             </div>
@@ -69,14 +69,16 @@ export default {
       }
     },
     logout() {
-
       this.isLoggedIn = false;
       Cookies.remove('token');
       window.location.href = '/';
-
+      this.closeNav();
     },
     toggleNav() {
       this.isNavOpen = !this.isNavOpen;
+    },
+    closeNav() {
+      this.isNavOpen = false;
     }
   }
 };
@@ -219,13 +221,11 @@ nav {
   }
 
   .dropdown-content {
-
-  top: 100%;
-  right: 0;
-  background-color: var(--navbar-color);
-  min-width: 100%;
-
-}
+    top: 100%;
+    right: 0;
+    background-color: var(--navbar-color);
+    min-width: 100%;
+  }
 
   .nav-open {
     display: flex;
