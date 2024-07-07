@@ -81,6 +81,13 @@ hr {
   margin-top: 30px;
 }
 
+
+.search-input {
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+
+}
+
 .search-button {
   background-color: #007bff;
   color: white;
@@ -90,6 +97,8 @@ hr {
   cursor: pointer;
   font-size: 16px;
   transition: 0.2s ease-in-out;
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
 }
 
 .search-button:hover {
@@ -100,7 +109,7 @@ input[type="text"] {
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
-  padding: 8px;
+  padding: 8.5px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -115,7 +124,7 @@ input[type="text"] {
   .hero-img {
     display: block;
     margin: 0 auto 20px;
-    order: -1; /* Ensures the image comes first */
+    order: -1;
   }
 
   .title-container-hero {
