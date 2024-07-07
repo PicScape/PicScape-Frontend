@@ -49,9 +49,9 @@
                             <span v-for="tag in modalContent.tags" :key="tag" class="img-tag">{{ tag }}</span>
                         </div>
                     </div>
-                    <div v-if="modalContent.username" @click="redirectToAuthorMyScape">
+                    <div v-if="modalContent.username" >
                         <div class="text-set-middle-bottom">Uploaded by:</div>
-                        <div class="img-author text-set-middle-bottom-sub">{{ modalContent.username }}</div>
+                        <div class="img-author text-set-middle-bottom-sub"><div class="username-text" @click="redirectToAuthorMyScape">{{ modalContent.username }}</div></div>
                     </div>
                     <div>
                         <div class="text-set-middle-bottom">Publish Date:</div>
@@ -372,15 +372,19 @@ export default {
     margin: auto;
 }
 
-.img-author {
+
+.username-text{
+    width: min-content;
+    
+}
+.username-text:hover{
+    text-decoration: underline;
     cursor: pointer;
 
-}
-
-.img-author:hover {
-    text-decoration: underline;
 
 }
+
+
 
 .modal-image-pfp {
     width: 150px;
