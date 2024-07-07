@@ -134,7 +134,6 @@ export default {
                 this.authorUsername = author.user.username;
             }
 
-            // Add or remove no-scroll class when showModal changes
             if (this.showModal) {
                 document.body.classList.add('no-scroll');
             }
