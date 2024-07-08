@@ -4,6 +4,7 @@
         <button :class="{ 'active': imageType === 'pfp' }" @click="setType('pfp')">Profile Pictures</button>
         <button :class="{ 'active': imageType === 'wallpaper' }" @click="setType('wallpaper')">Wallpapers</button>
       </div>
+
       <div id="images-pre">
         <div id="images">
           <div v-for="(image, index) in images" :key="index"
