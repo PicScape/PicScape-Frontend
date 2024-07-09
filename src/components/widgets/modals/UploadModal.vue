@@ -239,9 +239,6 @@ export default {
             this.isRounded = !this.isRounded;
             localStorage.setItem("isRounded", this.isRounded.toString());
         },
-        redirectToAuthorMyScape() {
-            window.location.href = '/myscape/' + this.modalContent.authorId;
-        }
     }
 };
 
