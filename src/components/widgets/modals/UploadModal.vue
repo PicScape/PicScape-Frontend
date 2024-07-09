@@ -49,9 +49,12 @@
                             <span v-for="tag in modalContent.tags" :key="tag" class="img-tag">{{ tag }}</span>
                         </div>
                     </div>
-                    <div v-if="modalContent.username" >
+                    <div v-if="modalContent.username">
                         <div class="text-set-middle-bottom">Uploaded by:</div>
-                        <div class="img-author text-set-middle-bottom-sub"><div class="username-text" @click="redirectToAuthorMyScape">{{ modalContent.username }}</div></div>
+                        <div class="img-author text-set-middle-bottom-sub">
+                            <a :href="'/myscape/' + modalContent.authorId" class="username-text">{{
+                                modalContent.username }}</a>
+                        </div>
                     </div>
                     <div>
                         <div class="text-set-middle-bottom">Publish Date:</div>
@@ -236,15 +239,11 @@ export default {
             this.isRounded = !this.isRounded;
             localStorage.setItem("isRounded", this.isRounded.toString());
         },
-        redirectToAuthorMyScape() {
-            window.location.href = '/myscape/' + this.modalContent.authorId;
-        }
     }
 };
 
 </script>
 <style scoped>
-
 .no-scroll {
     overflow: hidden;
 }
@@ -373,18 +372,24 @@ export default {
 }
 
 
-.username-text{
+.username-text {
     width: min-content;
-    
+
 }
-.username-text:hover{
+
+.username-text:hover {
     text-decoration: underline;
     cursor: pointer;
 
 
 }
 
+.username-text:visited {
+    text-decoration: underline;
+    color: #e7e7e7;
 
+
+}
 
 .modal-image-pfp {
     width: 150px;
