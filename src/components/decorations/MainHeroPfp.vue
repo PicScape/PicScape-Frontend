@@ -2,8 +2,8 @@
   <div class="grid-container-hero">
     <div class="text-container-hero" ref="textContainer">
       <div class="title-container-hero">
-        <h1 class="title-hero">Profile Pictures</h1>
-        <p class="subtitle-hero">Share, Find, and Download your favorite Profile Pictures</p>
+        <HomeHeroTitle />
+        <p class="subtitle-hero">Share, Find, and Download your favorite Profile Pictures, Wallpapers and Banners.</p>
         <form class="search-box" @submit.prevent="openSearchQuery">
           <input type="text" id="search-input" v-model="searchTerm" placeholder="Search for profile pictures..."
              class="search-input">
@@ -29,7 +29,12 @@
 </template>
 
 <script>
+import HomeHeroTitle from '@/components/decorations/HomeHeroTitle.vue';
+
 export default {
+  components: {
+    HomeHeroTitle
+  },
   data() {
     return {
       searchTerm: '',

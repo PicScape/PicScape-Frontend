@@ -30,71 +30,98 @@
   };
   </script>
   
+
   <style scoped>
-
-
-
-@media screen and (max-width: 630px) {
-  .content__container__list {
-    opacity: 0;
+  @media screen and (max-width: 630px) {
+    .content__container__list {
+      opacity: 0;
+  
+    }
+  
+    .content__container__text {
+      opacity: 0;
+    }
   
   }
-  .content__container__text{
-    opacity: 0;
+  
+  
+  
+  .text-animation {
+    background: linear-gradient(87deg, #80608b, #d07ca2, #9f3c6a, #f6a2b1, #f5688b, #d884e7);
+    background-size: 1200% 1200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 600;
+  
+    -webkit-animation: TextAnimation 70s ease infinite;
+    -moz-animation: TextAnimation 70s ease infinite;
+    animation: TextAnimation 70s ease infinite;
   }
-
-}
-
-
-
-.text-animation {
-  background: linear-gradient(87deg, #80608b, #d07ca2, #9f3c6a, #f6a2b1, #f5688b, #d884e7);
-  background-size: 1200% 1200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 600;
-
-  -webkit-animation: TextAnimation 70s ease infinite;
-  -moz-animation: TextAnimation 70s ease infinite;
-  animation: TextAnimation 70s ease infinite;
-}
-
-@-webkit-keyframes TextAnimation {
-  0% { background-position: 0% 99%; }
-  50% { background-position: 100% 2%; }
-  100% { background-position: 0% 99%; }
-}
-
-@-moz-keyframes TextAnimation {
-  0% { background-position: 0% 99%; }
-  50% { background-position: 100% 2%; }
-  100% { background-position: 0% 99%; }
-}
-
-@keyframes TextAnimation {
-  0% { background-position: 0% 99%; }
-  50% { background-position: 100% 2%; }
-  100% { background-position: 0% 99%; }
-}
-
+  
+  @-webkit-keyframes TextAnimation {
+    0% {
+      background-position: 0% 99%;
+    }
+  
+    50% {
+      background-position: 100% 2%;
+    }
+  
+    100% {
+      background-position: 0% 99%;
+    }
+  }
+  
+  @-moz-keyframes TextAnimation {
+    0% {
+      background-position: 0% 99%;
+    }
+  
+    50% {
+      background-position: 100% 2%;
+    }
+  
+    100% {
+      background-position: 0% 99%;
+    }
+  }
+  
+  @keyframes TextAnimation {
+    0% {
+      background-position: 0% 99%;
+    }
+  
+    50% {
+      background-position: 100% 2%;
+    }
+  
+    100% {
+      background-position: 0% 99%;
+    }
+  }
+  
   
   .content {
-
-
+  
+  
     overflow: hidden;
     font-family: "Lato", sans-serif;
     font-size: 35px;
     line-height: 40px;
     color: #ecf0f1;
   }
+  
   .content__container {
     font-weight: 600;
     overflow: hidden;
     height: 40px;
+    text-align: left;
+    
   }
   
-  .content__container:after, .content__container:before {
-
+  .content__container:after,
+  .content__container:before {
+  
     color: #16a085;
     font-size: 42px;
     line-height: 40px;
@@ -102,19 +129,22 @@
     animation-duration: 2s;
     animation-iteration-count: infinite;
   }
+  
   .content__container__text {
+    position: fixed;
     display: inline;
     float: left;
     margin: 0;
   }
   .content__container__list {
     margin-top: 0;
-    padding-left: 183px;
-    text-align: left;
-    list-style: none;
-    animation-name: change;
-    animation-duration: 22s;
-    animation-iteration-count: infinite;
+    left: 182px;
+    position: relative;
+  text-align: left;
+  list-style: none;
+  animation-name: change;
+  animation-duration: 22s;
+  animation-iteration-count: infinite;
   }
   .content__container__list__item {
     line-height: 40px;
