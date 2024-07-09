@@ -84,7 +84,7 @@ export default {
   },
   async mounted() {
 
-
+    
 
     const user = await axiosService.checkTokenValidity()
     if (user) {
@@ -101,6 +101,7 @@ export default {
       } catch (error) {
         console.log("Error while mounting:", error);
       }
+      this.searchTerm = this.searchQuery || '';
     this.fetchSearchQuery(this.localType, this.localQuery);
     this.setupScrollListener();
   },
