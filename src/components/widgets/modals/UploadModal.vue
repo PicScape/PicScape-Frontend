@@ -391,6 +391,11 @@ export default {
 
 }
 
+.username-text {
+    text-decoration: underline;
+    color: #e7e7e7;
+}
+
 .modal-image-pfp {
     width: 150px;
     height: 150px;
