@@ -8,7 +8,7 @@
         <img :src="getProfilePictureUrl()" alt="Profile Picture" class="profile-pic">
         <div class="details-container">
           <div class="username">{{ userObj ? userObj.user.username : 'Loading...' }}</div>
-          <div class="joined">Joined 12.02.2023 20:23</div>
+          <div class="joined">{{ userObj ? created_at_formatted : 'Loading...' }}</div>
           <div class="roles-container">
         <div v-for="(role, index) in roles" :key="index" class="role">
           {{ role }}
@@ -25,7 +25,7 @@
 
 <script>
 import axiosService from '@/services/axiosService';
-
+import timeConvert from '@/services/timeConvert';
 export default {
   data() {
     return {
@@ -33,6 +33,7 @@ export default {
       userObj: null,
       roles: ["test"],
       pfp_url: '',
+      created_at_formatted: '',
     };
   },
   methods: {
@@ -67,6 +68,8 @@ export default {
       const response = await axiosService.getUser("userId", this.userid);
       this.roles = response.user.roles || [];
       this.userObj = response;
+      this.created_at_formatted = timeConvert.convertToFormattedLocalTime(this.userObj.user.created_at)
+
     } catch (error) {
       console.error('Error fetching user:', error);
     }
