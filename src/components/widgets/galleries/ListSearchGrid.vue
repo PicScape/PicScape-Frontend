@@ -1,9 +1,6 @@
 <template>
     <div class="toogle-buttons-container">
-      <div id="toggle-buttons" class="tabs">
-        <button :class="{ 'active': imageType === 'pfp' }" @click="setType('pfp')">Profile Pictures</button>
-        <button :class="{ 'active': imageType === 'wallpaper' }" @click="setType('wallpaper')">Wallpapers</button>
-      </div>
+
 
       <div id="images-pre">
         <div id="images">
@@ -40,6 +37,16 @@
   import ImageModal from '@/components/widgets/modals/UploadModal.vue';
   
   export default {
+    props: {
+      searchQuery: {
+        type: String,
+        required: false
+      },
+      type: {
+        type: String,
+        required: false
+      }
+    },
     components: {
       ImageModal,
     },
@@ -51,36 +58,33 @@
         page: 1,
         loading: false,
         hasMore: true,
-        imageType: 'pfp',
         userid: '',
       };
     },
     async mounted() {
-      this.userid = this.$route.params.userid;
-      if (!this.userid) {
+
+
   
         const user = await axiosService.checkTokenValidity()
         if (user) {
           this.userid = user.user.id;
-          this.roles = user.user.roles || [];
-        } else {
-          window.location.href = '/login';
-        }
+        } 
   
   
-      }
-      this.fetchNewestImages();
+      
+      this.fetchSearchQuery();
       this.setupScrollListener();
     },
   
     methods: {
-      async fetchNewestImages() {
+      async fetchSearchQuery() {
         if (!this.hasMore || this.loading) return;
   
         this.loading = true;
   
         try {
-          const response = await axiosService.getUploadsFromUser(this.imageType, this.page, this.userid);
+          console.log(this.type, this.page, this.searchQuery)
+          const response = await axiosService.getUploadsQuery(this.type, this.page, this.searchQuery);
           const newImages = response.uploads.map(image => ({
             ...image,
             url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,
@@ -101,7 +105,7 @@
       },
       checkScrollEnd() {
         if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-          this.fetchNewestImages();
+          this.fetchSearchQuery();
         }
       },
       openModal(image) {
@@ -120,14 +124,14 @@
         this.images = [];
         this.page = 1;
         this.hasMore = true;
-        this.fetchNewestImages();
+        this.fetchSearchQuery();
       },
       handleDeleteSuccess() {
         this.modalId = null;
         this.page = 1;
         this.images = [];
         this.hasMore = true;
-        this.fetchNewestImages();
+        this.fetchSearchQuery();
       },
     },
   };
