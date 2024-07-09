@@ -4,14 +4,14 @@
       class="search-input">
     <div class="search-button-wrapper">
       <button type="submit" class="search-button">
-        <span>{{ type === 'pfp' ? 'Search for Pfps' : 'Search for Wallpapers' }}</span>
+        <span>{{ seltype === 'pfp' ? 'Search for Pfps' : 'Search for Wallpapers' }}</span>
         <a class="dropdown-btn" @click.prevent="toggleDropdown">
           <span class="dropdown-arrow">&#9207;</span>
         </a>
       </button>
       <div v-if="dropdownVisible" class="dropdown-menu">
-        <button @click="searchOption(type === 'pfp' ? 'wallpaper' : 'pfp')">
-          Search for {{ type === 'pfp' ? 'Wallpapers' : 'Pfps' }}
+        <button @click="searchOption(seltype === 'pfp' ? 'wallpaper' : 'pfp')">
+          Search for {{ seltype === 'pfp' ? 'Wallpapers' : 'Pfps' }}
         </button>
       </div>
     </div>
@@ -77,6 +77,7 @@ export default {
       dropdownVisible: false,
       localType: 'pfp',
       localQuery: '',
+      seltype: 'pfp',
 
 
     };
@@ -111,7 +112,7 @@ export default {
       this.loading = true;
 
       try {
-        console.log(type, this.page, searchQuery)
+        console.log(type, this.page, searchQuery, "ts")
         const response = await axiosService.getUploadsQuery(type, this.page, searchQuery);
         const newImages = response.uploads.map(image => ({
           ...image,
@@ -131,6 +132,15 @@ export default {
         this.loading = false;
       }
     },
+    openSearchQuery() {
+      this.localType = this.seltype
+      console.log(this.localType, this.searchTerm)
+
+      this.page = 1;
+      this.images = [];
+      this.hasMore = true;
+      this.fetchSearchQuery(this.localType, this.searchTerm)
+    },
     checkScrollEnd() {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
         this.fetchSearchQuery(this.localType, this.localQuery);
@@ -147,13 +157,7 @@ export default {
         this.checkScrollEnd();
       });
     },
-    setType(type) {
-      this.localType = type;
-      this.images = [];
-      this.page = 1;
-      this.hasMore = true;
-      this.fetchSearchQuery(this.localType, this.localQuery);
-    },
+
     handleDeleteSuccess() {
       this.modalId = null;
       this.page = 1;
@@ -165,8 +169,12 @@ export default {
       this.dropdownVisible = !this.dropdownVisible;
     },
     searchOption(option) {
-      this.localType = option;
+      this.seltype = option;
       this.dropdownVisible = false;
+      if(this.searchTerm){
+        this.openSearchQuery()
+      }
+
     }
   },
 };
