@@ -131,7 +131,7 @@
   }
   
   .content__container__text {
-    position: fixed;
+    position: absolute;
     display: inline;
     float: left;
     margin: 0;
