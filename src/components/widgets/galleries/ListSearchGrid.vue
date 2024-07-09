@@ -168,7 +168,9 @@ export default {
       this.page = 1;
       this.images = [];
       this.hasMore = true;
-      window.location.href = `/search?type=${this.localType}&searchQuery=${this.searchTerm}`;
+      this.localQuery = this.searchTerm
+      this.$router.push(`/search?type=${this.localType}&searchQuery=${this.searchTerm}`);
+      this.fetchSearchQuery(this.localType, this.localQuery);
     },
     checkScrollEnd() {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
