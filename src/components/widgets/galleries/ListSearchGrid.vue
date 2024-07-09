@@ -1,6 +1,9 @@
 <template>
-  <form class="search-box" @submit.prevent="openSearchQuery">
-    <input type="text" id="search-input" v-model="searchTerm" placeholder="Search for profile pictures..." required
+
+
+  <div class="list-container">
+    <form class="search-box" @submit.prevent="openSearchQuery">
+    <input type="text" id="search-input" v-model="searchTerm" placeholder="Search" required
       class="search-input">
     <div class="search-button-wrapper">
       <button type="submit" class="search-button">
@@ -16,9 +19,6 @@
       </div>
     </div>
   </form>
-
-  <div class="list-container">
-
 
     <div id="images-pre">
       <div id="images">
@@ -97,6 +97,7 @@ export default {
         if (this.type && this.searchQuery) {
           this.localQuery = this.searchQuery
           this.localType = this.type
+          this.seltype = this.localType
         }
       } catch (error) {
         console.log("Error while mounting:", error);
@@ -135,12 +136,10 @@ export default {
     },
     openSearchQuery() {
       this.localType = this.seltype
-      console.log(this.localType, this.searchTerm)
-
       this.page = 1;
       this.images = [];
       this.hasMore = true;
-      this.fetchSearchQuery(this.localType, this.searchTerm)
+      window.location.href = `/search?type=${this.localType}&searchQuery=${this.searchTerm}`;
     },
     checkScrollEnd() {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
@@ -211,7 +210,7 @@ export default {
   align-items: center;
   grid-template-columns: 1fr auto;
   margin-top: 30px;
-  width: 700px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
 }

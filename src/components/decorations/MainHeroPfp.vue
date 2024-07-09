@@ -40,6 +40,12 @@ export default {
   methods: {
     openSearchQuery() {
       console.log(this.searchTerm, this.type)
+      if(!this.searchTerm){
+        const inputElement = document.getElementById('search-input');
+    if (inputElement) {
+      this.searchTerm = inputElement.value;
+    }
+      }
       window.location.href = `/search?type=${this.type}&searchQuery=${this.searchTerm}`;
     },
     toggleDropdown() {
@@ -51,6 +57,7 @@ export default {
     }
   },
   mounted() {
+    
     this.$refs.textContainer.classList.add('fly-in');
   }
 };

@@ -188,7 +188,7 @@ export default {
             this.authorId = '';
             this.authorUsername = '';
             this.$emit('close');
-            document.body.classList.remove('no-scroll'); // Remove no-scroll class when modal is closed
+            document.body.classList.remove('no-scroll');
         },
         async handleDelete() {
             let confirmMessage = '';
