@@ -5,12 +5,13 @@
         <h1 class="title-hero">Profile Pictures</h1>
         <p class="subtitle-hero">Share, Find, and Download your favorite Profile Pictures</p>
         <form class="search-box" @submit.prevent="openSearchQuery">
-          <input type="text" id="search-input" v-model="searchTerm"  placeholder="Search for profile pictures..." required class="search-input">
+          <input type="text" id="search-input" v-model="searchTerm" placeholder="Search for profile pictures..."
+            required class="search-input">
           <div class="search-button-wrapper">
             <button type="submit" class="search-button">
               <span>{{ type === 'pfp' ? 'Search for Pfps' : 'Search for Wallpapers' }}</span>
-              <a class="dropdown-btn" @click="toggleDropdown">
-                <span class="dropdown-arrow"></span>
+              <a class="dropdown-btn" @click.prevent="toggleDropdown">
+                <span class="dropdown-arrow">&#9207;</span>
               </a>
             </button>
             <div v-if="dropdownVisible" class="dropdown-menu">
@@ -56,7 +57,6 @@ export default {
 </script>
 
 <style scoped>
-
 .dropdown-menu {
   position: absolute;
   top: 100%;
@@ -142,7 +142,6 @@ hr {
 .search-button {
   background-color: #007bff;
   color: white;
-  padding: 8px 10px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -153,7 +152,9 @@ hr {
   display: flex;
   align-items: center;
   justify-content: center;
-  
+  position: relative;
+  padding: 6.5px 10px;
+
 }
 
 .search-button:hover {
@@ -161,14 +162,10 @@ hr {
 }
 
 .dropdown-arrow {
-  width: 0;
-  height: 0;
+  display: inline-block;
   margin-left: 6px;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 6px solid white;
+  line-height: 1.3;
 }
-
 .dropdown-btn {
   display: flex;
   align-items: center;
@@ -214,6 +211,7 @@ input[type="text"] {
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
