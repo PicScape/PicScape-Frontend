@@ -137,7 +137,7 @@ export default {
 
 .content__container__list {
   margin-top: 0;
-  left: 84px;
+  left: 83.5px;
   position: relative;
   text-align: left;
   list-style: none;

@@ -138,7 +138,7 @@
   }
   .content__container__list {
     margin-top: 0;
-    left: 182px;
+    left: 183px;
     position: relative;
   text-align: left;
   list-style: none;
