@@ -1,9 +1,5 @@
 <template>
-    <div>
-      <h1>Search Results</h1>
-      <p>Searching for: {{ searchQuery }}</p>
-      <p>{{ type }}</p>
-    </div>
+
     <ListSearchGrid :searchQuery="searchQuery" :type="type" />
   </template>
   

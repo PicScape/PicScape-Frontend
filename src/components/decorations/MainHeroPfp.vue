@@ -6,7 +6,7 @@
         <p class="subtitle-hero">Share, Find, and Download your favorite Profile Pictures</p>
         <form class="search-box" @submit.prevent="openSearchQuery">
           <input type="text" id="search-input" v-model="searchTerm" placeholder="Search for profile pictures..."
-            required class="search-input">
+             class="search-input">
           <div class="search-button-wrapper">
             <button type="submit" class="search-button">
               <span>{{ type === 'pfp' ? 'Search for Pfps' : 'Search for Wallpapers' }}</span>

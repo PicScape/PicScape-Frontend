@@ -1,24 +1,30 @@
 <template>
+<div class="topper">
+  <SearchTitleAnimation/>
+  <div class="subtitle">Choose your favorite profile picture or wallpaper from a collection of {{ total_uploads }} uploads!</div>
 
+<form class="search-box" @submit.prevent="openSearchQuery">
+<input type="text" id="search-input" v-model="searchTerm" placeholder="Search"
+  class="search-input">
+<div class="search-button-wrapper">
+  <button type="submit" class="search-button">
+    <span>{{ seltype === 'pfp' ? 'Search for Pfps' : 'Search for Wallpapers' }}</span>
+    <a class="dropdown-btn" @click.prevent="toggleDropdown">
+      <span class="dropdown-arrow">&#9207;</span>
+    </a>
+  </button>
+  <div v-if="dropdownVisible" class="dropdown-menu">
+    <button @click="searchOption(seltype === 'pfp' ? 'wallpaper' : 'pfp')">
+      Search for {{ seltype === 'pfp' ? 'Wallpapers' : 'Pfps' }}
+    </button>
+  </div>
+</div>
+</form>
+</div>
+    
+  <hr>
 
   <div class="list-container">
-    <form class="search-box" @submit.prevent="openSearchQuery">
-    <input type="text" id="search-input" v-model="searchTerm" placeholder="Search" required
-      class="search-input">
-    <div class="search-button-wrapper">
-      <button type="submit" class="search-button">
-        <span>{{ seltype === 'pfp' ? 'Search for Pfps' : 'Search for Wallpapers' }}</span>
-        <a class="dropdown-btn" @click.prevent="toggleDropdown">
-          <span class="dropdown-arrow">&#9207;</span>
-        </a>
-      </button>
-      <div v-if="dropdownVisible" class="dropdown-menu">
-        <button @click="searchOption(seltype === 'pfp' ? 'wallpaper' : 'pfp')">
-          Search for {{ seltype === 'pfp' ? 'Wallpapers' : 'Pfps' }}
-        </button>
-      </div>
-    </div>
-  </form>
 
     <div id="images-pre">
       <div id="images">
@@ -49,6 +55,7 @@ const baseURL = process.env.VUE_APP_API_URL;
 
 import axiosService from '@/services/axiosService';
 import ImageModal from '@/components/widgets/modals/UploadModal.vue';
+import SearchTitleAnimation from '@/components/decorations/SearchTitleAnimation.vue';
 
 export default {
   props: {
@@ -63,6 +70,7 @@ export default {
   },
   components: {
     ImageModal,
+    SearchTitleAnimation,
   },
   data() {
     return {
@@ -78,14 +86,15 @@ export default {
       localType: 'pfp',
       localQuery: '',
       seltype: 'pfp',
+      total_uploads: 0,
 
 
     };
   },
   async mounted() {
 
-    
-
+    const stats = await axiosService.getStats()
+    this.total_uploads = stats.uploads.total
     const user = await axiosService.checkTokenValidity()
     if (user) {
       this.userid = user.user.id;
@@ -98,12 +107,16 @@ export default {
           this.localQuery = this.searchQuery
           this.localType = this.type
           this.seltype = this.localType
+          this.fetchSearchQuery(this.localType, this.localQuery);
+
+        }else{
+          this.fetchSearchQuery(this.localType, this.localQuery);
+
         }
       } catch (error) {
         console.log("Error while mounting:", error);
       }
       this.searchTerm = this.searchQuery || '';
-    this.fetchSearchQuery(this.localType, this.localQuery);
     this.setupScrollListener();
   },
 
@@ -114,9 +127,9 @@ export default {
       this.loading = true;
 
       try {
-        console.log(type, this.page, searchQuery, "ts")
-        const response = await axiosService.getUploadsQuery(type, this.page, searchQuery);
-        const newImages = response.uploads.map(image => ({
+        if(!type || !searchQuery){
+          const response = await axiosService.getNewestUploads(type, this.page, searchQuery);
+          const newImages = response.uploads.map(image => ({
           ...image,
           url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,
         }));
@@ -128,6 +141,22 @@ export default {
         this.hasMore = newImages.length > 0;
 
         this.checkScrollEnd();
+        }else{
+          const response = await axiosService.getUploadsQuery(type, this.page, searchQuery);
+          const newImages = response.uploads.map(image => ({
+          ...image,
+          url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,
+        }));
+
+        this.images = [...this.images, ...newImages];
+        this.page++;
+        this.loading = false;
+
+        this.hasMore = newImages.length > 0;
+
+        this.checkScrollEnd();
+        }
+
       } catch (error) {
         console.error('Error fetching images:', error);
         this.showInfoBox = true;
@@ -181,6 +210,35 @@ export default {
 </script>
 
 <style scoped>
+
+.subtitle{
+  text-align: left;
+
+margin-top: 6px;
+font-weight: 500;
+
+color: var(--white-surface-300);
+}
+
+
+
+.topper{
+  margin-bottom: 60px;
+  margin-left: auto;
+  margin-top: 70px;
+
+  margin-right: auto;
+  padding-left: calc((100% - (870px)) / 2);
+  padding-right: calc((100% - (870px)) / 2);
+
+}
+hr {
+  border: 1px solid #4e4e4e;
+  margin-bottom: 20px;
+}
+
+
+
 .dropdown-menu {
   position: absolute;
   top: 100%;
@@ -209,7 +267,7 @@ export default {
   display: grid;
   align-items: center;
   grid-template-columns: 1fr auto;
-  margin-top: 30px;
+  margin-top: 40px;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
@@ -282,6 +340,12 @@ input[type="text"] {
 
   .list-container {
     width: calc(100% - 20px);
+
+  }
+
+  .topper{
+    margin-left: 20px;
+    margin-right: 20px;
 
   }
 

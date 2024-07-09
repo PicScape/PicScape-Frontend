@@ -225,6 +225,20 @@ export const deleteUpload = async (imgId) => {
   }
 };
 
+
+export const getStats = async () => {
+  try {
+
+    const response = await axiosInstance.get(`/image/stats`, {
+
+      
+    });
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
 export const getUser = async (identifier, value) => {
   try {
     let response;
@@ -265,5 +279,6 @@ export default {
   verifyLoginCode,
   ActivateAccount,
   getUploadsFromUser,
-  getUploadsQuery
+  getUploadsQuery,
+  getStats
 };
