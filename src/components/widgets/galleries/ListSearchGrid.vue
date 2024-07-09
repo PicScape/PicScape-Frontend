@@ -210,7 +210,7 @@ export default {
   align-items: center;
   grid-template-columns: 1fr auto;
   margin-top: 30px;
-  width: 90%;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -292,9 +292,6 @@ input[type="text"] {
 }
 
 @media (max-width: 400px) {
-.search-box{
-  width: 100%;
-}
 
   .image-container.wallpaper {
     height: 90px !important;
