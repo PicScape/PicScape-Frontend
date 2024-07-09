@@ -4,10 +4,23 @@
       <div class="title-container-hero">
         <h1 class="title-hero">Profile Pictures</h1>
         <p class="subtitle-hero">Share, Find, and Download your favorite Profile Pictures</p>
-        <div class="search-box">
-          <input type="text" id="search-input" @input="filterProducts" v-model="searchTerm" placeholder="Search for profile pictures..." class="search-input">
-          <button type="button" class="search-button">Search</button>
-        </div>
+        <form class="search-box" @submit.prevent="openSearchQuery">
+          <input type="text" id="search-input" v-model="searchTerm" placeholder="Search for profile pictures..."
+             class="search-input">
+          <div class="search-button-wrapper">
+            <button type="submit" class="search-button">
+              <span>{{ type === 'pfp' ? 'Search for Pfps' : 'Search for Wallpapers' }}</span>
+              <a class="dropdown-btn" @click.prevent="toggleDropdown">
+                <span class="dropdown-arrow">&#9207;</span>
+              </a>
+            </button>
+            <div v-if="dropdownVisible" class="dropdown-menu">
+              <button @click="searchOption(type === 'pfp' ? 'wallpaper' : 'pfp')">
+                Search for {{ type === 'pfp' ? 'Wallpapers' : 'Pfps' }}
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
     <img class="hero-img" src="@/assets/logo.png" alt="Profile Picture">
@@ -19,20 +32,62 @@
 export default {
   data() {
     return {
-      searchTerm: ''
+      searchTerm: '',
+      dropdownVisible: false,
+      type: 'pfp'
     };
   },
   methods: {
-    filterProducts() {
+    openSearchQuery() {
+      console.log(this.searchTerm, this.type)
+      if(!this.searchTerm){
+        const inputElement = document.getElementById('search-input');
+    if (inputElement) {
+      this.searchTerm = inputElement.value;
+    }
+      }
+      window.location.href = `/search?type=${this.type}&searchQuery=${this.searchTerm}`;
+    },
+    toggleDropdown() {
+      this.dropdownVisible = !this.dropdownVisible;
+    },
+    searchOption(option) {
+      this.type = option;
+      this.dropdownVisible = false;
     }
   },
   mounted() {
+    
     this.$refs.textContainer.classList.add('fly-in');
   }
 };
 </script>
 
 <style scoped>
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  margin-top: 8px;
+  width: 200px;
+}
+
+.dropdown-menu button {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dropdown-menu button:hover {
+  background-color: #f1f1f1;
+}
+
 .grid-container-hero {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -81,26 +136,56 @@ hr {
   margin-top: 30px;
 }
 
+.search-input {
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
+.search-button-wrapper {
+  position: relative;
+  display: flex;
+}
+
 .search-button {
   background-color: #007bff;
   color: white;
-  padding: 8px 10px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
   transition: 0.2s ease-in-out;
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 6.5px 10px;
+
 }
 
 .search-button:hover {
   background-color: #0056b3;
 }
 
+.dropdown-arrow {
+  display: inline-block;
+  margin-left: 6px;
+  line-height: 1.3;
+}
+.dropdown-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+
 input[type="text"] {
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
-  padding: 8px;
+  padding: 8.5px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -115,7 +200,7 @@ input[type="text"] {
   .hero-img {
     display: block;
     margin: 0 auto 20px;
-    order: -1; /* Ensures the image comes first */
+    order: -1;
   }
 
   .title-container-hero {
@@ -133,6 +218,7 @@ input[type="text"] {
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

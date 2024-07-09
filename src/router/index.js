@@ -7,6 +7,8 @@ import Wallpapers from '../views/WallpapersView.vue';
 import Settings from '../views/SettingsView.vue';
 import MyScape from '../views/MyScape.vue';
 import ActivateAccount from '../views/ActivateAccountView.vue';
+import SearchView from '../views/SearchView.vue';
+
 const routes = [
   { path: '/', component: Home },
   { path: '/pfps', component: Pfps },
@@ -16,7 +18,7 @@ const routes = [
   { path: '/settings', component: Settings },
   { path: '/myscape/:userid', component: MyScape },
   { path: '/uploads/:imgId', component: Home },
-
+  { path: '/search', component: SearchView, props: route => ({ searchQuery: route.query.searchQuery, type: route.query.type }) },
   { path: '/myscape', component: MyScape },
   { path: '/account/activate', component: ActivateAccount, props: route => ({ activationToken: route.query.activationToken }) }
 ];
