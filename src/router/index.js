@@ -18,7 +18,7 @@ const routes = [
   { path: '/settings', component: Settings },
   { path: '/myscape/:userid', component: MyScape },
   { path: '/uploads/:imgId', component: Home },
-  { path: '/search', component: SearchView, props: route => ({ searchQuery: route.query.searchQuery }) },
+  { path: '/search', component: SearchView, props: route => ({ searchQuery: route.query.searchQuery, type: route.query.type }) },
   { path: '/myscape', component: MyScape },
   { path: '/account/activate', component: ActivateAccount, props: route => ({ activationToken: route.query.activationToken }) }
 ];
