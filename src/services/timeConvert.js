@@ -1,7 +1,9 @@
 
 function convertToUserLocalTime(isoTime) {
     const date = new Date(isoTime);
-    
+    console.log(isoTime)
+
+    console.log(date)
     const localTime = {
         year: date.getFullYear(),
         month: date.getMonth() + 1,
