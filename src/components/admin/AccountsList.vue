@@ -151,7 +151,7 @@ export default {
 .profile-picture {
   width: 80px;
   height: 80px;
-  border-radius: 50%;
+  border-radius: 7px;
 }
 
 .roles-container {
