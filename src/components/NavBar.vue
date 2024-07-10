@@ -20,6 +20,8 @@
               <div class="dropdown-content">
                 <router-link to="/myscape" class="nav-link sub-nav" @click="closeNav">My Scape</router-link>
                 <router-link to="/settings" class="nav-link sub-nav" @click="closeNav">Settings</router-link>
+                <router-link v-if="isAdmin" to="/admin" class="nav-link sub-nav admin-btn" @click="closeNav">Admin</router-link>
+
                 <router-link to="/" @click="logout" class="nav-link sub-nav logout-btn">Logout</router-link>
               </div>
             </div>
@@ -45,7 +47,8 @@ export default {
       isLoggedIn: false,
       isLoaded: false,
       username: '',
-      isNavOpen: false
+      isNavOpen: false,
+      isAdmin: false
     };
   },
   created() {
@@ -56,8 +59,10 @@ export default {
       let accountData = null;
       try {
         accountData = await axiosService.checkTokenValidity();
-
         this.isLoggedIn = !!accountData;
+        if(accountData.user.isAdmin){
+          this.isAdmin = accountData.user.isAdmin;
+        }
       } catch (error) {
         this.isLoggedIn = false;
         Cookies.remove('token');
@@ -87,6 +92,10 @@ export default {
 <style>
 .logout-btn:hover {
   background-color: red !important;
+}
+
+.admin-btn:hover{
+  background-color: blueviolet !important;
 }
 
 .navbar {
