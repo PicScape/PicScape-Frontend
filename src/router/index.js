@@ -8,6 +8,7 @@ import Settings from '../views/SettingsView.vue';
 import MyScape from '../views/MyScape.vue';
 import ActivateAccount from '../views/ActivateAccountView.vue';
 import SearchView from '../views/SearchView.vue';
+import AdminView from '../views/AdminView.vue';
 
 const routes = [
   { path: '/', component: Home },
@@ -20,7 +21,10 @@ const routes = [
   { path: '/uploads/:imgId', component: Home },
   { path: '/search', component: SearchView, props: route => ({ searchQuery: route.query.searchQuery, type: route.query.type }) },
   { path: '/myscape', component: MyScape },
-  { path: '/account/activate', component: ActivateAccount, props: route => ({ activationToken: route.query.activationToken }) }
+  { path: '/account/activate', component: ActivateAccount, props: route => ({ activationToken: route.query.activationToken }) },
+  { path: '/admin', component: AdminView }
+
+
 ];
 
 const router = createRouter({

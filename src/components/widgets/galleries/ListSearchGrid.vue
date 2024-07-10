@@ -1,27 +1,27 @@
 <template>
-<div class="topper">
-  <SearchTitleAnimation/>
-  <div class="subtitle">Choose your favorite profile picture or wallpaper from a collection of {{ total_uploads }} uploads!</div>
+  <div class="topper">
+    <SearchTitleAnimation />
+    <div class="subtitle">Choose your favorite profile picture or wallpaper from a collection of {{ total_uploads }}
+      uploads!</div>
 
-<form class="search-box" @submit.prevent="openSearchQuery">
-<input type="text" id="search-input" v-model="searchTerm" placeholder="Search"
-  class="search-input">
-<div class="search-button-wrapper">
-  <button type="submit" class="search-button">
-    <span>{{ seltype === 'pfp' ? 'Search for Pfps' : 'Search for Wallpapers' }}</span>
-    <a class="dropdown-btn" @click.prevent="toggleDropdown">
-      <span class="dropdown-arrow">&#9207;</span>
-    </a>
-  </button>
-  <div v-if="dropdownVisible" class="dropdown-menu">
-    <button @click="searchOption(seltype === 'pfp' ? 'wallpaper' : 'pfp')">
-      Search for {{ seltype === 'pfp' ? 'Wallpapers' : 'Pfps' }}
-    </button>
+    <form class="search-box" @submit.prevent="openSearchQuery">
+      <input type="text" id="search-input" v-model="searchTerm" placeholder="Search" class="search-input">
+      <div class="search-button-wrapper">
+        <button type="submit" class="search-button">
+          <span>{{ seltype === 'pfp' ? 'Search for Pfps' : 'Search for Wallpapers' }}</span>
+          <a class="dropdown-btn" @click.prevent="toggleDropdown">
+            <span class="dropdown-arrow">&#9207;</span>
+          </a>
+        </button>
+        <div v-if="dropdownVisible" class="dropdown-menu">
+          <button @click="searchOption(seltype === 'pfp' ? 'wallpaper' : 'pfp')">
+            Search for {{ seltype === 'pfp' ? 'Wallpapers' : 'Pfps' }}
+          </button>
+        </div>
+      </div>
+    </form>
   </div>
-</div>
-</form>
-</div>
-    
+
   <hr>
 
   <div class="list-container">
@@ -102,21 +102,21 @@ export default {
 
 
     try {
+      if(this.type){
+        this.localType = this.type
 
-        if (this.type && this.searchQuery) {
-          this.localQuery = this.searchQuery
-          this.localType = this.type
-          this.seltype = this.localType
-          this.fetchSearchQuery(this.localType, this.localQuery);
-
-        }else{
-          this.fetchSearchQuery(this.localType, this.localQuery);
-
-        }
-      } catch (error) {
-        console.log("Error while mounting:", error);
       }
-      this.searchTerm = this.searchQuery || '';
+      if(this.searchQuery){
+        this.localQuery = this.searchQuery
+
+      }
+      this.seltype = this.localType
+      this.fetchSearchQuery(this.localType, this.localQuery);
+      
+    } catch (error) {
+      console.log("Error while mounting:", error);
+    }
+    this.searchTerm = this.searchQuery || '';
     this.setupScrollListener();
   },
 
@@ -127,34 +127,34 @@ export default {
       this.loading = true;
 
       try {
-        if(!type || !searchQuery){
+        if (!type || !searchQuery) {
           const response = await axiosService.getNewestUploads(type, this.page, searchQuery);
           const newImages = response.uploads.map(image => ({
-          ...image,
-          url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,
-        }));
+            ...image,
+            url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,
+          }));
 
-        this.images = [...this.images, ...newImages];
-        this.page++;
-        this.loading = false;
+          this.images = [...this.images, ...newImages];
+          this.page++;
+          this.loading = false;
 
-        this.hasMore = newImages.length > 0;
+          this.hasMore = newImages.length > 0;
 
-        this.checkScrollEnd();
-        }else{
+          this.checkScrollEnd();
+        } else {
           const response = await axiosService.getUploadsQuery(type, this.page, searchQuery);
           const newImages = response.uploads.map(image => ({
-          ...image,
-          url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,
-        }));
+            ...image,
+            url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,
+          }));
 
-        this.images = [...this.images, ...newImages];
-        this.page++;
-        this.loading = false;
+          this.images = [...this.images, ...newImages];
+          this.page++;
+          this.loading = false;
 
-        this.hasMore = newImages.length > 0;
+          this.hasMore = newImages.length > 0;
 
-        this.checkScrollEnd();
+          this.checkScrollEnd();
         }
 
       } catch (error) {
@@ -202,7 +202,7 @@ export default {
     searchOption(option) {
       this.seltype = option;
       this.dropdownVisible = false;
-      if(this.searchTerm){
+      if (this.searchTerm) {
         this.openSearchQuery()
       }
 
@@ -212,19 +212,18 @@ export default {
 </script>
 
 <style scoped>
-
-.subtitle{
+.subtitle {
   text-align: left;
 
-margin-top: 6px;
-font-weight: 500;
+  margin-top: 6px;
+  font-weight: 500;
 
-color: var(--white-surface-300);
+  color: var(--white-surface-300);
 }
 
 
 
-.topper{
+.topper {
   margin-bottom: 60px;
   margin-left: auto;
   margin-top: 70px;
@@ -234,6 +233,7 @@ color: var(--white-surface-300);
   padding-right: calc((100% - (870px)) / 2);
 
 }
+
 hr {
   border: 1px solid #4e4e4e;
   margin-bottom: 20px;
@@ -345,7 +345,7 @@ input[type="text"] {
 
   }
 
-  .topper{
+  .topper {
     margin-left: 20px;
     margin-right: 20px;
 
