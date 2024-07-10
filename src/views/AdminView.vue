@@ -1,5 +1,9 @@
 <template>
-    <AccountsList/>
+    <AccountsList
+      :sortField="created_at"
+      :sortOrder="dec"
+    />
+    
 </template>
   
   <script>

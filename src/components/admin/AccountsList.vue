@@ -59,7 +59,20 @@ export default {
       localUser: '',
     };
   },
-
+  props: {
+        sortOrder: {
+            type: String,
+            required: true
+        },
+        sortField: {
+            type: String,
+            required: true
+        },
+    },
+  async mounted() {
+    this.localUser = await axiosService.checkTokenValidity();
+    this.fetchUsers();
+  },
   methods: {
     async deleteUser(user) {
       if (confirm("You sure you want to delete " + user.username)) {
@@ -73,7 +86,7 @@ export default {
     async fetchUsers() {
       try {
         this.isLoading = true;
-        const response = await axiosServiceAdmin.getAccounts();
+        const response = await axiosServiceAdmin.getAccounts(this.sortField, this.sortOrder);
         this.users = response.accounts;
       } catch (error) {
         this.error = error;
@@ -82,10 +95,7 @@ export default {
       }
     },
   },
-  async mounted() {
-    this.localUser = await axiosService.checkTokenValidity();
-    this.fetchUsers();
-  }
+
 };
 </script>
 
