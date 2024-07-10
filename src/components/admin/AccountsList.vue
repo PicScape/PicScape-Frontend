@@ -12,25 +12,27 @@
       </div>
 
       <!-- User Cards -->
-      <div v-else v-for="(user, index) in this.users" :key="index">
-        <div class="card" v-bind:class="{ 'animated-card': animateCards }"
-          v-bind:style="{ 'animation-delay': index * 0.1 + 's' }">
+      <div class="card-container" v-else v-for="(user, index) in users" :key="user.id">
+        <div class="card" :class="{ 'animated-card': animateCards }" :style="{ 'animation-delay': index * 0.1 + 's' }">
           <div class="card-body">
-            <div>
-              <img :src="getProfilePictureUrl(user.id)" alt="Profile Picture" class="profile-picture">
-              <!-- Delete Button -->
+            <div class="buttons">
               <button v-if="user.id !== localUser.user.id" @click="deleteUser(user)" class="delete-button">
-                <i>delete</i>
+                <div>&#128465;</div>
               </button>
               <button @click="openEditModal(user)" class="edit-button">
-                <i>edit</i>
+                <div>&#9998;</div>
               </button>
             </div>
-            <div>
-              <p>@{{ user.username }}</p>
-              <p>{{ user.email }}</p>
+            <div class="left-section">
+              <img :src="getProfilePictureUrl(user.id)" alt="Profile Picture" class="profile-picture">
+            </div>
+            <div class="right-section">
+              <div class="username">@{{ user.username }}</div>
+              <div class="email">{{ user.email }}</div>
               <div class="roles-container">
-                <span v-for="(role, roleIndex) in user.roles" :key="roleIndex" class="role">{{ role }}</span>
+                <span v-for="(role, roleIndex) in user.roles" :key="roleIndex" class="role">
+                  {{ role }}
+                </span>
               </div>
             </div>
           </div>
@@ -71,82 +73,109 @@ export default {
         this.isLoading = false;
       }
     },
-
   },
   async mounted() {
     this.localUser = await axiosService.checkTokenValidity();
-    console.log(this.localUser.user.id)
     this.fetchUsers();
   }
 };
 </script>
 
 <style scoped>
+
+.card-container{
+  width:100%;
+
+}
+
+.username {
+  font-size: medium;
+  margin-top: 5px;
+  margin-bottom: 4px;
+}
+
+.email {
+  font-size: small;
+  color: var(--white-surface-300);
+  margin-bottom: 4px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto; /* Center the container */
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  width: 100%;
+}
+.card {
+  height: 150px;
+  margin: 10px;
+  display: flex;
+  overflow: hidden;
+  border-color: var(--card-border);
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+}
+
+.card-body {
+  background-color: var(--card-color);
+  color: var(--text-color-1) !important;
+  display: flex;
+  flex-direction: row;
+  padding: 1rem;
+}
+
+.left-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.right-section {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  flex: 2;
+  padding-left: 1rem;
+  text-align: left;
+
+}
+
 .profile-picture {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  margin-right: auto;
 }
 
 .roles-container {
   margin-top: 0.5rem;
-  display: inline-block;
-  white-space: nowrap;
-  flex-wrap: wrap;
+  display: flex;
+  flex-wrap: nowrap;
   overflow: hidden;
-  width: 300px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 170px;
 }
-
-
 
 .role {
   background-color: #d3d3d3;
   border-radius: 4px;
   padding: 2px 4px;
   margin-right: 8px;
-  margin-bottom: 8px;
-  display: inline-block;
-  margin-bottom: 0;
   color: black;
   font-weight: 500;
   font-size: 13px;
 }
 
-
-.card {
-  width: 300px;
-  height: 245px;
-  margin: 10px;
-  overflow: hidden;
-  border-color: var(--card-border);
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.card-body {
-  background-color: var(--card-color);
-  color: var(--text-color-1) !important;
-}
-
-
-
-
-
-
-.card-body {
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.card-title,
-.card-text {
-  margin-bottom: 0.3rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.animated-card {
+  animation: fadeIn 0.5s ease forwards;
 }
 
 @keyframes fadeIn {
@@ -154,43 +183,26 @@ export default {
     opacity: 0;
     transform: translateY(-20px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-.animated-card {
-  animation: fadeIn 0.5s ease forwards;
+.buttons {
+  position: fixed;
+  right: 10px;
+  top: 10px;
 }
 
-.row {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-gap: 5px;
-}
-
-
-.card {
-  opacity: 0;
-}
-
-.delete-button {
-  padding: 5px;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  transition: color 0.3s;
-  color: var(--text-color-3);
-}
-
+.delete-button,
 .edit-button {
   padding: 5px;
   background-color: transparent;
   border: none;
   cursor: pointer;
   transition: color 0.3s;
+  font-size: medium;
   color: var(--text-color-3);
 }
 
