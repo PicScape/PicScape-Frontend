@@ -59,6 +59,10 @@ export default {
       localUser: '',
     };
   },
+  watch: {
+    sortField: 'fetchUsers',
+    sortOrder: 'fetchUsers',
+  },
   props: {
         sortOrder: {
             type: String,
