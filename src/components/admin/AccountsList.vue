@@ -2,21 +2,21 @@
   <div class="container">
     <div class="row">
       <!-- Loading Indicator -->
-      <div v-if="isLoading" class="col-md-12 text-center">
+      <div v-if="isLoading">
         <p>Loading...</p>
       </div>
 
       <!-- Error Handling -->
-      <div v-else-if="error" class="col-md-12 text-center">
+      <div v-else-if="error">
         <p>Error fetching users. Please try again later.</p>
       </div>
 
       <!-- User Cards -->
-      <div v-else class="col-md-4" v-for="(user, index) in filteredUsers" :key="index">
-        <div class="card mb-4" v-bind:class="{ 'animated-card': animateCards }"
+      <div v-else v-for="(user, index) in this.users" :key="index">
+        <div class="card" v-bind:class="{ 'animated-card': animateCards }"
           v-bind:style="{ 'animation-delay': index * 0.1 + 's' }">
-          <div class="card-body d-flex flex-column">
-            <div class="d-flex justify-content-between align-items-start mb-3">
+          <div class="card-body">
+            <div>
               <img :src="getProfilePictureUrl(user.id)" alt="Profile Picture" class="profile-picture">
               <!-- Delete Button -->
               <button v-if="user.id !== localUser.user.id" @click="deleteUser(user)" class="delete-button">
@@ -27,10 +27,10 @@
               </button>
             </div>
             <div>
-              <p class="card-text mb-1">@{{ user.username }}</p>
-              <p class="card-text mb-0">{{ user.email }}</p>
+              <p>@{{ user.username }}</p>
+              <p>{{ user.email }}</p>
               <div class="roles-container">
-                <span v-for="(role, roleIndex) in user.roles" :key="roleIndex" class="badge">{{ role }}</span>
+                <span v-for="(role, roleIndex) in user.roles" :key="roleIndex" class="role">{{ role }}</span>
               </div>
             </div>
           </div>
@@ -55,13 +55,7 @@ export default {
       localUser: '',
     };
   },
-  computed: {
-    filteredUsers() {
-      console.log(this.users)
 
-      return this.users;
-    }
-  },
   methods: {
     getProfilePictureUrl(id) {
       return `${baseURL}/fetch/pfp/${id}`;
@@ -99,55 +93,46 @@ export default {
   margin-top: 0.5rem;
   display: inline-block;
   white-space: nowrap;
+  flex-wrap: wrap;
   overflow: hidden;
   width: 300px;
 }
 
-.badge {
+
+
+.role {
+  background-color: #d3d3d3;
+  border-radius: 4px;
+  padding: 2px 4px;
+  margin-right: 8px;
+  margin-bottom: 8px;
   display: inline-block;
-  padding: 0.35rem 0.5rem;
-  border-radius: 0.25rem;
-  background-color: #007bff;
-  color: #fff;
-  font-size: 0.875rem;
-  margin-right: 0.5rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  margin-bottom: 0;
+  color: black;
+  font-weight: 500;
+  font-size: 13px;
 }
+
 
 .card {
   width: 300px;
   height: 245px;
   margin: 10px;
   overflow: hidden;
-  border-color: var(--background-color-4);
+  border-color: var(--card-border);
+  border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .card-body {
-  background-color: var(--card-color-1);
+  background-color: var(--card-color);
   color: var(--text-color-1) !important;
 }
 
-.card-footer {
-  background-color: var(--card-color-1) !important;
-  color: var(--text-color-1) !important;
-}
 
-.form-control {
-  background-color: var(--background-color-2) !important;
-  color: var(--text-color-1) !important;
-  border-color: var(--textbox-border-color) !important;
-}
 
-.form-control:focus {
-  background-color: var(--background-color-3) !important;
-  color: var(--text-color-1) !important;
-}
 
-.form-control::placeholder {
-  color: var(--text-color-2) !important;
-}
+
 
 .card-body {
   padding: 1rem;
@@ -186,9 +171,6 @@ export default {
   grid-gap: 5px;
 }
 
-.col-md-4 {
-  flex: 1;
-}
 
 .card {
   opacity: 0;
