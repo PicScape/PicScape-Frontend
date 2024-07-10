@@ -14,6 +14,7 @@
       <!-- User Cards -->
       <div class="card-container" v-else v-for="(user, index) in users" :key="user.id">
         <div class="card" :class="{ 'animated-card': animateCards }" :style="{ 'animation-delay': index * 0.1 + 's' }">
+
           <div class="card-body">
             <div class="buttons">
               <button v-if="user.id !== localUser.user.id" @click="deleteUser(user)" class="delete-button">
@@ -28,7 +29,8 @@
             </div>
             <div class="right-section">
               <div class="username">@{{ user.username }}</div>
-              <div class="email">{{ user.email }}</div>
+              <div class="id">{{ user.id }}</div>
+
               <div class="roles-container">
                 <span v-for="(role, roleIndex) in user.roles" :key="roleIndex" class="role">
                   {{ role }}
@@ -59,6 +61,12 @@ export default {
   },
 
   methods: {
+    async deleteUser(user) {
+      if (confirm("You sure you want to delete " + user.username)) {
+        await axiosServiceAdmin.deleteAccount(user.id)
+        this.fetchUsers()
+      }
+    },
     getProfilePictureUrl(id) {
       return `${baseURL}/fetch/pfp/${id}`;
     },
@@ -82,9 +90,8 @@ export default {
 </script>
 
 <style scoped>
-
-.card-container{
-  width:100%;
+.card-container {
+  width: 100%;
 
 }
 
@@ -100,20 +107,33 @@ export default {
   margin-bottom: 4px;
 }
 
+.id {
+  font-size: 11px;
+  color: var(--white-surface-300);
+
+}
+
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: auto; /* Center the container */
+  margin: auto;
 }
 
 .row {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   width: 100%;
 }
+
+@media screen and (max-width: 350px) {
+  .row {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
 .card {
-  height: 150px;
+
   margin: 10px;
   display: flex;
   overflow: hidden;
@@ -128,7 +148,9 @@ export default {
   color: var(--text-color-1) !important;
   display: flex;
   flex-direction: row;
-  padding: 1rem;
+  padding: 8%;
+  width: 100%;
+  height: min-content;
 }
 
 .left-section {
@@ -149,8 +171,8 @@ export default {
 }
 
 .profile-picture {
-  width: 80px;
-  height: 80px;
+  width: 90px;
+  height: 90px;
   border-radius: 7px;
 }
 
@@ -183,6 +205,7 @@ export default {
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -190,9 +213,10 @@ export default {
 }
 
 .buttons {
-  position: fixed;
-  right: 10px;
-  top: 10px;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+
 }
 
 .delete-button,

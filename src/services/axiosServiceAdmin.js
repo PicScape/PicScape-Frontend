@@ -45,11 +45,25 @@ export const getAccounts = async () => {
 
 
 
+export const deleteAccount = async (accountId) => {
+  try {
+    const response = await axiosInstance.delete('/admin/action/delete', {
+      params: {
+        accountId: accountId 
+      }
+    });
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
 
 
 
 
 export default {
 
-    getAccounts
+    getAccounts,
+    deleteAccount
 };
