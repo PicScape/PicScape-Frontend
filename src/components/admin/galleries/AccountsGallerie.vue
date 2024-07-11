@@ -62,6 +62,8 @@ export default {
   watch: {
     sortField: 'fetchUsers',
     sortOrder: 'fetchUsers',
+    searchValue: 'fetchUsers'
+    
   },
   props: {
         sortOrder: {
@@ -69,6 +71,10 @@ export default {
             required: true
         },
         sortField: {
+            type: String,
+            required: true
+        },
+        searchValue: {
             type: String,
             required: true
         },
@@ -90,7 +96,7 @@ export default {
     async fetchUsers() {
       try {
         this.isLoading = true;
-        const response = await axiosServiceAdmin.getAccounts(this.sortField, this.sortOrder);
+        const response = await axiosServiceAdmin.getAccounts(this.sortField, this.sortOrder, this.searchValue);
         this.users = response.accounts;
       } catch (error) {
         this.error = error;

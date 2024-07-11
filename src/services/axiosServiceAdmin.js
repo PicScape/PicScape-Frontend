@@ -33,12 +33,14 @@ const handleApiError = (error) => {
   throw new Error('API is not reachable');
 };
 
-export const getAccounts = async (sortField, sortOrder) => {
+export const getAccounts = async (sortField, sortOrder, searchValue) => {
   try {
     const response = await axiosInstance.get('/admin/fetch/getAccounts', {
       params: {
         sortField: sortField,
-        sortOrder: sortOrder
+        sortOrder: sortOrder,
+        searchValue: searchValue
+
       }
     });
     return response.data;
