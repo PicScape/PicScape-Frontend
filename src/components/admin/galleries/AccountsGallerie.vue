@@ -28,7 +28,7 @@
               <img :src="getProfilePictureUrl(user.id)" alt="Profile Picture" class="profile-picture">
             </div>
             <div class="right-section">
-              <div class="username">@{{ user.username }}</div>
+              <div class="username"><a :href="'/myscape/' + user.id" class="username-text">{{ user.username }}</a></div>
               <div class="id">{{ user.id }}</div>
 
               <div class="roles-container">
@@ -63,22 +63,22 @@ export default {
     sortField: 'fetchUsers',
     sortOrder: 'fetchUsers',
     searchValue: 'fetchUsers'
-    
+
   },
   props: {
-        sortOrder: {
-            type: String,
-            required: true
-        },
-        sortField: {
-            type: String,
-            required: true
-        },
-        searchValue: {
-            type: String,
-            required: true
-        },
+    sortOrder: {
+      type: String,
+      required: true
     },
+    sortField: {
+      type: String,
+      required: true
+    },
+    searchValue: {
+      type: String,
+      required: true
+    },
+  },
   async mounted() {
     this.localUser = await axiosService.checkTokenValidity();
     this.fetchUsers();
@@ -110,6 +110,33 @@ export default {
 </script>
 
 <style scoped>
+
+.username-text {
+    width: min-content;
+
+}
+
+.username-text:hover {
+    text-decoration: underline;
+    cursor: pointer;
+
+
+}
+
+.username-text:visited {
+    text-decoration: underline;
+    color: #e7e7e7;
+
+
+}
+
+.username-text {
+    text-decoration: underline;
+    color: #e7e7e7;
+}
+
+
+
 .card-container {
   width: 100%;
 
