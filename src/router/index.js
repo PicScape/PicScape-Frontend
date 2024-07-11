@@ -22,7 +22,19 @@ const routes = [
   { path: '/search', component: SearchView, props: route => ({ searchQuery: route.query.searchQuery, type: route.query.type }) },
   { path: '/myscape', component: MyScape },
   { path: '/account/activate', component: ActivateAccount, props: route => ({ activationToken: route.query.activationToken }) },
-  { path: '/admin', component: AdminView }
+
+
+
+  {
+    path: '/admin',
+    component: AdminView,
+    children: [
+      { path: '', component: () => import('../views/adminViews/DashboardAdminView') },
+      { path: 'users', component: () => import('../views/adminViews/UsersAdminView') },
+      { path: 'reports', component: () => import('../views/adminViews/ReportsAdminView') },
+      { path: 'uploads', component: () => import('../views/adminViews/UploadsAdminView') },
+    ]
+  }
 
 
 ];

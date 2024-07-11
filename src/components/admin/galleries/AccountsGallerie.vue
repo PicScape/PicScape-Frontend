@@ -131,7 +131,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: auto;
+
 }
 
 .row {
@@ -140,11 +140,6 @@ export default {
   width: 100%;
 }
 
-@media screen and (max-width: 350px) {
-  .row {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  }
-}
 
 .card {
 
