@@ -46,7 +46,6 @@
   padding: 20px;
   box-sizing: border-box;
   transition: width 0.3s ease;
-  z-index: 20;
 }
 
 .collapsed {

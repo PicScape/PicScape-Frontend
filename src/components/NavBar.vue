@@ -106,7 +106,10 @@ export default {
   justify-content: center;
   align-items: center;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1000;
 }
+
 
 .header-container {
   width: 100%;
@@ -165,7 +168,6 @@ nav {
   background-color: var(--navbar-color);
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 99999;
 }
 
 .dropdown-content .sub-nav {
@@ -195,6 +197,7 @@ nav {
   padding: 0;
   display: flex;
   align-items: center;
+  
 }
 
 .dropdown-toggle:hover {
