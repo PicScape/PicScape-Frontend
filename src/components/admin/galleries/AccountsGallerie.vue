@@ -14,7 +14,6 @@
       <!-- User Cards -->
       <div class="card-container" v-else v-for="(user, index) in users" :key="user.id">
         <div class="card" :class="{ 'animated-card': animateCards }" :style="{ 'animation-delay': index * 0.1 + 's' }">
-
           <div class="card-body">
             <div class="buttons">
               <button v-if="user.id !== localUser.user.id" @click="deleteUser(user)" class="delete-button">
@@ -41,15 +40,28 @@
         </div>
       </div>
     </div>
+
+    <!-- Edit User Modal -->
+    <EditUserModal
+      :is-visible="isEditModalVisible"
+      :user="currentUser"
+      @close="isEditModalVisible = false"
+      @save="saveUser"
+    />
   </div>
 </template>
 
 <script>
 import axiosServiceAdmin from '@/services/axiosServiceAdmin';
 import axiosService from '@/services/axiosService';
+import EditUserModal from '../modals/EditUserModal';
+
 const baseURL = process.env.VUE_APP_API_URL;
 
 export default {
+  components: {
+    EditUserModal
+  },
   data() {
     return {
       users: [],
@@ -57,13 +69,14 @@ export default {
       error: null,
       animateCards: true,
       localUser: '',
+      isEditModalVisible: false,
+      currentUser: null
     };
   },
   watch: {
     sortField: 'fetchUsers',
     sortOrder: 'fetchUsers',
     searchValue: 'fetchUsers'
-
   },
   props: {
     sortOrder: {
@@ -77,7 +90,7 @@ export default {
     searchValue: {
       type: String,
       required: true
-    },
+    }
   },
   async mounted() {
     this.localUser = await axiosService.checkTokenValidity();
@@ -86,8 +99,8 @@ export default {
   methods: {
     async deleteUser(user) {
       if (confirm("You sure you want to delete " + user.username)) {
-        await axiosServiceAdmin.deleteAccount(user.id)
-        this.fetchUsers()
+        await axiosServiceAdmin.deleteAccount(user.id);
+        this.fetchUsers();
       }
     },
     getProfilePictureUrl(id) {
@@ -104,10 +117,22 @@ export default {
         this.isLoading = false;
       }
     },
-  },
-
+    openEditModal(user) {
+      this.currentUser = { ...user };
+      this.isEditModalVisible = true;
+    },
+    async saveUser(updatedUser) {
+      try {
+        await axiosServiceAdmin.updateAccount(updatedUser);
+        this.fetchUsers();
+      } catch (error) {
+        console.error('Error saving user:', error);
+      }
+    }
+  }
 };
 </script>
+
 
 <style scoped>
 
