@@ -37,13 +37,15 @@
   
   <style scoped>
 .side-nav {
+  overflow: hidden;
   width: 200px;
   height: 100vh;
   background-color: #333;
   color: #fff;
   padding: 20px;
   box-sizing: border-box;
-  transition: width 0.3s ease; /* Optional: Add smooth transition */
+  transition: width 0.3s ease;
+  z-index: 20;
 }
 
 .collapsed {
@@ -71,7 +73,8 @@
 }
 
 .toggle-btn {
-  background-color: transparent;
+  background-color: #333333c2;
+  border-bottom-right-radius: 3px;
   position: absolute;
   border: none;
   cursor: pointer;
@@ -87,6 +90,7 @@
 .toggle-btn span:hover {
   transform: scale(1.2);
 }
+
 
 </style>
 
