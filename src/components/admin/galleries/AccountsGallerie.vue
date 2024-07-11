@@ -111,6 +111,14 @@ export default {
 
 <style scoped>
 
+@media (max-width: 440px) {
+  .row {
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
+
+}
+
+}
+
 .username-text {
     width: min-content;
 
