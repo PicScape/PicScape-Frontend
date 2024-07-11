@@ -37,9 +37,10 @@
   
   <style scoped>
 .side-nav {
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: visible;
   width: 200px;
-  height: 100vh;
+  
   background-color: #333;
   color: #fff;
   padding: 20px;
