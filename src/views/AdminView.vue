@@ -22,8 +22,14 @@ export default {
 </script>
 
 <style scoped>
+adminSideNav{
+  height: 100vh;
+}
+
 .admin-container {
   display: flex;
+  min-height: 100vh;
+
 }
 
 .admin-content {
