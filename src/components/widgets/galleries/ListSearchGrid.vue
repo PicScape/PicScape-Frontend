@@ -202,9 +202,8 @@ export default {
     searchOption(option) {
       this.seltype = option;
       this.dropdownVisible = false;
-      if (this.searchTerm) {
-        this.openSearchQuery()
-      }
+      this.openSearchQuery()
+
 
     }
   },
