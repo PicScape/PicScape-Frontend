@@ -1,27 +1,4 @@
 <template>
-  <div class="topper">
-    <SearchTitleAnimation />
-    <div class="subtitle">Choose your favorite profile picture or wallpaper from a collection of {{ total_uploads }}
-      uploads!</div>
-
-    <form class="search-box" @submit.prevent="openSearchQuery">
-      <input type="text" id="search-input" v-model="searchTerm" placeholder="Search" class="search-input">
-      <div class="search-button-wrapper">
-        <button type="submit" class="search-button">
-          <span>{{ seltype === 'pfp' ? 'Search for Pfps' : 'Search for Wallpapers' }}</span>
-          <a class="dropdown-btn" @click.prevent="toggleDropdown">
-            <span class="dropdown-arrow">&#9207;</span>
-          </a>
-        </button>
-        <div v-if="dropdownVisible" class="dropdown-menu">
-          <button @click="searchOption(seltype === 'pfp' ? 'wallpaper' : 'pfp')">
-            Search for {{ seltype === 'pfp' ? 'Wallpapers' : 'Pfps' }}
-          </button>
-        </div>
-      </div>
-    </form>
-  </div>
-
   <div>
     <div id="images-pre">
       <div id="images">
@@ -209,102 +186,8 @@ checkScrollEnd() {
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.topper {
-  margin-bottom: 60px;
-  margin-left: auto;
-  margin-top: 70px;
-
-  margin-right: auto;
-  padding-left: calc((100% - (870px)) / 2);
-  padding-right: calc((100% - (870px)) / 2);
-}
-
-.subtitle {
-  text-align: left;
-
-  margin-top: 6px;
-  font-weight: 500;
-
-  color: var(--white-surface-300);
-}
-
-.search-box {
-  display: grid;
-  align-items: center;
-  grid-template-columns: 1fr auto;
-  margin-top: 40px;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .overlay button:hover {
   background-color: var(--submit-btn-secondary);
-}
-
-.dropdown-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.dropdown-arrow {
-  display: inline-block;
-  margin-left: 6px;
-  line-height: 1.3;
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: white;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-  margin-top: 8px;
-  width: 200px;
-}
-
-.dropdown-menu button {
-  background: none;
-  border: none;
-  padding: 10px 20px;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-}
-
-.dropdown-menu button:hover {
-  background-color: #f1f1f1;
-}
-
-.search-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: 0.2s ease-in-out;
-  border-top-left-radius: 0px !important;
-  border-bottom-left-radius: 0px !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  padding: 6.5px 10px;
-
-}
-
-.search-input {
-  border-top-right-radius: 0px !important;
-  border-bottom-right-radius: 0px !important;
-}
-
-.search-button-wrapper {
-  position: relative;
-  display: flex;
 }
 
 .info-box {
