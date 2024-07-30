@@ -165,7 +165,7 @@ export default {
     methods: {
         shareClick() {
             var x = document.getElementById("snackbar");
-            navigator.clipboard.writeText(`${window.location}uploads/${this.imgId}`);
+            navigator.clipboard.writeText(`${baseURL}/uploads/${this.imgId}`);
             x.className = "show";
 
             setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
