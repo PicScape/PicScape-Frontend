@@ -32,18 +32,6 @@ export default {
 </script>
 
 <style scoped>
-@media screen and (max-width: 630px) {
-  .content__container__list {
-    opacity: 0;
-
-  }
-
-  .content__container__text {
-    opacity: 0;
-  }
-
-}
-
 
 
 .text-animation {
@@ -133,6 +121,8 @@ export default {
   display: inline;
   float: left;
   margin: 0;
+  overflow: hidden;
+
 }
 
 .content__container__list {
@@ -144,11 +134,15 @@ export default {
   animation-name: change;
   animation-duration: 22s;
   animation-iteration-count: infinite;
+  overflow: hidden;
+
 }
 
 .content__container__list__item {
   line-height: 40px;
   margin: 0;
+  overflow: hidden;
+
 }
 
 @keyframes change {
