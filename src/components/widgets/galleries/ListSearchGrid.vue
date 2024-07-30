@@ -220,8 +220,6 @@ export default {
   color: var(--white-surface-300);
 }
 
-
-
 .topper {
   margin-bottom: 60px;
   margin-left: auto;
@@ -230,15 +228,12 @@ export default {
   margin-right: auto;
   padding-left: calc((100% - (870px)) / 2);
   padding-right: calc((100% - (870px)) / 2);
-
 }
 
 hr {
   border: 1px solid #4e4e4e;
   margin-bottom: 20px;
 }
-
-
 
 .dropdown-menu {
   position: absolute;
@@ -299,7 +294,6 @@ hr {
   justify-content: center;
   position: relative;
   padding: 6.5px 10px;
-
 }
 
 .search-button:hover {
@@ -334,20 +328,17 @@ input[type="text"] {
   width: 870px;
   margin-left: auto;
   margin-right: auto;
-
 }
 
 @media (max-width: 890px) {
-
+  
   .list-container {
     width: calc(100% - 20px);
-
   }
 
   .topper {
     margin-left: 20px;
     margin-right: 20px;
-
   }
 
   .image-container.wallpaper {
@@ -361,8 +352,6 @@ input[type="text"] {
   .image-container.wallpaper {
     height: 90px !important;
   }
-
-
 }
 
 #toggle-buttons.tabs {
@@ -370,14 +359,11 @@ input[type="text"] {
   display: flex;
   justify-content: left;
   margin-bottom: 20px;
-
-
 }
 
 
 #toggle-buttons.tabs button {
   font-weight: bold;
-
   margin: 0;
   padding: 10px 20px;
   cursor: pointer;
@@ -406,7 +392,6 @@ input[type="text"] {
   padding-bottom: 20px;
   padding-left: calc((100% - (870px)) / 2);
   padding-right: calc((100% - (870px)) / 2);
-
 }
 
 #images {
@@ -418,13 +403,11 @@ input[type="text"] {
   padding: auto;
   justify-content: center;
   width: 100%;
-
 }
 
 .image-container {
   position: relative;
   border-radius: 10px;
-
   flex-shrink: 0;
   overflow: hidden;
   text-align: center;
@@ -442,9 +425,6 @@ input[type="text"] {
   width: 30%;
   height: 150px;
 }
-
-
-
 
 .image-container img {
   width: 100%;
