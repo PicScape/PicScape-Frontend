@@ -2,7 +2,7 @@
   <div>
     
     <div id="module-container">
-      <router-link to="/pfps" id="slide-title">
+      <router-link to="/search?type=pfp&searchQuery=" id="slide-title">
         Profile Pictures<i> &#8614;</i>
       </router-link>
     <div id="slider-container" ref="sliderContainer">
