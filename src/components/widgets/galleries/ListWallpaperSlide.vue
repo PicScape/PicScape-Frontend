@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="module-container">
-      <router-link to="/wallpapers" id="slide-title">
+      <router-link to="/search?type=wallpaper&searchQuery=" id="slide-title">
         Wallpapers<i> &#8614;</i>
       </router-link>
     <div id="slider-container" ref="sliderContainer">
