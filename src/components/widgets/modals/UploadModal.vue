@@ -46,7 +46,7 @@
                     <div>
                         <div class="text-set-middle-bottom" style="margin-bottom: 5px">Tags:</div>
                         <div class="img-tags text-set-middle-bottom-sub">
-                            <span v-for="tag in modalContent.tags" :key="tag" class="img-tag">{{ tag }}</span>
+                            <span v-for="tag in modalContent.tags" :key="tag" class="img-tag"><a class="tag-area" :href="'/search?type=' + modalContent.type + '&searchQuery=' + tag">{{ tag }}</a></span>
                         </div>
                     </div>
                     <div v-if="modalContent.username">
@@ -244,6 +244,17 @@ export default {
 
 </script>
 <style scoped>
+
+.tag-area{
+    text-decoration: none;
+    color: #e7e7e7;
+
+}
+
+.tag-area:visited {
+    color: #e7e7e7;
+}
+
 .no-scroll {
     overflow: hidden;
 }
