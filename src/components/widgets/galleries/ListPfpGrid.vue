@@ -2,11 +2,7 @@
   <div>
     <div id="images-pre">
       <div id="images">
-        <div
-          v-for="(image, index) in images"
-          :key="index"
-          class="image-container"
-        >
+        <div v-for="(image, index) in images" :key="index" class="image-container">
           <img :src="image.url" :alt="image.title" />
           <div class="overlay">
             <button @click="openModal(image)">View</button>
@@ -14,21 +10,13 @@
         </div>
       </div>
     </div>
-    <div
-      id="info-box"
-      v-if="showInfoBox"
-      class="info-box"
-    >
+    <div id="info-box" v-if="showInfoBox" class="info-box">
       <p>Unable to reach the API.</p>
     </div>
 
     <!-- Modal component usage -->
-    <ImageModal
-      :show-modal="modalId !== null"
-      :modal-content="findImageById(modalId)"
-      @close="modalId = null"
-      @delete-success="fetchNewestImages"
-    />
+    <ImageModal :show-modal="modalId !== null" :modal-content="findImageById(modalId)" @close="modalId = null"
+      @delete-success="fetchNewestImages" />
   </div>
 </template>
 
@@ -49,8 +37,8 @@ export default {
       showInfoBox: false,
       modalId: null,
       page: 1,
-      loading: false, 
-      hasMore: true, 
+      loading: false,
+      hasMore: true,
     };
   },
   mounted() {
@@ -61,35 +49,35 @@ export default {
   methods: {
 
     async fetchNewestImages() {
-  if (!this.hasMore || this.loading) return;
+      if (!this.hasMore || this.loading) return;
 
-  this.loading = true;
+      this.loading = true;
 
-  try {
-    const response = await axiosService.getNewestUploads("pfp", this.page);
-    const newImages = response.uploads.map(image => ({
-      ...image,
-      url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,
-    }));
+      try {
+        const response = await axiosService.getNewestUploads("pfp", this.page);
+        const newImages = response.uploads.map(image => ({
+          ...image,
+          url: `${baseURL}/image/view/${image.imgId}?lowRes=true`,
+        }));
 
-    this.images = [...this.images, ...newImages];
-    this.page++;
-    this.loading = false;
+        this.images = [...this.images, ...newImages];
+        this.page++;
+        this.loading = false;
 
-    this.hasMore = newImages.length > 0;
+        this.hasMore = newImages.length > 0;
 
-    this.checkScrollEnd();
-  } catch (error) {
-    console.error('Error fetching images:', error);
-    this.showInfoBox = true;
-    this.loading = false;
-  }
-},
-checkScrollEnd() {
-  if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-    this.fetchNewestImages();
-  }
-},
+        this.checkScrollEnd();
+      } catch (error) {
+        console.error('Error fetching images:', error);
+        this.showInfoBox = true;
+        this.loading = false;
+      }
+    },
+    checkScrollEnd() {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        this.fetchNewestImages();
+      }
+    },
 
     openModal(image) {
       this.modalId = image.imgId;
@@ -100,10 +88,10 @@ checkScrollEnd() {
     },
 
     setupScrollListener() {
-  window.addEventListener('scroll', () => {
-    this.checkScrollEnd();
-  });
-},
+      window.addEventListener('scroll', () => {
+        this.checkScrollEnd();
+      });
+    },
   },
 };
 </script>
@@ -129,9 +117,6 @@ checkScrollEnd() {
   justify-content: center;
   margin-left: 50px;
   margin-right: 50px;
-
-
-
 
 }
 

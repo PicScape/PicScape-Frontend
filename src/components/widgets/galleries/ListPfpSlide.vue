@@ -1,38 +1,30 @@
 <template>
   <div>
-    
+
     <div id="module-container">
       <router-link to="/search?type=pfp&searchQuery=" id="slide-title">
         Profile Pictures<i> &#8614;</i>
       </router-link>
-    <div id="slider-container" ref="sliderContainer">
-      <div id="slider" :style="{ transform: `translateX(-${currentSlide * 60}%)` }">
-        <div
-          v-for="(image, index) in images"
-          :key="index"
-          class="image-container"
-        >
-          <img :src="image.url" :alt="image.title" />
-          <div class="overlay">
-            <button @click="openModal(image)">View</button>
+      <div id="slider-container" ref="sliderContainer">
+        <div id="slider" :style="{ transform: `translateX(-${currentSlide * 60}%)` }">
+          <div v-for="(image, index) in images" :key="index" class="image-container">
+            <img :src="image.url" :alt="image.title" />
+            <div class="overlay">
+              <button @click="openModal(image)">View</button>
+            </div>
           </div>
         </div>
+        <button class="slider-button left" @click="prevSlide">‹</button>
+        <button v-if="currentSlide <= 4" class="slider-button right" @click="nextSlide">›</button>
+        <button v-else class="slider-button right" @click="redirectToAnotherPage">Show More</button>
       </div>
-      <button class="slider-button left" @click="prevSlide">‹</button>
-      <button v-if="currentSlide <= 4" class="slider-button right" @click="nextSlide">›</button>
-      <button v-else class="slider-button right" @click="redirectToAnotherPage">Show More</button>
     </div>
-  </div>
     <div id="info-box" v-if="showInfoBox" class="info-box">
       <p>Unable to reach the API.</p>
     </div>
 
-    <ImageModal
-      :show-modal="modalId !== null"
-      :modal-content="findImageById(modalId)"
-      @close="modalId = null"
-      @delete-success="fetchNewestImages"
-    />
+    <ImageModal :show-modal="modalId !== null" :modal-content="findImageById(modalId)" @close="modalId = null"
+      @delete-success="fetchNewestImages" />
   </div>
 </template>
 
@@ -95,7 +87,6 @@ export default {
 </script>
 
 <style scoped>
-
 #slide-title {
   font-size: 25px;
   font-weight: bold;
@@ -122,12 +113,12 @@ export default {
 
 #slider-container {
   position: relative;
-  overflow: hidden; 
+  overflow: hidden;
   margin-bottom: 40px;
 
 }
 
-#module-container{
+#module-container {
   margin-left: auto;
   margin-right: auto;
   width: 60%;
@@ -137,15 +128,12 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
-  #module-container{
-  margin-left: auto;
-  margin-right: auto;
-  width: 90%;
-  text-align: left;
-
-
-}
-
+  #module-container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    text-align: left;
+  }
 }
 
 
@@ -169,6 +157,7 @@ export default {
   right: 0;
   background: linear-gradient(to left, var(--background-color), rgba(255, 255, 255, 0));
 }
+
 #slider {
   display: flex;
   transition: transform 0.5s ease-in-out;
@@ -245,7 +234,6 @@ export default {
 .slider-button.left {
   left: 0;
   z-index: 3;
-
 }
 
 .slider-button.right {
@@ -272,4 +260,3 @@ export default {
   background-color: var(--submit-btn-secondary);
 }
 </style>
-

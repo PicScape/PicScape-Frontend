@@ -28,7 +28,8 @@
                                 </div>
                             </div>
                             <div class="add-role">
-                                <input type="text" v-model="newRole" placeholder="Add a role" @keydown.enter.prevent="addRole">
+                                <input type="text" v-model="newRole" placeholder="Add a role"
+                                    @keydown.enter.prevent="addRole">
                                 <button @click="addRole" class="btn-add">Add</button>
                             </div>
                         </div>
@@ -104,14 +105,12 @@ export default {
 };
 </script>
 <style scoped>
-
-
 label {
-  font-weight: bold;
-  text-align: left;
-  padding-bottom: 7px;
-  color: var(--text-color);
-  pointer-events: none;
+    font-weight: bold;
+    text-align: left;
+    padding-bottom: 7px;
+    color: var(--text-color);
+    pointer-events: none;
 }
 
 .pfp-container img {
@@ -120,9 +119,8 @@ label {
 }
 
 .input-field-container {
-width: auto;
+    width: auto;
 }
-
 
 .modal-overlay {
     position: fixed;
@@ -138,7 +136,6 @@ width: auto;
 }
 
 
-
 .modal-content {
     background: var(--card-color);
     padding: 20px;
@@ -147,14 +144,13 @@ width: auto;
     max-width: 100%;
 }
 
-
-
 .form-group {
-  display: grid;
-  grid-template-columns: auto;
-  align-items: center;
-  margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: auto;
+    align-items: center;
+    margin-bottom: 10px;
 }
+
 .buttons {
     display: flex;
     justify-content: flex-end;
@@ -179,8 +175,8 @@ width: auto;
 }
 
 .tags-container {
-  display: flex;
-  flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 
@@ -221,13 +217,12 @@ width: auto;
 }
 
 .tag {
-  background-color: #d3d3d3;
-  border-radius: 4px;
-  padding: 4px 8px;
-  margin-right: 8px;
-  display: flex;
-  align-items: center;
-  animation-duration: 0.3s;
+    background-color: #d3d3d3;
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+    animation-duration: 0.3s;
 }
-
 </style>

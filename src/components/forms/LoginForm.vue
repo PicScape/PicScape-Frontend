@@ -19,7 +19,8 @@
       </div>
       <div class="form-group">
         <label for="confirmPassword">Confirm Password:</label>
-        <input type="password" id="confirmPassword" v-model="confirmPassword" name="confirmPassword" required autocomplete="new-password">
+        <input type="password" id="confirmPassword" v-model="confirmPassword" name="confirmPassword" required
+          autocomplete="new-password">
       </div>
       <button type="submit" class="submit-button" :disabled="isSubmitting">Register</button>
       <div class="toggle-auth-option">
@@ -36,7 +37,8 @@
         </div>
         <div class="form-group">
           <label for="loginPassword">Password:</label>
-          <input type="password" id="loginPassword" v-model="loginPassword" name="loginPassword" required autocomplete="current-password">
+          <input type="password" id="loginPassword" v-model="loginPassword" name="loginPassword" required
+            autocomplete="current-password">
         </div>
         <button type="submit" class="submit-button" :disabled="isSubmitting">Login</button>
         <div class="toggle-auth-option">
@@ -49,12 +51,24 @@
           <label for="code">Verification Code:</label>
           <div class="code-input-container">
             <!-- Use v-model for each input -->
-            <input ref="code1" type="text" id="code1" v-model="code[0]" name="code1" maxlength="1" @input="handleCodeInput(0, $event)" @keydown="handleCodeKeydown(0, $event)" @paste="handlePaste($event)" required>
-            <input ref="code2" type="text" id="code2" v-model="code[1]" name="code2" maxlength="1" @input="handleCodeInput(1, $event)" @keydown="handleCodeKeydown(1, $event)" @paste="handlePaste($event)" required>
-            <input ref="code3" type="text" id="code3" v-model="code[2]" name="code3" maxlength="1" @input="handleCodeInput(2, $event)" @keydown="handleCodeKeydown(2, $event)" @paste="handlePaste($event)" required>
-            <input ref="code4" type="text" id="code4" v-model="code[3]" name="code4" maxlength="1" @input="handleCodeInput(3, $event)" @keydown="handleCodeKeydown(3, $event)" @paste="handlePaste($event)" required>
-            <input ref="code5" type="text" id="code5" v-model="code[4]" name="code5" maxlength="1" @input="handleCodeInput(4, $event)" @keydown="handleCodeKeydown(4, $event)" @paste="handlePaste($event)" required>
-            <input ref="code6" type="text" id="code6" v-model="code[5]" name="code6" maxlength="1" @input="handleCodeInput(5, $event)" @keydown="handleCodeKeydown(5, $event)" @paste="handlePaste($event)" required>
+            <input ref="code1" type="text" id="code1" v-model="code[0]" name="code1" maxlength="1"
+              @input="handleCodeInput(0, $event)" @keydown="handleCodeKeydown(0, $event)" @paste="handlePaste($event)"
+              required>
+            <input ref="code2" type="text" id="code2" v-model="code[1]" name="code2" maxlength="1"
+              @input="handleCodeInput(1, $event)" @keydown="handleCodeKeydown(1, $event)" @paste="handlePaste($event)"
+              required>
+            <input ref="code3" type="text" id="code3" v-model="code[2]" name="code3" maxlength="1"
+              @input="handleCodeInput(2, $event)" @keydown="handleCodeKeydown(2, $event)" @paste="handlePaste($event)"
+              required>
+            <input ref="code4" type="text" id="code4" v-model="code[3]" name="code4" maxlength="1"
+              @input="handleCodeInput(3, $event)" @keydown="handleCodeKeydown(3, $event)" @paste="handlePaste($event)"
+              required>
+            <input ref="code5" type="text" id="code5" v-model="code[4]" name="code5" maxlength="1"
+              @input="handleCodeInput(4, $event)" @keydown="handleCodeKeydown(4, $event)" @paste="handlePaste($event)"
+              required>
+            <input ref="code6" type="text" id="code6" v-model="code[5]" name="code6" maxlength="1"
+              @input="handleCodeInput(5, $event)" @keydown="handleCodeKeydown(5, $event)" @paste="handlePaste($event)"
+              required>
           </div>
         </div>
         <button type="submit" class="submit-button" :disabled="isSubmitting">Verify Code</button>
@@ -259,13 +273,14 @@ input[type="code"] {
   width: 100%;
   box-sizing: border-box;
 }
+
 .code-input-container {
   display: flex;
   justify-content: space-between;
 }
 
 .code-input-container input[type="text"] {
-  width: calc(20% - 20px); 
+  width: calc(20% - 20px);
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;

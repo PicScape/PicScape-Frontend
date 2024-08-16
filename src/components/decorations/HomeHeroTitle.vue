@@ -5,7 +5,7 @@
         <p class="content__container__text">
           Find
         </p>
-        
+
         <div class="content__container__list ">
           <li class="content__container__list__item text-animation" v-for="(item, index) in items" :key="index">
             {{ item }}
@@ -32,8 +32,6 @@ export default {
 </script>
 
 <style scoped>
-
-
 .text-animation {
   background: linear-gradient(87deg, #80608b, #d07ca2, #9f3c6a, #f6a2b1, #f5688b, #d884e7);
   background-size: 1200% 1200%;
@@ -149,36 +147,45 @@ export default {
   0% {
     transform: translate3d(0, 0, 0);
   }
+
   10% {
     transform: translate3d(0, 0, 0);
   }
+
   20% {
     transform: translate3d(0, -20%, 0);
   }
+
   30% {
     transform: translate3d(0, -20%, 0);
   }
+
   40% {
     transform: translate3d(0, -40%, 0);
   }
+
   50% {
     transform: translate3d(0, -40%, 0);
   }
+
   60% {
     transform: translate3d(0, -60%, 0);
   }
+
   70% {
     transform: translate3d(0, -60%, 0);
   }
+
   80% {
     transform: translate3d(0, -80%, 0);
   }
+
   90% {
     transform: translate3d(0, -80%, 0);
   }
+
   100% {
     transform: translate3d(0, 0%, 0);
   }
 }
-
 </style>

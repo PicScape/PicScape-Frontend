@@ -102,17 +102,17 @@ export default {
 
 
     try {
-      if(this.type){
+      if (this.type) {
         this.localType = this.type
 
       }
-      if(this.searchQuery){
+      if (this.searchQuery) {
         this.localQuery = this.searchQuery
 
       }
       this.seltype = this.localType
       this.fetchSearchQuery(this.localType, this.localQuery);
-      
+
     } catch (error) {
       console.log("Error while mounting:", error);
     }
@@ -203,7 +203,6 @@ export default {
       this.seltype = option;
       this.dropdownVisible = false;
       this.openSearchQuery()
-
 
     }
   },
@@ -331,7 +330,7 @@ input[type="text"] {
 }
 
 @media (max-width: 890px) {
-  
+
   .list-container {
     width: calc(100% - 20px);
   }

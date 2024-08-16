@@ -36,7 +36,7 @@ export default {
       LocalsearchValue: '',
     };
   },
-  watch:{
+  watch: {
     LocalsearchValue(newValue) {
       if (!newValue.trim()) {
         this.handleSearch();
@@ -108,11 +108,8 @@ export default {
   background-color: #0056b3;
 }
 
-
 .left-buttons {
   display: flex;
-  
-
 }
 
 .right-buttons {
@@ -124,9 +121,9 @@ export default {
   background-color: #007bff;
   color: white;
   border: none !important;
-  
+
   font-size: 14px;
-  
+
   border-radius: 5px;
   cursor: pointer;
 }
@@ -171,8 +168,6 @@ export default {
 
 }
 
-
-
 .right-buttons button:focus {
   outline: none;
 }
@@ -184,11 +179,8 @@ export default {
     gap: 5px;
   }
 
-
-
   .search-section {
-
-  margin-left: 0px;
-}
+    margin-left: 0px;
+  }
 }
 </style>
